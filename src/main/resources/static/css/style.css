@@ -1,0 +1,636 @@
+/* =========================
+   GLOBAL
+========================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #fffafc;
+    color: #1f2937;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+}
+
+section {
+    position: relative;
+}
+
+/* =========================
+   HERO SECTION
+========================= */
+.hero-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    text-align: center;
+}
+
+.small-hero {
+    min-height: 60vh;
+}
+
+.hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+            linear-gradient(135deg, rgba(17, 24, 39, 0.78), rgba(88, 28, 135, 0.58)),
+            rgba(0, 0, 0, 0.25);
+    z-index: 2;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 3;
+    max-width: 950px;
+    padding: 40px 20px;
+    animation: fadeUp 0.9s ease;
+}
+
+.hero-badge {
+    display: inline-block;
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.24);
+    color: #fff;
+    font-size: 0.92rem;
+    font-weight: 500;
+    backdrop-filter: blur(8px);
+    margin-bottom: 24px;
+}
+
+.hero-title {
+    font-size: clamp(2.3rem, 5vw, 4.6rem);
+    font-weight: 800;
+    line-height: 1.15;
+    color: #fff;
+    margin-bottom: 18px;
+}
+
+.hero-title span {
+    background: linear-gradient(90deg, #f9a8d4, #fda4af, #fdba74);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.06rem;
+    line-height: 1.9;
+    max-width: 760px;
+    margin: 0 auto 32px;
+}
+
+.hero-buttons .btn {
+    min-width: 160px;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+.btn {
+    border-radius: 999px;
+    padding: 12px 28px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-primary {
+    background: linear-gradient(90deg, #ec4899, #f97316);
+    color: #fff;
+    box-shadow: 0 12px 30px rgba(236, 72, 153, 0.28);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(90deg, #db2777, #ea580c);
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    background: linear-gradient(90deg, #10b981, #059669);
+    color: #fff;
+    box-shadow: 0 12px 28px rgba(16, 185, 129, 0.22);
+}
+
+.btn-success:hover {
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+.btn-light {
+    background: #ffffff;
+    color: #1f2937;
+    box-shadow: 0 10px 26px rgba(255, 255, 255, 0.16);
+}
+
+.btn-light:hover {
+    background: #fff1f7;
+    color: #111827;
+    transform: translateY(-2px);
+}
+
+.btn-outline-light {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    color: #fff;
+}
+
+.btn-outline-light:hover {
+    background: #fff;
+    color: #111827;
+    transform: translateY(-2px);
+}
+
+.btn-outline-secondary {
+    border: 1px solid #d1d5db;
+    color: #374151;
+    background: #fff;
+}
+
+.btn-outline-secondary:hover {
+    background: #f9fafb;
+    color: #111827;
+    transform: translateY(-2px);
+}
+
+.btn-warning,
+.btn-danger,
+.btn-sm {
+    border-radius: 999px;
+}
+
+/* =========================
+   SECTION TITLES
+========================= */
+.section-title {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    color: #111827;
+}
+
+.section-subtitle {
+    text-align: center;
+    color: #6b7280;
+    max-width: 720px;
+    margin: 0 auto 42px;
+    line-height: 1.8;
+}
+
+/* =========================
+   STATS SECTION
+========================= */
+.stats-section {
+    margin-top: -70px;
+    position: relative;
+    z-index: 5;
+    padding-bottom: 20px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(14px);
+    border-radius: 28px;
+    padding: 30px 24px;
+    text-align: center;
+    box-shadow: 0 14px 34px rgba(17, 24, 39, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-6px);
+}
+
+.stat-number {
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, #ec4899, #f97316);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.stat-label {
+    margin-top: 8px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+/* =========================
+   MAIN CONTENT SECTION
+========================= */
+.reviews-section {
+    padding: 80px 0;
+    background:
+            radial-gradient(circle at top right, rgba(244, 114, 182, 0.08), transparent 28%),
+            radial-gradient(circle at bottom left, rgba(249, 115, 22, 0.08), transparent 28%),
+            linear-gradient(180deg, #fffafc 0%, #fff7fb 100%);
+}
+
+/* =========================
+   CARD STYLES
+========================= */
+.review-card {
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(12px);
+    border-radius: 30px;
+    padding: 32px;
+    box-shadow: 0 18px 40px rgba(17, 24, 39, 0.08);
+    border: 1px solid rgba(244, 114, 182, 0.08);
+    height: 100%;
+    transition: all 0.3s ease;
+}
+
+.review-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 50px rgba(17, 24, 39, 0.12);
+}
+
+.review-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.customer-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.service-name {
+    color: #ec4899;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.review-stars {
+    margin-bottom: 14px;
+}
+
+.rating-text {
+    color: #6b7280;
+    font-size: 0.95rem;
+}
+
+.review-comment {
+    color: #4b5563;
+    font-size: 0.98rem;
+    line-height: 1.85;
+    margin-bottom: 20px;
+}
+
+.review-footer {
+    font-size: 0.92rem;
+    color: #6b7280;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    padding-top: 16px;
+}
+
+.review-status {
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.mini-tag {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #fce7f3, #ffedd5);
+    color: #be185d;
+    font-weight: 600;
+    font-size: 0.88rem;
+}
+
+/* =========================
+   EMPTY STATE
+========================= */
+.empty-box {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 44px 28px;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 28px;
+    box-shadow: 0 18px 40px rgba(17, 24, 39, 0.07);
+}
+
+/* =========================
+   CTA
+========================= */
+.footer-cta {
+    background: linear-gradient(135deg, #ec4899, #f97316);
+    color: #fff;
+    border-radius: 32px;
+    padding: 56px 24px;
+    text-align: center;
+    box-shadow: 0 24px 48px rgba(236, 72, 153, 0.2);
+}
+
+.footer-cta h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.footer-cta p {
+    max-width: 700px;
+    margin: 0 auto 26px;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.94);
+}
+
+/* =========================
+   TABLES
+========================= */
+.table-responsive {
+    background: transparent;
+    border-radius: 26px;
+}
+
+.table {
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.06);
+    margin-bottom: 0;
+    background: #fff;
+}
+
+.table thead th {
+    padding: 16px 14px;
+    vertical-align: middle;
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+}
+
+.table tbody td {
+    padding: 16px 14px;
+    vertical-align: middle;
+    color: #374151;
+    font-size: 0.94rem;
+}
+
+.table-hover tbody tr:hover {
+    background: #fff7fb;
+}
+
+/* =========================
+   FORMS
+========================= */
+.form-label {
+    color: #374151;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.form-control,
+.form-select {
+    border-radius: 18px;
+    padding: 12px 16px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: none;
+    font-size: 0.95rem;
+    background: #fff;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #d63384;
+    box-shadow: 0 0 0 0.18rem rgba(214, 51, 132, 0.12);
+}
+
+textarea.form-control {
+    min-height: 130px;
+    resize: vertical;
+}
+
+/* =========================
+   GENERAL CARDS / BOXES
+========================= */
+.about-box,
+.feature-box,
+.contact-box {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 24px;
+    box-shadow: 0 14px 34px rgba(17, 24, 39, 0.07);
+    border: 1px solid rgba(244, 114, 182, 0.06);
+}
+
+.about-box {
+    background: linear-gradient(135deg, #fff1f7, #fff7ed);
+}
+
+.feature-box,
+.contact-box {
+    height: 100%;
+}
+
+.cta-section {
+    background: linear-gradient(135deg, #fff7fb, #fff1f2);
+}
+
+/* =========================
+   BADGES
+========================= */
+.badge {
+    border-radius: 999px;
+    padding: 8px 14px;
+    font-weight: 600;
+}
+
+/* =========================
+   NAVBAR (if used anywhere)
+========================= */
+.navbar {
+    padding: 14px 0;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+footer {
+    background: #111827;
+    color: #fff;
+}
+
+.sakura-site-footer {
+    /* Glassmorphism backdrop */
+    background: rgba(250, 250, 249, 0.92) !important;
+    backdrop-filter: blur(18px) saturate(180%);
+    -webkit-backdrop-filter: blur(18px) saturate(180%);
+    border-top: 1px solid rgba(255, 183, 197, 0.35) !important;
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.06);
+    padding: 0.7rem 0 !important;
+    width: 100%;
+    margin-top: auto; /* Pushes to bottom of flex containers naturally */
+}
+
+/* ─── Responsive tweaks ─── */
+@media (max-width: 768px) {
+    .sakura-site-footer {
+        padding: 0.5rem 0 !important;
+    }
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(24px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 991px) {
+    .hero-title {
+        font-size: 2.8rem;
+    }
+
+    .review-card {
+        padding: 24px;
+    }
+
+    .section-title {
+        font-size: 1.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-section {
+        min-height: 85vh;
+    }
+
+    .small-hero {
+        min-height: 50vh;
+    }
+
+    .hero-title {
+        font-size: 2.2rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.98rem;
+        line-height: 1.8;
+    }
+
+    .hero-buttons .btn {
+        width: 100%;
+        max-width: 280px;
+    }
+
+    .stats-section {
+        margin-top: -40px;
+    }
+
+    .review-top {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .table thead th,
+    .table tbody td {
+        font-size: 0.88rem;
+        padding: 12px 10px;
+    }
+
+    .section-title {
+        font-size: 1.65rem;
+    }
+
+    .footer-cta h2 {
+        font-size: 1.55rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-content {
+        padding: 30px 16px;
+    }
+
+    .review-card,
+    .empty-box,
+    .stat-card {
+        border-radius: 22px;
+    }
+
+    .section-title {
+        font-size: 1.45rem;
+    }
+
+    .hero-badge {
+        font-size: 0.82rem;
+    }
+
+    .customer-name {
+        font-size: 1.05rem;
+    }
+}
+
+
+
+
+
+
+/* =========================
+   JS Animation Helpers
+========================= */
+.hidden-element {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.7s ease;
+}
+
+.show-element {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.btn-clicked {
+    transform: scale(0.97);
+}
+
+.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.15rem rgba(220, 53, 69, 0.15) !important;
+}

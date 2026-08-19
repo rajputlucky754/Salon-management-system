@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout/fragments :: head('Inventory — Sakura Saki')}"></head>
+<body class="bg-background text-on-surface font-body">
+<th:block th:replace="~{layout/fragments :: sakura-canvas}" />
+
+<div class="flex min-h-screen w-full relative z-10 md:pl-72">
+    <aside th:replace="~{layout/fragments :: staff-sidebar('inventory')}"></aside>
+
+    <main class="flex-1 px-6 pt-6 md:px-10 pt-10 lg:px-14 pt-14 relative flex flex-col pb-2">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+            <div>
+                <h2 class="font-headline text-3xl md:text-4xl text-tertiary tracking-tight font-bold">Inventory</h2>
+                <p class="font-body text-on-surface-variant mt-2">Track products and supplies</p>
+            </div>
+        </header>
+
+        <!-- Inventory Items (Mock Data) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <div class="glass-pane rounded-[2rem] p-6 clay-lift">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-2 bg-primary-container/30 rounded-full"><span class="material-symbols-outlined text-primary">spa</span></div>
+                    <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-green-100 text-green-700">In Stock</span>
+                </div>
+                <h4 class="font-headline text-lg text-tertiary font-bold mb-1">Sakura Oil Blend</h4>
+                <p class="text-sm text-on-surface-variant mb-3">Premium cherry blossom infused massage oil</p>
+                <div class="flex justify-between text-xs font-semibold">
+                    <span class="text-on-surface-variant">Qty: <span class="text-on-surface">24 units</span></span>
+                    <span class="text-primary">₹1,200/unit</span>
+                </div>
+            </div>
+
+            <div class="glass-pane rounded-[2rem] p-6 clay-lift">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-2 bg-primary-container/30 rounded-full"><span class="material-symbols-outlined text-primary">water_drop</span></div>
+                    <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-yellow-100 text-yellow-700">Low Stock</span>
+                </div>
+                <h4 class="font-headline text-lg text-tertiary font-bold mb-1">Yuzu Bath Salts</h4>
+                <p class="text-sm text-on-surface-variant mb-3">Japanese citrus bath mineral blend</p>
+                <div class="flex justify-between text-xs font-semibold">
+                    <span class="text-on-surface-variant">Qty: <span class="text-on-surface">2 units</span></span>
+                    <span class="text-primary">₹850/unit</span>
+                </div>
+            </div>
+
+            <div class="glass-pane rounded-[2rem] p-6 clay-lift">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-2 bg-primary-container/30 rounded-full"><span class="material-symbols-outlined text-primary">face_retouching_natural</span></div>
+                    <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-green-100 text-green-700">In Stock</span>
+                </div>
+                <h4 class="font-headline text-lg text-tertiary font-bold mb-1">Matcha Face Mask</h4>
+                <p class="text-sm text-on-surface-variant mb-3">Antioxidant-rich green tea clay mask</p>
+                <div class="flex justify-between text-xs font-semibold">
+                    <span class="text-on-surface-variant">Qty: <span class="text-on-surface">15 units</span></span>
+                    <span class="text-primary">₹950/unit</span>
+                </div>
+            </div>
+
+            <div class="glass-pane rounded-[2rem] p-6 clay-lift">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-2 bg-primary-container/30 rounded-full"><span class="material-symbols-outlined text-primary">colorize</span></div>
+                    <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-green-100 text-green-700">In Stock</span>
+                </div>
+                <h4 class="font-headline text-lg text-tertiary font-bold mb-1">Hair Color Set</h4>
+                <p class="text-sm text-on-surface-variant mb-3">Professional ammonia-free color range</p>
+                <div class="flex justify-between text-xs font-semibold">
+                    <span class="text-on-surface-variant">Qty: <span class="text-on-surface">30 sets</span></span>
+                    <span class="text-primary">₹2,500/set</span>
+                </div>
+            </div>
+
+            <div class="glass-pane rounded-[2rem] p-6 clay-lift">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-2 bg-primary-container/30 rounded-full"><span class="material-symbols-outlined text-primary">dry_cleaning</span></div>
+                    <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-red-100 text-red-700">Out of Stock</span>
+                </div>
+                <h4 class="font-headline text-lg text-tertiary font-bold mb-1">Bamboo Towel Set</h4>
+                <p class="text-sm text-on-surface-variant mb-3">Organic antibacterial bamboo fiber towels</p>
+                <div class="flex justify-between text-xs font-semibold">
+                    <span class="text-on-surface-variant">Qty: <span class="text-on-surface">0 units</span></span>
+                    <span class="text-primary">₹1,800/set</span>
+                </div>
+            </div>
+
+            <div class="glass-pane rounded-[2rem] p-6 clay-lift">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="p-2 bg-primary-container/30 rounded-full"><span class="material-symbols-outlined text-primary">local_florist</span></div>
+                    <span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-green-100 text-green-700">In Stock</span>
+                </div>
+                <h4 class="font-headline text-lg text-tertiary font-bold mb-1">Rose Hip Serum</h4>
+                <p class="text-sm text-on-surface-variant mb-3">Cold-pressed vitamin C enriched facial serum</p>
+                <div class="flex justify-between text-xs font-semibold">
+                    <span class="text-on-surface-variant">Qty: <span class="text-on-surface">18 units</span></span>
+                    <span class="text-primary">₹1,500/unit</span>
+                </div>
+            </div>
+        </div>
+        
+<footer th:replace="~{layout/fragments :: dashboard-footer}"></footer>
+    </main>
+</div>
+
+
+<th:block th:replace="~{layout/fragments :: sakura-js}" />
+</body>
+</html>

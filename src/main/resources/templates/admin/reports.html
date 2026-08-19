@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout/fragments :: head('Reports — Sakura Saki Admin')}"></head>
+<body class="bg-surface text-on-surface font-body">
+<th:block th:replace="~{layout/fragments :: sakura-canvas}" />
+
+<div class="flex min-h-screen w-full relative z-10 md:pl-72">
+    <!-- Sidebar -->
+    <aside th:replace="~{layout/fragments :: admin-sidebar('reports')}"></aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-6 pt-6 md:px-10 pt-10 lg:px-14 pt-14 relative flex flex-col pb-2">
+        <!-- Page Header -->
+        <header class="flex justify-between items-end mb-12 flex-wrap gap-4">
+            <div>
+                <span class="text-primary font-label text-xs font-bold tracking-[0.2em] uppercase block mb-2">Analytical Reports</span>
+                <h1 class="font-headline text-4xl text-tertiary font-bold">Salon Performance</h1>
+            </div>
+        </header>
+
+        <!-- Quick Stats Row -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div class="glass-pane bg-surface-container-lowest rounded-3xl p-6 clay-lift border border-outline-variant/30 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity group-hover:scale-110 duration-300">
+                    <span class="material-symbols-outlined text-6xl text-primary">group</span>
+                </div>
+                <div class="relative z-10">
+                    <div class="w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center mb-4">
+                        <span class="material-symbols-outlined text-xl">group</span>
+                    </div>
+                    <div class="font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Total Customers</div>
+                    <div class="font-headline text-4xl font-bold text-on-surface" th:text="${summary.totalCustomers}">0</div>
+                </div>
+            </div>
+            
+            <div class="glass-pane bg-surface-container-lowest rounded-3xl p-6 clay-lift border border-outline-variant/30 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity group-hover:scale-110 duration-300">
+                    <span class="material-symbols-outlined text-6xl text-secondary">content_cut</span>
+                </div>
+                <div class="relative z-10">
+                    <div class="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center mb-4">
+                        <span class="material-symbols-outlined text-xl">content_cut</span>
+                    </div>
+                    <div class="font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Salon Services</div>
+                    <div class="font-headline text-4xl font-bold text-on-surface" th:text="${summary.totalServices}">0</div>
+                </div>
+            </div>
+            
+            <div class="glass-pane bg-surface-container-lowest rounded-3xl p-6 clay-lift border border-outline-variant/30 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity group-hover:scale-110 duration-300">
+                    <span class="material-symbols-outlined text-6xl text-tertiary">badge</span>
+                </div>
+                <div class="relative z-10">
+                    <div class="w-12 h-12 rounded-full bg-tertiary-container text-on-tertiary-container flex items-center justify-center mb-4">
+                        <span class="material-symbols-outlined text-xl">badge</span>
+                    </div>
+                    <div class="font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1">Total Staff</div>
+                    <div class="font-headline text-4xl font-bold text-on-surface" th:text="${summary.totalStaff}">0</div>
+                </div>
+            </div>
+            
+            <div class="glass-pane bg-primary-container text-on-primary-container rounded-3xl p-6 clay-lift border border-primary/20 relative overflow-hidden group">
+                <div class="absolute top-0 right-0 p-6 opacity-10 group-hover:opacity-20 transition-opacity group-hover:scale-110 duration-300">
+                    <span class="material-symbols-outlined text-6xl">calendar_today</span>
+                </div>
+                <div class="relative z-10">
+                    <div class="w-12 h-12 rounded-full bg-primary text-on-primary flex items-center justify-center mb-4">
+                        <span class="material-symbols-outlined text-xl">calendar_today</span>
+                    </div>
+                    <div class="font-label text-xs font-bold text-primary-fixed-variant uppercase tracking-wider mb-1">Today's Appointments</div>
+                    <div class="font-headline text-4xl font-bold text-primary-fixed-variant" th:text="${summary.todayAppointments}">0</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8 flex-1">
+            
+            <!-- Appointments Per Day -->
+            <div class="glass-pane bg-surface-container-lowest rounded-[2rem] p-6 lg:p-8 clay-lift border border-outline-variant/30 flex flex-col min-h-[400px]">
+                <h3 class="font-headline text-xl font-bold text-tertiary mb-6">Appointments Per Day</h3>
+                <div class="flex flex-wrap items-center gap-3 mb-8">
+                    <div class="flex items-center gap-2">
+                        <span class="font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider">From</span>
+                        <input type="date" id="appFrom" class="px-4 py-2 rounded-full bg-surface-container-high border-none font-body text-xs text-on-surface focus:ring-2 focus:ring-primary/30 shadow-inner">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider">To</span>
+                        <input type="date" id="appTo" class="px-4 py-2 rounded-full bg-surface-container-high border-none font-body text-xs text-on-surface focus:ring-2 focus:ring-primary/30 shadow-inner">
+                    </div>
+                    <button onclick="loadAppointmentReport()" class="bg-primary text-on-primary px-4 py-2 rounded-full font-label text-xs font-bold uppercase tracking-wider hover:bg-primary-fixed-variant transition-colors shadow-sm ml-auto">Update</button>
+                </div>
+                <div class="flex-1 relative w-full min-h-[250px]">
+                    <canvas id="appointmentsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Most Booked Services -->
+            <div class="glass-pane bg-surface-container-lowest rounded-[2rem] p-6 lg:p-8 clay-lift border border-outline-variant/30 flex flex-col min-h-[400px]">
+                <h3 class="font-headline text-xl font-bold text-tertiary mb-6">Most Booked Services</h3>
+                <div class="flex flex-wrap items-center gap-3 mb-8">
+                    <div class="flex items-center gap-2">
+                        <span class="font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider">From</span>
+                        <input type="date" id="svcFrom" class="px-4 py-2 rounded-full bg-surface-container-high border-none font-body text-xs text-on-surface focus:ring-2 focus:ring-primary/30 shadow-inner">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider">To</span>
+                        <input type="date" id="svcTo" class="px-4 py-2 rounded-full bg-surface-container-high border-none font-body text-xs text-on-surface focus:ring-2 focus:ring-primary/30 shadow-inner">
+                    </div>
+                    <button onclick="loadServiceReport()" class="bg-primary text-on-primary px-4 py-2 rounded-full font-label text-xs font-bold uppercase tracking-wider hover:bg-primary-fixed-variant transition-colors shadow-sm ml-auto">Update</button>
+                </div>
+                <div class="flex-1 relative w-full min-h-[250px] flex items-center justify-center pb-4">
+                    <canvas id="servicesChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        
+<footer th:replace="~{layout/fragments :: dashboard-footer}"></footer>
+    </main>
+</div>
+
+
+<th:block th:replace="~{layout/fragments :: sakura-js}" />
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    let appointmentsChart;
+    let servicesChart;
+
+    async function loadAppointmentReport() {
+        const from = document.getElementById('appFrom').value;
+        const to = document.getElementById('appTo').value;
+        if (!from || !to) return;
+
+        try {
+            const response = await fetch(`/admin/reports/appointments?from=${from}&to=${to}`);
+            const result = await response.json();
+
+            const labels = Object.keys(result.data).map(d => {
+                const p = d.split('-');
+                return p[2] + '/' + p[1];
+            });
+            const values = Object.values(result.data);
+
+            if (appointmentsChart) appointmentsChart.destroy();
+            appointmentsChart = new Chart(document.getElementById('appointmentsChart'), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Appointments',
+                        data: values,
+                        borderColor: '#864e5a',
+                        backgroundColor: 'rgba(255, 183, 197, 0.15)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#864e5a',
+                        pointRadius: 5,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { stepSize: 1, font: { family: 'Manrope', size: 11 } }, grid: { color: 'rgba(0,0,0,0.04)' } },
+                        x: { ticks: { font: { family: 'Manrope', size: 11 } }, grid: { display: false } }
+                    }
+                }
+            });
+        } catch(e) { console.log('Error loading appointment report:', e); }
+    }
+
+    async function loadServiceReport() {
+        const from = document.getElementById('svcFrom').value;
+        const to = document.getElementById('svcTo').value;
+        if (!from || !to) return;
+
+        try {
+            const response = await fetch(`/admin/reports/services?from=${from}&to=${to}`);
+            const result = await response.json();
+
+            const labels = Object.keys(result.data);
+            const values = Object.values(result.data);
+
+            const colors = ['#864e5a', '#ffb7c5', '#f8d8db', '#d6c2c4', '#70585b', '#ffd9df', '#fbb3c1'];
+
+            if (servicesChart) servicesChart.destroy();
+            servicesChart = new Chart(document.getElementById('servicesChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: colors.slice(0, labels.length),
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { font: { family: 'Manrope', size: 11 }, padding: 16, usePointStyle: true }
+                        }
+                    }
+                }
+            });
+        } catch(e) { console.log('Error loading service report:', e); }
+    }
+
+    // Auto-load with last 30 days
+    window.addEventListener('DOMContentLoaded', () => {
+        const today = new Date();
+        const monthAgo = new Date();
+        monthAgo.setMonth(today.getMonth() - 1);
+
+        const fmt = d => d.toISOString().split('T')[0];
+
+        document.getElementById('appFrom').value = fmt(monthAgo);
+        document.getElementById('appTo').value = fmt(today);
+        document.getElementById('svcFrom').value = fmt(monthAgo);
+        document.getElementById('svcTo').value = fmt(today);
+
+        loadAppointmentReport();
+        loadServiceReport();
+    });
+</script>
+</body>
+</html>

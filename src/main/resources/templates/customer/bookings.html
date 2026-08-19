@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout/fragments :: head('My Bookings — Sakura Saki')}">
+    <!-- Required styling injected in the layout but we can ensure clay-card exists in a style block -->
+</head>
+<body class="antialiased min-h-screen bg-gradient-to-br from-surface to-secondary-container/30 flex text-on-surface" x-data="actionSystem">
+
+<th:block th:replace="~{layout/fragments :: sakura-canvas}" />
+<div id="sidebar-overlay" class="fixed inset-0 bg-on-surface/20 backdrop-blur-sm z-40 hidden md:hidden"></div>
+
+<style>
+    /* Glassmorphism utility */
+    .glass-panel {
+        background: rgba(255,255,255,0.6);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+    }
+    /* Claymorphism utility */
+    .clay-card {
+        background: #ffffff;
+        box-shadow: 20px 20px 60px rgba(0,0,0,0.06), 
+                   -20px -20px 60px rgba(255,255,255,0.8),
+                   inset 2px 2px 5px rgba(255,255,255,0.5);
+        border-radius: 2rem;
+    }
+</style>
+
+<div class="flex min-h-screen w-full relative z-10 md:pl-72">
+    <aside th:replace="~{layout/fragments :: customer-sidebar('bookings')}"></aside>
+
+    <main class="flex-1 px-6 pt-8 lg:px-8 xl:px-10 2xl:px-12 relative flex flex-col pb-2">
+        <div class="max-w-[1600px] mx-auto w-full flex flex-col flex-1">
+            <!-- Mobile TopAppBar -->
+            <header class="md:hidden flex justify-between items-center w-full bg-surface-container-lowest/60 backdrop-blur-xl shadow-sm sticky top-0 z-30 -mt-8 mb-8 -mx-6 px-6 py-4" style="width: calc(100% + 3rem);">
+                <div class="flex items-center gap-3">
+                    <button class="material-symbols-outlined text-primary mobile-menu-btn bg-transparent border-none p-0 cursor-pointer">menu</button>
+                    <h1 class="font-headline text-2xl font-bold tracking-tight text-primary">Sakura Saki</h1>
+                </div>
+                <div class="flex items-center gap-4 text-primary">
+                    <a th:href="@{/customer/settings}" class="material-symbols-outlined scale-95" style="text-decoration:none;">settings</a>
+                </div>
+            </header>
+            <!-- Page Title -->
+            <section class="flex flex-col gap-2 mb-10">
+                <span class="font-label text-primary uppercase tracking-widest text-sm font-semibold">Your Journey</span>
+                <h2 class="font-headline text-4xl md:text-5xl font-bold text-tertiary tracking-tight">My Bookings</h2>
+            </section>
+            
+            <div th:if="${success}" class="mb-8 p-4 bg-green-100 text-green-800 rounded-xl text-center font-medium font-body" th:text="${success}"></div>
+            <div th:if="${error}" class="mb-8 p-4 bg-red-100 text-red-800 rounded-xl text-center font-medium font-body" th:text="${error}"></div>
+
+            <!-- Bento Grid Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                
+                <!-- Main Column: Upcoming Rituals -->
+                <div class="lg:col-span-8 flex flex-col gap-6">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-headline text-2xl text-on-surface">Upcoming Rituals</h3>
+                    </div>
+                    
+                    <div th:if="${upcomingAppointments.empty}" class="clay-card p-12 text-center flex flex-col items-center">
+                        <span class="material-symbols-outlined text-5xl text-outline-variant mb-4">event_busy</span>
+                        <h4 class="font-headline text-xl font-bold text-tertiary mb-2">No upcoming rituals</h4>
+                        <p class="text-sm text-on-surface-variant mb-6">Schedule your next wellness session today.</p>
+                        <a th:href="@{/booking}" class="px-8 py-3 bg-primary text-on-primary rounded-full font-label text-xs font-bold uppercase tracking-wider hover:scale-105 transition-all shadow-lg" style="text-decoration:none;">Book Now</a>
+                    </div>
+
+                    <!-- Dynamic Upcoming Cards -->
+                    <th:block th:each="appt : ${upcomingAppointments.content}">
+                        <div class="clay-card p-6 flex flex-col sm:flex-row gap-6 relative group overflow-hidden">
+                            <!-- Decorative background glow -->
+                            <div class="absolute -top-20 -right-20 w-64 h-64 bg-primary-container/30 rounded-full blur-3xl group-hover:bg-primary-container/50 transition-colors duration-700"></div>
+                            
+                            <!-- Service Image or Fallback -->
+                            <div class="w-full sm:w-40 h-48 sm:h-auto rounded-2xl overflow-hidden shrink-0 shadow-md bg-secondary-container flex items-center justify-center text-on-secondary-container relative">
+                                <img th:if="${appt.service != null && appt.service.imageUrl != null}" 
+                                     th:src="${appt.service.imageUrl}" 
+                                     alt="Service Image" 
+                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 absolute inset-0 z-10" />
+                                <span class="material-symbols-outlined text-6xl group-hover:scale-110 transition-transform duration-700 relative z-0" 
+                                      th:text="${appt.service != null && appt.service.name.toLowerCase().contains('massage') ? 'spa' : 'face_retouching_natural'}">spa</span>
+                            </div>
+                            
+                            <!-- Details -->
+                            <div class="flex flex-col flex-1 justify-between relative z-10">
+                                <div>
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="px-3 py-1 bg-surface-container-high rounded-full font-label text-[10px] uppercase tracking-widest text-on-surface-variant flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-[14px]">event</span> <span th:text="${appt.appointmentDate}">Oct 24</span>
+                                        </span>
+                                        <span class="font-body text-sm text-tertiary" th:text="${appt.appointmentTime}">10:00 AM</span>
+                                    </div>
+                                    <h4 class="font-headline text-xl text-on-surface font-semibold mb-1" th:text="${appt.service != null ? appt.service.name : 'Service'}">Sakura Signature Hair Ritual</h4>
+                                    <p class="font-body text-on-surface-variant text-sm mb-4" th:text="${appt.service != null ? appt.service.description : 'A deeply restorative treatment.'}">A deeply restorative scalp and hair treatment.</p>
+                                    
+                                    <div class="flex items-center gap-2 text-sm text-on-surface-variant font-body" th:if="${appt.staff != null}">
+                                        <span class="material-symbols-outlined text-outline">person</span>
+                                        <span>with <span class="font-semibold text-tertiary" th:text="${appt.staff.firstName + ' ' + appt.staff.lastName}">Mei Lin</span></span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Actions -->
+                                <div class="flex items-center gap-6 mt-6 pt-4 border-t border-outline-variant/20">
+                                    <a th:href="@{/booking(serviceId=${appt.service != null ? appt.service.id : ''}, rescheduleId=${appt.id})}" class="font-label uppercase text-xs tracking-wider text-primary hover:text-primary-fixed transition-colors duration-400 flex items-center" style="text-decoration:none;">
+                                        Reschedule
+                                    </a>
+                                    <button th:data-appt-id="${appt.id}" @click="openCancelModal($el.dataset.apptId)" class="font-label uppercase text-xs tracking-wider text-outline hover:text-error transition-colors duration-400 bg-transparent border-none cursor-pointer p-0 m-0">
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </th:block>
+                    
+                    <!-- Upcoming Pagination -->
+                    <th:block th:replace="~{layout/fragments :: multi-pagination(page=${upcomingAppointments}, url='/customer/bookings', prefix='upcoming', otherPrefix='past', otherPage=${pastAppointments.number}, otherSize=${pastAppointments.size})}" />
+                </div>
+                
+                <!-- Side Column: Calendar & Past -->
+                <div class="lg:col-span-4 flex flex-col gap-8 lg:mt-[4.5rem]">
+                    
+                    <!-- Calendar Widget (Functional) -->
+                    <div class="glass-panel rounded-3xl p-6 shadow-sm" x-data="calendarWidget()">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="font-headline text-lg text-on-surface font-bold" x-text="monthName + ' ' + year">This Month</h3>
+                            <div class="flex gap-2">
+                                <button @click="prevMonth" class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:bg-primary-container hover:text-on-primary-container transition-colors duration-400">
+                                    <span class="material-symbols-outlined text-sm">chevron_left</span>
+                                </button>
+                                <button @click="nextMonth" class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant hover:bg-primary-container hover:text-on-primary-container transition-colors duration-400">
+                                    <span class="material-symbols-outlined text-sm">chevron_right</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Calendar Grid -->
+                        <div class="grid grid-cols-7 gap-y-4 text-center font-body text-sm">
+                            <template x-for="day in ['Su','Mo','Tu','We','Th','Fr','Sa']">
+                                <div class="text-outline-variant font-label text-xs" x-text="day"></div>
+                            </template>
+                            
+                            <template x-for="blank in blanks" :key="'blank-'+blank">
+                                <div class="text-outline-variant"></div>
+                            </template>
+                            
+                            <template x-for="date in daysInMonth" :key="'date-'+date">
+                                <div class="relative flex items-center justify-center h-8"
+                                     :class="{
+                                         'text-on-surface': !isToday(date) && !hasAppointment(date),
+                                         'bg-primary text-on-primary rounded-full font-bold shadow-md w-8 h-8 mx-auto': isToday(date),
+                                         'font-bold': hasAppointment(date) && !isToday(date)
+                                     }">
+                                    <span x-text="date"></span>
+                                    <span x-show="hasAppointment(date) && !isToday(date)" class="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 bg-primary rounded-full"></span>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                    
+                    <!-- Past Rituals Section -->
+                    <div>
+                        <h3 class="font-headline text-lg text-on-surface mb-4">Past Rituals</h3>
+                        <div class="flex flex-col gap-3">
+                            
+                            <div th:if="${pastAppointments.empty}" class="text-center py-6">
+                                <p class="text-sm text-on-surface-variant">No past history yet.</p>
+                            </div>
+
+                            <th:block th:each="appt : ${pastAppointments.content}">
+                                <div class="bg-surface-container-lowest/80 rounded-2xl p-4 flex gap-4 items-center shadow-sm">
+                                    <div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-primary shrink-0">
+                                        <span class="material-symbols-outlined" th:text="${appt.status == 'CANCELLED' ? 'cancel' : 'self_care'}">self_care</span>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <h4 class="font-headline text-sm font-semibold text-on-surface truncate" th:text="${appt.service != null ? appt.service.name : 'Service'}">Deep Tissue Harmony</h4>
+                                        <div class="flex flex-col gap-1 mt-1 items-start">
+                                            <p class="font-body text-xs text-outline" th:text="${appt.appointmentDate}">Sept 12, 2023</p>
+                                            <span th:if="${appt.status == 'CANCELLED'}" class="text-[10px] uppercase font-bold text-error bg-error/10 px-2 py-0.5 rounded-full inline-block mt-0.5">Cancelled</span>
+                                            <span th:if="${appt.status == 'EXPIRED'}" class="text-[10px] uppercase font-bold text-error bg-error/10 px-2 py-0.5 rounded-full inline-block mt-0.5">Expired</span>
+                                            <span th:if="${appt.status == 'COMPLETED'}" class="text-[10px] uppercase font-bold text-tertiary bg-surface-container px-2 py-0.5 rounded-full inline-block mt-0.5">Completed</span>
+                                            <span th:if="${appt.status != 'CANCELLED' && appt.status != 'COMPLETED' && appt.status != 'EXPIRED'}" class="text-[10px] uppercase font-bold text-tertiary bg-surface-container px-2 py-0.5 rounded-full inline-block mt-0.5" th:text="${appt.status}">Completed</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="shrink-0 flex items-center gap-2">
+                                        <!-- Review state -->
+                                        <div class="flex text-primary cursor-pointer hover:opacity-80 transition-opacity" 
+                                             th:if="${appt.status == 'COMPLETED' && reviewedIds != null && #sets.contains(reviewedIds, appt.id)}"
+                                             th:data-appt-id="${appt.id}"
+                                             th:data-rating="${reviewsMap.get(appt.id).rating}"
+                                             th:data-comment="${reviewsMap.get(appt.id).comment != null ? reviewsMap.get(appt.id).comment : ''}"
+                                             @click="openReviewModal($el.dataset.apptId, $el.dataset.rating, $el.dataset.comment)"
+                                             title="Edit Review">
+                                            <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                            <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                            <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                            <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                            <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span>
+                                        </div>
+                                        
+                                        <button th:if="${appt.status == 'COMPLETED' && reviewedIds != null && !#sets.contains(reviewedIds, appt.id)}"
+                                           th:data-appt-id="${appt.id}"
+                                           @click="openReviewModal($el.dataset.apptId, 0, '')"
+                                           title="Leave Review"
+                                           class="text-amber-600 hover:bg-amber-100 w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-400">
+                                            <span class="material-symbols-outlined text-sm">rate_review</span>
+                                        </button>
+                                        
+                                        <a th:if="${appt.service != null}" th:href="${(appt.status == 'CANCELLED' || appt.status == 'EXPIRED') ? '/booking?serviceId=' + appt.service.id + '&rescheduleId=' + appt.id : '/booking?serviceId=' + appt.service.id}" title="Book Again" class="text-primary hover:bg-primary-container w-8 h-8 rounded-full flex items-center justify-center transition-colors duration-400">
+                                            <span class="material-symbols-outlined text-sm">refresh</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </th:block>
+                            
+                            <!-- Past Pagination -->
+                            <th:block th:replace="~{layout/fragments :: multi-pagination(page=${pastAppointments}, url='/customer/bookings', prefix='past', otherPrefix='upcoming', otherPage=${upcomingAppointments.number}, otherSize=${upcomingAppointments.size})}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="h-12 md:hidden"></div>
+        </div>
+        
+        
+<footer th:replace="~{layout/fragments :: dashboard-footer}"></footer>
+    </main>
+</div>
+
+
+<th:block th:replace="~{layout/fragments :: sakura-js}" />
+
+<div th:replace="~{layout/fragments :: review-modal}"></div>
+<div th:replace="~{layout/fragments :: cancel-modal}"></div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const scheduledAppointmentsRaw = /*[[${allUpcomingAppointments}]]*/ null;
+    const scheduledAppointments = scheduledAppointmentsRaw || [];
+    /*]]>*/
+
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('calendarWidget', () => ({
+            month: new Date().getMonth(),
+            year: new Date().getFullYear(),
+            daysInMonth: [],
+            blanks: [],
+            monthName: '',
+            appointmentDates: [],
+
+            init() {
+                this.extractAppointmentDates();
+                this.calculateDays();
+            },
+
+            extractAppointmentDates() {
+                this.appointmentDates = scheduledAppointments.map(d => {
+                    const parts = d.split('-');
+                    if (parts.length === 3) {
+                        return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+                    }
+                    return new Date(d + 'T00:00:00');
+                });
+            },
+
+            calculateDays() {
+                let daysInMonth = new Date(this.year, this.month + 1, 0).getDate();
+                let dayOfWeek = new Date(this.year, this.month, 1).getDay();
+                let blankdaysArray = [];
+                for (var i = 1; i <= dayOfWeek; i++) {
+                    blankdaysArray.push(i);
+                }
+                let daysArray = [];
+                for (var i = 1; i <= daysInMonth; i++) {
+                    daysArray.push(i);
+                }
+                this.blanks = blankdaysArray;
+                this.daysInMonth = daysArray;
+                this.monthName = new Date(this.year, this.month, 1).toLocaleString('default', { month: 'long' });
+            },
+
+            nextMonth() {
+                if (this.month === 11) {
+                    this.month = 0;
+                    this.year++;
+                } else {
+                    this.month++;
+                }
+                this.calculateDays();
+            },
+
+            prevMonth() {
+                if (this.month === 0) {
+                    this.month = 11;
+                    this.year--;
+                } else {
+                    this.month--;
+                }
+                this.calculateDays();
+            },
+
+            isToday(date) {
+                const today = new Date();
+                return this.month === today.getMonth() && this.year === today.getFullYear() && date === today.getDate();
+            },
+
+            hasAppointment(date) {
+                return this.appointmentDates.some(d => d.getDate() === date && d.getMonth() === this.month && d.getFullYear() === this.year);
+            }
+        }));
+    });
+</script>
+
+</body>
+</html>

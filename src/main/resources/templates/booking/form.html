@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html class="light" lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Book Your Experience | Sakura Saki</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#ffd9df", "outline": "#837375", "error": "#ba1a1a",
+                        "primary": "#864e5a", "inverse-primary": "#fbb3c1",
+                        "surface-container-low": "#f3f3f3", "on-error": "#ffffff",
+                        "surface-container": "#eeeeee", "on-primary-container": "#7b4551",
+                        "background": "#f9f9f9", "on-background": "#1a1c1c",
+                        "surface-container-highest": "#e2e2e2", "on-tertiary": "#ffffff",
+                        "surface": "#f9f9f9", "tertiary": "#5f5e5e",
+                        "surface-container-lowest": "#ffffff", "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6", "secondary": "#70585b",
+                        "on-primary": "#ffffff", "primary-container": "#ffb7c5",
+                        "on-surface": "#1a1c1c", "surface-container-high": "#e8e8e8",
+                        "surface-variant": "#e2e2e2", "surface-bright": "#f9f9f9",
+                        "on-surface-variant": "#514345", "outline-variant": "#d6c2c4"
+                    },
+                    "borderRadius": { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                    "fontFamily": { "headline": ["Noto Serif"], "body": ["Manrope"], "label": ["Manrope"] }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-panel { background: rgba(255, 255, 255, 0.65); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); }
+        .clay-lift { box-shadow: 0 40px 60px -15px rgba(26, 28, 28, 0.06), inset 2px 2px 4px rgba(255, 255, 255, 0.8); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        #step2, #step3 { display: none; }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
+    <canvas class="fixed inset-0 pointer-events-none w-full h-full -z-[1]" id="sakura-canvas"></canvas>
+
+    <!-- TopNavBar -->
+    <div th:replace="~{layout/fragments :: topnav('booking')}"></div>
+
+    <main class="pt-32 pb-16 mb-8 px-4 md:px-8 max-w-[1600px] mx-auto relative min-h-screen">
+        <div class="absolute -top-10 -left-20 w-64 h-64 bg-primary-container/20 rounded-full blur-3xl -z-10"></div>
+        <div class="absolute top-1/2 -right-20 w-96 h-96 bg-secondary-container/30 rounded-full blur-3xl -z-10"></div>
+
+        <header class="mb-12 text-center">
+            <span class="font-label text-primary uppercase tracking-[0.2em] text-xs font-bold mb-3 block">Reservation Portal</span>
+            <h1 class="font-headline text-4xl md:text-6xl text-on-surface -tracking-[0.02em] font-bold">Curate Your Calm</h1>
+        </header>
+
+        <div th:if="${success}" class="max-w-5xl mx-auto mb-8 p-4 bg-green-100 text-green-800 rounded-lg text-center font-medium" th:text="${success}"></div>
+        <div th:if="${error}" class="max-w-5xl mx-auto mb-8 p-4 bg-red-100 text-red-800 rounded-lg text-center font-medium" th:text="${error}"></div>
+
+        <!-- Multi-step Booking Container -->
+        <div class="glass-panel clay-lift rounded-xl md:rounded-lg overflow-hidden border border-white/40 max-w-5xl mx-auto flex flex-col md:flex-row">
+
+            <!-- Step Navigation -->
+            <aside class="w-full md:w-72 bg-surface-container-low/50 p-8 flex flex-row md:flex-col justify-between md:justify-start gap-6 border-r border-white/20">
+                <div class="flex flex-col gap-8 w-full">
+                    <div id="nav-step1" class="flex items-center gap-4 opacity-100 transition-opacity" th:style="${selectedServiceId != null ? 'display:none!important;' : ''}">
+                        <div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold shadow-lg shadow-primary/20 transition-colors">1</div>
+                        <div class="hidden md:block">
+                            <p class="text-[10px] font-label uppercase tracking-widest text-primary font-bold">Step 01</p>
+                            <p class="text-sm font-semibold text-on-surface">Service</p>
+                        </div>
+                    </div>
+                    <div id="nav-step2" class="flex items-center gap-4 opacity-50 transition-opacity">
+                        <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-bold transition-colors">2</div>
+                        <div class="hidden md:block">
+                            <p class="text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold">Step 02</p>
+                            <p class="text-sm font-semibold text-on-surface">Date &amp; Time</p>
+                        </div>
+                    </div>
+                    <div id="nav-step3" class="flex items-center gap-4 opacity-50 transition-opacity">
+                        <div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-bold transition-colors">3</div>
+                        <div class="hidden md:block">
+                            <p class="text-[10px] font-label uppercase tracking-widest text-on-surface-variant font-bold">Step 03</p>
+                            <p class="text-sm font-semibold text-on-surface">Artisan</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-auto hidden md:block p-4 rounded-lg bg-primary-container/20">
+                    <p class="text-xs italic text-on-primary-container leading-relaxed">"True beauty begins the moment you decide to be yourself."</p>
+                </div>
+            </aside>
+
+            <!-- Form Body -->
+            <section class="flex-1 p-8 md:p-12 relative">
+                <form id="bookingForm" th:action="@{/booking}" method="post">
+                    <input type="hidden" name="serviceId" id="input-serviceId" th:value="${selectedServiceId}">
+                    <input type="hidden" name="staffId" id="input-staffId">
+                    <input type="hidden" id="input-serviceDuration" value="60">
+                    <input type="hidden" name="rescheduleId" id="input-rescheduleId" th:if="${rescheduleId != null}" th:value="${rescheduleId}">
+
+                    <!-- STEP 1: SELECT SERVICE (Packages + Individual) -->
+                    <div id="step1" class="space-y-10" th:style="${selectedServiceId != null ? 'display:none!important;' : ''}">
+                        <div class="flex justify-between items-end">
+                            <div>
+                                <h2 class="font-headline text-2xl font-bold text-on-surface">Select Service</h2>
+                                <p class="text-on-surface-variant/70 mt-2">What experience are we crafting for you today?</p>
+                            </div>
+                        </div>
+
+                        <!-- Packages Section -->
+                        <div th:if="${packages != null && !packages.isEmpty()}">
+                            <h3 class="text-xs font-label uppercase tracking-[0.15em] text-primary font-bold mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">inventory_2</span> Packages
+                            </h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                                <div th:each="pkg : ${packages}"
+                                     class="service-card group relative p-5 rounded-lg bg-gradient-to-br from-primary-container/20 to-surface-container-lowest border clay-lift transition-all duration-400 cursor-pointer border-transparent hover:border-primary-container"
+                                     th:data-id="${pkg.services != null && !pkg.services.isEmpty() ? pkg.services[0].id : ''}"
+                                     th:data-duration="${pkg.services != null && !pkg.services.isEmpty() ? pkg.services[0].durationMinutes : 60}"
+                                     onclick="selectService(this)">
+                                    <div class="check-icon absolute top-4 right-4 w-6 h-6 rounded-full border-2 border-primary-container flex items-center justify-center transition-colors">
+                                        <span class="material-symbols-outlined text-[14px] text-white opacity-0 transition-opacity" style="font-variation-settings: 'FILL' 1;">check</span>
+                                    </div>
+                                    <span class="material-symbols-outlined text-primary text-2xl mb-3">redeem</span>
+                                    <h3 class="font-bold text-on-surface mb-1 text-sm" th:text="${pkg.name}">Package</h3>
+                                    <p class="text-[11px] text-on-surface-variant/80 mb-3 leading-relaxed line-clamp-2" th:text="${pkg.description}">Description</p>
+                                    <div class="flex justify-between items-center pt-3 border-t border-surface-container">
+                                        <div>
+                                            <span class="font-bold text-primary text-sm" th:text="'₹' + ${#numbers.formatDecimal(pkg.getDiscountedPrice(),1,2)}">$0</span>
+                                            <span class="text-[10px] text-outline line-through ml-1" th:text="'₹' + ${#numbers.formatDecimal(pkg.getTotalPrice(),1,2)}">$0</span>
+                                        </div>
+                                        <span class="text-[9px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold uppercase">Save <span th:text="${pkg.discountPercent}">10</span>%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Individual Services Section -->
+                        <div>
+                            <h3 class="text-xs font-label uppercase tracking-[0.15em] text-primary font-bold mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">spa</span> Individual Services
+                            </h3>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div th:each="s : ${services}"
+                                     class="service-card group relative p-5 rounded-lg bg-surface-container-lowest border clay-lift transition-all duration-400 cursor-pointer border-transparent hover:border-primary-container"
+                                     th:data-id="${s.id}"
+                                     th:data-duration="${s.durationMinutes}"
+                                     onclick="selectService(this)">
+                                    <div class="check-icon absolute top-4 right-4 w-6 h-6 rounded-full border-2 border-primary-container flex items-center justify-center transition-colors">
+                                        <span class="material-symbols-outlined text-[14px] text-white opacity-0 transition-opacity" style="font-variation-settings: 'FILL' 1;">check</span>
+                                    </div>
+                                    <span class="material-symbols-outlined text-primary text-2xl mb-3">spa</span>
+                                    <h3 class="font-bold text-on-surface mb-1 text-sm" th:text="${s.name}">Service Name</h3>
+                                    <p class="text-[11px] text-on-surface-variant/80 mb-3 leading-relaxed line-clamp-2" th:text="${s.description}">Description</p>
+                                    <div class="flex justify-between items-center pt-3 border-t border-surface-container">
+                                        <span class="font-bold text-primary text-sm" th:text="'₹' + ${#numbers.formatDecimal(s.price,1,2)}">$120</span>
+                                        <span class="text-[10px] font-label text-outline uppercase" th:text="${s.durationMinutes} + ' min'">60 min</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end pt-8">
+                            <button type="button" onclick="goToStep(2)" class="bg-primary text-white px-10 py-4 rounded-full font-label uppercase text-sm tracking-widest flex items-center gap-3 clay-lift transition-all duration-300 hover:scale-105">
+                                Next: Date &amp; Time
+                                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: DATE & TIME -->
+                    <div id="step2" class="space-y-10">
+                        <div>
+                            <h2 class="font-headline text-2xl font-bold text-on-surface">Select Date &amp; Time</h2>
+                            <p class="text-on-surface-variant/70 mt-2">Choose when you'd like your appointment.</p>
+                        </div>
+
+                        <div id="dateTimeError" class="hidden p-4 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm font-medium flex items-center gap-3">
+                            <span class="material-symbols-outlined text-red-500">error</span>
+                            <span id="dateTimeErrorMsg">Error message</span>
+                        </div>
+
+                        <div class="glass-panel clay-lift rounded-lg p-8 border border-white/40 space-y-6">
+                            <div class="flex flex-col gap-2">
+                                <label class="text-xs font-bold uppercase tracking-widest text-primary">Select Date</label>
+                                <input type="date" name="date" id="dateInput" required class="w-full bg-surface-container-low border-none rounded-lg p-4 text-on-surface focus:ring-2 focus:ring-primary shadow-inner">
+                            </div>
+                            <div class="flex flex-col gap-2">
+                                <label class="text-xs font-bold uppercase tracking-widest text-primary">Select Time</label>
+                                <input type="time" name="time" id="timeInput" required class="w-full bg-surface-container-low border-none rounded-lg p-4 text-on-surface focus:ring-2 focus:ring-primary shadow-inner">
+                            </div>
+                            <div class="flex flex-col gap-2 pt-4">
+                                <label class="text-xs font-bold uppercase tracking-widest text-primary">Special Requests (Optional)</label>
+                                <textarea name="notes" rows="3" class="w-full bg-surface-container-low border-none rounded-lg p-4 text-on-surface focus:ring-2 focus:ring-primary shadow-inner" placeholder="Any specific needs..."></textarea>
+                            </div>
+                        </div>
+
+                        <div class="flex pt-8" th:classappend="${selectedServiceId != null ? 'justify-end' : 'justify-between'}">
+                            <button th:if="${selectedServiceId == null}" type="button" onclick="goToStep(1)" class="text-primary font-label uppercase text-sm tracking-widest flex items-center gap-3 transition-all duration-300 hover:opacity-70">
+                                <span class="material-symbols-outlined text-lg">arrow_back</span> Back
+                            </button>
+                            <button type="button" onclick="goToStep(3)" class="bg-primary text-white px-10 py-4 rounded-full font-label uppercase text-sm tracking-widest flex items-center gap-3 clay-lift transition-all duration-300 hover:scale-105">
+                                Next: Select Artisan
+                                <span class="material-symbols-outlined text-lg">arrow_forward</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- STEP 3: SELECT STAFF (dynamically loaded) -->
+                    <div id="step3" class="space-y-10">
+                        <div>
+                            <h2 class="font-headline text-2xl font-bold text-on-surface">Select Artisan</h2>
+                            <p class="text-on-surface-variant/70 mt-2">Available staff for your selected date &amp; time.</p>
+                        </div>
+
+                        <div id="staffLoading" class="text-center py-12 hidden">
+                            <span class="material-symbols-outlined text-primary text-4xl animate-spin">progress_activity</span>
+                            <p class="text-sm text-on-surface-variant mt-4">Loading available staff...</p>
+                        </div>
+
+                        <div id="staffContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <!-- Staff cards are loaded dynamically via JS -->
+                        </div>
+
+                        <div id="noStaffMsg" class="hidden text-center py-12">
+                            <span class="material-symbols-outlined text-outline-variant text-5xl mb-4 block">person_off</span>
+                            <p class="text-on-surface-variant font-medium">No staff available at this time. Please go back and choose a different date/time.</p>
+                        </div>
+
+                        <div class="flex justify-between pt-8">
+                            <button type="button" onclick="goToStep(2)" class="text-primary font-label uppercase text-sm tracking-widest flex items-center gap-3 transition-all duration-300 hover:opacity-70">
+                                <span class="material-symbols-outlined text-lg">arrow_back</span> Back
+                            </button>
+                            <button type="submit" class="bg-primary text-white px-10 py-4 rounded-full font-label uppercase text-sm tracking-widest flex items-center gap-3 clay-lift transition-all duration-300 hover:scale-105">
+                                Confirm Booking
+                                <span class="material-symbols-outlined text-lg">check_circle</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <footer th:replace="~{layout/fragments :: site-footer}"></footer>
+
+    <script>
+        // Canvas Animation
+        const canvas = document.getElementById('sakura-canvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+        window.addEventListener('resize', () => { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; });
+        const petals = [];
+        for (let i = 0; i < 40; i++) {
+            petals.push({
+                x: Math.random() * width, y: Math.random() * height - height, size: Math.random() * 12 + 8,
+                speedY: Math.random() * 1.5 + 0.5, speedX: Math.random() * 2 - 1, angle: Math.random() * 360,
+                spin: Math.random() * 0.05 - 0.025, opacity: Math.random() * 0.6 + 0.2
+            });
+        }
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            petals.forEach(p => {
+                p.y += p.speedY; p.x += p.speedX; p.angle += p.spin;
+                if (p.y > height + p.size) { p.y = -p.size; p.x = Math.random() * width; }
+                if (p.x > width + p.size) p.x = -p.size;
+                if (p.x < -p.size) p.x = width + p.size;
+                ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.angle);
+                ctx.fillStyle = `rgba(255, 183, 197, ${p.opacity})`;
+                ctx.beginPath(); ctx.moveTo(0, 0);
+                ctx.quadraticCurveTo(p.size * 0.8, -p.size * 0.8, p.size * 1.2, 0);
+                ctx.quadraticCurveTo(p.size * 0.8, p.size * 0.8, 0, 0);
+                ctx.fill(); ctx.restore();
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        // Multi-step Logic
+        let currentStep = 1;
+        const totalSteps = 3;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const dateParam = params.get('date');
+            if (dateParam) {
+                document.getElementById('dateInput').value = dateParam;
+            }
+            
+            // serviceId parsing already exists via Thymeleaf logic (or it relies on user click)
+            // But we check if serviceId was provided in query params and maybe auto-advance to step 2?
+            if (params.get('serviceId') || params.get('date')) {
+                // If they came with a specific service or date intent, we might want to guide them.
+            }
+        });
+
+        function goToStep(step) {
+            // Validation
+            if (step === 2 && !document.getElementById('input-serviceId').value) {
+                alert('Please select a service first.');
+                return;
+            }
+            if (step === 3) {
+                const dateVal = document.getElementById('dateInput').value;
+                const timeVal = document.getElementById('timeInput').value;
+                if (!dateVal || !timeVal) {
+                    showDateTimeError('Please select a date and time first.');
+                    return;
+                }
+                // Client-side past date/time validation
+                const now = new Date();
+                const selectedDate = new Date(dateVal);
+                const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const selected = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), selectedDate.getDate());
+
+                if (selected < today) {
+                    showDateTimeError('Cannot book on a past date. Please select today or a future date.');
+                    return;
+                }
+                if (selected.getTime() === today.getTime()) {
+                    const [hours, minutes] = timeVal.split(':').map(Number);
+                    const selectedTime = new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes);
+                    if (selectedTime <= now) {
+                        showDateTimeError('Cannot book at a past time. Please select a future time slot.');
+                        return;
+                    }
+                }
+                hideDateTimeError();
+                // Load available staff dynamically
+                loadAvailableStaff();
+            }
+
+            // Hide all steps, update nav
+            for (let i = 1; i <= totalSteps; i++) {
+                document.getElementById('step' + i).style.display = 'none';
+                const nav = document.getElementById('nav-step' + i);
+                const circle = nav.querySelector('div');
+                const texts = nav.querySelectorAll('p');
+                if (i === step) {
+                    nav.style.opacity = '1';
+                    circle.classList.remove('bg-surface-container-high', 'text-on-surface-variant');
+                    circle.classList.add('bg-primary', 'text-white', 'shadow-lg', 'shadow-primary/20');
+                    if (texts[0]) texts[0].classList.replace('text-on-surface-variant', 'text-primary');
+                } else if (i < step) {
+                    nav.style.opacity = '0.7';
+                    circle.classList.add('bg-primary', 'text-white');
+                    circle.classList.remove('bg-surface-container-high', 'text-on-surface-variant', 'shadow-lg', 'shadow-primary/20');
+                    if (texts[0]) texts[0].classList.replace('text-on-surface-variant', 'text-primary');
+                } else {
+                    nav.style.opacity = '0.5';
+                    circle.classList.remove('bg-primary', 'text-white', 'shadow-lg', 'shadow-primary/20');
+                    circle.classList.add('bg-surface-container-high', 'text-on-surface-variant');
+                    if (texts[0]) texts[0].classList.replace('text-primary', 'text-on-surface-variant');
+                }
+            }
+            document.getElementById('step' + step).style.display = 'block';
+            currentStep = step;
+        }
+
+        function selectService(el) {
+            if (el.classList.contains('border-primary-container')) {
+                // Currently selected, so unselect it
+                resetCard(el);
+                document.getElementById('input-serviceId').value = '';
+                document.getElementById('input-serviceDuration').value = '60';
+                return;
+            }
+            document.querySelectorAll('.service-card').forEach(c => resetCard(c));
+            highlightCard(el);
+            document.getElementById('input-serviceId').value = el.getAttribute('data-id');
+            document.getElementById('input-serviceDuration').value = el.getAttribute('data-duration') || '60';
+        }
+
+        function selectStaff(el) {
+            document.querySelectorAll('.staff-card').forEach(c => resetCard(c));
+            highlightCard(el);
+            document.getElementById('input-staffId').value = el.getAttribute('data-id');
+        }
+
+        function highlightCard(el) {
+            el.classList.add('border-primary-container', 'ring-2', 'ring-primary-container/20', 'scale-[1.02]');
+            el.classList.remove('border-transparent');
+            const check = el.querySelector('.check-icon');
+            check.classList.add('bg-primary', 'border-primary');
+            check.classList.remove('border-primary-container');
+            check.querySelector('span').classList.remove('opacity-0');
+        }
+
+        function resetCard(el) {
+            el.classList.remove('border-primary-container', 'ring-2', 'ring-primary-container/20', 'scale-[1.02]');
+            el.classList.add('border-transparent');
+            const check = el.querySelector('.check-icon');
+            check.classList.remove('bg-primary', 'border-primary');
+            check.classList.add('border-primary-container');
+            check.querySelector('span').classList.add('opacity-0');
+        }
+
+        async function loadAvailableStaff() {
+            const date = document.getElementById('dateInput').value;
+            const time = document.getElementById('timeInput').value;
+            const duration = document.getElementById('input-serviceDuration').value || '60';
+
+            const container = document.getElementById('staffContainer');
+            const loading = document.getElementById('staffLoading');
+            const noStaff = document.getElementById('noStaffMsg');
+
+            container.innerHTML = '';
+            loading.classList.remove('hidden');
+            noStaff.classList.add('hidden');
+
+            try {
+                let url = `/booking/available-staff?date=${date}&time=${time}&durationMinutes=${duration}`;
+                const rescheduleEl = document.getElementById('input-rescheduleId');
+                if (rescheduleEl) {
+                    url += `&excludeAppointmentId=${rescheduleEl.value}`;
+                }
+                const resp = await fetch(url);
+                const staffList = await resp.json();
+
+                loading.classList.add('hidden');
+
+                if (staffList.length === 0) {
+                    noStaff.classList.remove('hidden');
+                    return;
+                }
+
+                staffList.forEach(s => {
+                    const initials = (s.firstName ? s.firstName[0] : '') + (s.lastName ? s.lastName[0] : '');
+                    const card = document.createElement('div');
+                    card.className = 'staff-card group relative p-6 rounded-lg bg-surface-container-lowest border clay-lift transition-all duration-400 cursor-pointer border-transparent hover:border-primary-container';
+                    card.setAttribute('data-id', s.id);
+                    card.onclick = function() { selectStaff(this); };
+                    card.innerHTML = `
+                        <div class="check-icon absolute top-4 right-4 w-6 h-6 rounded-full border-2 border-primary-container flex items-center justify-center transition-colors">
+                            <span class="material-symbols-outlined text-[14px] text-white opacity-0 transition-opacity" style="font-variation-settings: 'FILL' 1;">check</span>
+                        </div>
+                        <div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold mb-4">${initials}</div>
+                        <h3 class="font-bold text-on-surface mb-1">${s.firstName} ${s.lastName}</h3>
+                        <p class="text-xs text-on-surface-variant/80 mb-1">${s.staffType || ''}</p>
+                        <p class="text-[10px] text-primary font-medium">${s.specialization || ''}</p>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (e) {
+                loading.classList.add('hidden');
+                noStaff.classList.remove('hidden');
+            }
+        }
+
+        function showDateTimeError(msg) {
+            const el = document.getElementById('dateTimeError');
+            document.getElementById('dateTimeErrorMsg').textContent = msg;
+            el.classList.remove('hidden');
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function hideDateTimeError() {
+            document.getElementById('dateTimeError').classList.add('hidden');
+        }
+
+        // Initialize
+        window.onload = function() {
+            const initialService = document.getElementById('input-serviceId').value;
+            if (initialService) {
+                const el = document.querySelector(`.service-card[data-id="${initialService}"]`);
+                if (el) {
+                    selectService(el);
+                }
+                setTimeout(() => goToStep(2), 300);
+            }
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('dateInput').setAttribute('min', today);
+        }
+    </script>
+</body>
+</html>

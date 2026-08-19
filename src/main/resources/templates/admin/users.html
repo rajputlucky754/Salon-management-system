@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout/fragments :: head('User Management — Sakura Saki Admin')}"></head>
+<body class="bg-surface text-on-surface font-body">
+<th:block th:replace="~{layout/fragments :: sakura-canvas}" />
+
+<div class="flex min-h-screen w-full relative z-10 md:pl-72">
+    <!-- Sidebar -->
+    <aside th:replace="~{layout/fragments :: admin-sidebar('users')}"></aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-6 pt-6 md:px-10 pt-10 lg:px-14 pt-14 relative flex flex-col pb-2">
+        <!-- Page Header -->
+        <header class="flex justify-between items-end mb-12 flex-wrap gap-4">
+            <div>
+                <span class="text-primary font-label text-xs font-bold tracking-[0.2em] uppercase block mb-2">User Management</span>
+                <h1 class="font-headline text-4xl text-tertiary font-bold">All Users</h1>
+            </div>
+            <div class="flex items-center gap-4 flex-wrap">
+                <form th:action="@{/admin/users}" method="get" class="flex items-center">
+                    <div class="relative">
+                        <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline">search</span>
+                        <input type="text" name="search" th:value="${search}" class="pl-12 pr-4 py-3 rounded-full bg-surface-container-high border-none font-body text-sm text-on-surface placeholder:text-outline-variant focus:ring-2 focus:ring-primary/30 w-64 shadow-inner" placeholder="Search by username...">
+                    </div>
+                </form>
+            </div>
+        </header>
+
+        <!-- Alerts -->
+        <div th:if="${success}" class="mb-6 p-4 rounded-2xl bg-tertiary-container/30 border border-tertiary-container text-tertiary-fixed-variant font-body text-sm flex items-center gap-3">
+            <span class="material-symbols-outlined">check_circle</span> <span th:text="${success}"></span>
+        </div>
+        <div th:if="${error}" class="mb-6 p-4 rounded-2xl bg-error-container/30 border border-error-container text-on-error-container font-body text-sm flex items-center gap-3">
+            <span class="material-symbols-outlined">error</span> <span th:text="${error}"></span>
+        </div>
+
+        <!-- Content List -->
+        <div class="glass-pane bg-surface-container-lowest rounded-[2rem] p-6 lg:p-8 clay-lift border border-outline-variant/30 flex-1 flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-headline text-xl font-bold text-tertiary">
+                    <span th:text="${users.totalElements}">0</span> users found
+                </h3>
+                <a th:if="${search != null && !search.isEmpty()}" th:href="@{/admin/users}" class="bg-surface-container text-on-surface px-4 py-2 rounded-full font-label text-xs font-bold uppercase tracking-wider hover:bg-surface-container-high transition-colors flex items-center gap-1 shadow-sm" style="text-decoration:none;">
+                    <span class="material-symbols-outlined text-sm">close</span> Clear Search
+                </a>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse min-w-[700px]">
+                    <thead>
+                        <tr class="border-b border-outline-variant/30">
+                            <th class="pb-4 font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider">User</th>
+                            <th class="pb-4 font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider">Email</th>
+                            <th class="pb-4 font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider">Role</th>
+                            <th class="pb-4 font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider">Status</th>
+                            <th class="pb-4 font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="u : ${users.content}" class="border-b border-outline-variant/10 hover:bg-surface-container-low/50 transition-colors group">
+                            <td class="py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-xs shadow-sm"
+                                         th:text="${#strings.toUpperCase(#strings.substring(u.username, 0, 2))}">US</div>
+                                    <div>
+                                        <p class="font-body font-bold text-sm text-on-surface" th:text="${u.username}">username</p>
+                                        <p class="font-body text-[11px] text-outline mt-0.5">ID: <span th:text="${u.id}">1</span></p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 font-body text-sm text-on-surface-variant" th:text="${u.email}">user@mail.com</td>
+                            <td class="py-4">
+                                <span class="px-3 py-1 rounded-full font-label text-[10px] font-bold uppercase tracking-wider"
+                                      th:classappend="${u.role == 'ROLE_ADMIN'} ? 'bg-primary-container text-primary-fixed-variant' : 'bg-surface-container text-outline'"
+                                      th:text="${u.role == 'ROLE_ADMIN'} ? 'Admin' : 'User'">User</span>
+                            </td>
+                            <td class="py-4">
+                                <span class="px-3 py-1 rounded-full font-label text-[10px] font-bold uppercase tracking-wider"
+                                      th:classappend="${u.enabled} ? 'bg-tertiary-container/30 text-tertiary-fixed-variant' : 'bg-error-container/50 text-error'"
+                                      th:text="${u.enabled ? 'Active' : 'Disabled'}">Active</span>
+                            </td>
+                            <td class="py-4 text-right">
+                                <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <form th:if="${u.role != 'ROLE_ADMIN'}" th:action="@{'/admin/users/' + ${u.id} + '/make-admin'}" method="post">
+                                        <button type="submit" class="bg-surface-container hover:bg-primary-container hover:text-primary-fixed-variant text-on-surface px-4 py-2 rounded-full font-label text-[10px] font-bold uppercase tracking-wider transition-colors flex items-center gap-1 shadow-sm" title="Promote to Admin">
+                                            <span class="material-symbols-outlined text-sm">shield_person</span> Promote
+                                        </button>
+                                    </form>
+                                    <form th:action="@{'/admin/users/' + ${u.id} + '/toggle-enabled'}" method="post">
+                                        <button type="submit" class="px-4 py-2 rounded-full font-label text-[10px] font-bold uppercase tracking-wider transition-colors flex items-center gap-1 shadow-sm"
+                                                th:classappend="${u.enabled} ? 'bg-error-container/30 hover:bg-error-container text-on-error-container' : 'bg-primary-container hover:bg-primary-fixed text-on-primary-container'"
+                                                th:title="${u.enabled ? 'Disable User' : 'Enable User'}">
+                                            <span th:text="${u.enabled ? 'Disable' : 'Enable'}">Toggle</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${users.empty}">
+                            <td colspan="5" class="py-16 text-center">
+                                <span class="material-symbols-outlined text-5xl text-outline mb-2 block opacity-30">group_off</span>
+                                <p class="text-on-surface-variant font-body text-sm">No users found.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <th:block th:replace="~{layout/fragments :: pagination-controls(page=${users}, url='/admin/users')}" />
+        </div>
+
+        <!-- Footer -->
+        
+<footer th:replace="~{layout/fragments :: dashboard-footer}"></footer>
+    </main>
+</div>
+
+
+<th:block th:replace="~{layout/fragments :: sakura-js}" />
+</body>
+</html>

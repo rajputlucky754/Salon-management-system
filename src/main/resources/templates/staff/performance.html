@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout/fragments :: head('Performance — Sakura Saki')}"></head>
+<body class="bg-background text-on-surface font-body">
+<th:block th:replace="~{layout/fragments :: sakura-canvas}" />
+
+<div class="flex min-h-screen w-full relative z-10 md:pl-72">
+    <aside th:replace="~{layout/fragments :: staff-sidebar('performance')}"></aside>
+
+    <main class="flex-1 px-6 pt-6 md:px-10 pt-10 lg:px-14 pt-14 relative flex flex-col pb-2">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+            <div>
+                <h2 class="font-headline text-3xl md:text-4xl text-tertiary tracking-tight font-bold">Performance</h2>
+                <p class="font-body text-on-surface-variant mt-2">Your stats and achievements</p>
+            </div>
+        </header>
+
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            <div class="glass-pane rounded-[2rem] p-6 clay-lift text-center">
+                <span class="material-symbols-outlined text-3xl text-primary mb-2 block">event_available</span>
+                <p class="font-headline text-3xl font-bold text-tertiary" th:text="${appointments != null ? appointments.size() : 0}">0</p>
+                <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mt-1">Total Appointments</p>
+            </div>
+            <div class="glass-pane rounded-[2rem] p-6 clay-lift text-center">
+                <span class="material-symbols-outlined text-3xl text-primary mb-2 block">check_circle</span>
+                <p class="font-headline text-3xl font-bold text-tertiary" th:text="${appointments != null ? appointments.stream().filter(a -> a.status == 'COMPLETED').count() : 0}">0</p>
+                <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mt-1">Completed</p>
+            </div>
+            <div class="glass-pane rounded-[2rem] p-6 clay-lift text-center">
+                <span class="material-symbols-outlined text-3xl text-primary mb-2 block">today</span>
+                <p class="font-headline text-3xl font-bold text-tertiary" th:text="${todayCount != null ? todayCount : 0}">0</p>
+                <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mt-1">Today's Schedule</p>
+            </div>
+            <div class="glass-pane rounded-[2rem] p-6 clay-lift text-center">
+                <span class="material-symbols-outlined text-3xl text-primary mb-2 block">schedule</span>
+                <p class="font-headline text-3xl font-bold text-tertiary"><span th:text="${hoursBooked != null ? hoursBooked : '0.0'}">0</span><span class="text-lg text-on-surface-variant ml-1">hrs</span></p>
+                <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mt-1">Hours Today</p>
+            </div>
+        </div>
+
+        <!-- Staff Info -->
+        <section class="glass-pane rounded-[2rem] p-6 md:p-8 clay-lift mb-8" th:if="${staff != null}">
+            <h3 class="font-headline text-xl text-tertiary mb-6 font-bold flex items-center gap-3">
+                <span class="material-symbols-outlined text-primary">badge</span>
+                Staff Profile
+            </h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="bg-surface-container-lowest rounded-2xl p-5">
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1">Specialization</p>
+                    <p class="font-semibold text-on-surface" th:text="${staff.specialization}">-</p>
+                </div>
+                <div class="bg-surface-container-lowest rounded-2xl p-5">
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1">Role Type</p>
+                    <p class="font-semibold text-on-surface" th:text="${staff.staffType}">-</p>
+                </div>
+                <div class="bg-surface-container-lowest rounded-2xl p-5">
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1">Working Days</p>
+                    <p class="font-semibold text-on-surface" th:text="${staff.workingDays}">-</p>
+                </div>
+                <div class="bg-surface-container-lowest rounded-2xl p-5">
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant mb-1">Shift Hours</p>
+                    <p class="font-semibold text-on-surface" th:text="${staff.startTime + ' — ' + staff.endTime}">-</p>
+                </div>
+            </div>
+        </section>
+        
+<footer th:replace="~{layout/fragments :: dashboard-footer}"></footer>
+    </main>
+</div>
+
+
+<th:block th:replace="~{layout/fragments :: sakura-js}" />
+</body>
+</html>

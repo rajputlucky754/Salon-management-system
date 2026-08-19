@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout/fragments :: head('Sakura Saki - Customer Portal')}"></head>
+<body class="bg-surface text-on-surface" x-data="actionSystem">
+<th:block th:replace="~{layout/fragments :: sakura-canvas}" />
+
+<div class="flex min-h-screen w-full relative z-10 md:pl-72">
+    <!-- Overlay for mobile sidebar -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-on-surface/20 backdrop-blur-sm z-40 hidden md:hidden"></div>
+    <aside th:replace="~{layout/fragments :: customer-sidebar('overview')}"></aside>
+
+    <main class="flex-1 px-6 pt-8 lg:px-8 xl:px-10 2xl:px-12 relative flex flex-col pb-2">
+        <div class="max-w-[1600px] mx-auto w-full flex flex-col flex-1">
+            <!-- Mobile TopAppBar -->
+            <header class="md:hidden flex justify-between items-center w-full bg-surface-container-lowest/60 backdrop-blur-xl shadow-sm sticky top-0 z-30 -mt-8 mb-8 -mx-6 px-6 py-4" style="width: calc(100% + 3rem);">
+                <div class="flex items-center gap-3">
+                    <button class="material-symbols-outlined text-primary mobile-menu-btn bg-transparent border-none p-0 cursor-pointer">menu</button>
+                    <h1 class="font-headline text-2xl font-bold tracking-tight text-primary">Sakura Saki</h1>
+                </div>
+                <div class="flex items-center gap-4 text-primary">
+                    <a th:href="@{/customer/settings}" class="material-symbols-outlined scale-95" style="text-decoration:none;">settings</a>
+                </div>
+            </header>
+
+            <!-- Header -->
+        <header class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
+            <div>
+                <p class="font-label text-sm uppercase tracking-widest text-primary mb-2">Welcome Back</p>
+                <h1 class="font-headline text-4xl lg:text-5xl text-tertiary font-medium tracking-tight">
+                    Good morning, <span th:text="${customer != null ? customer.firstName : username}">Elowen</span>.
+                </h1>
+            </div>
+
+        </header>
+
+        <!-- Stitch Bento Dashboard -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 xl:gap-8 items-start mb-12">
+            <!-- Next Appointment -->
+            <section class="md:col-span-8 self-start bg-white/70 backdrop-blur-2xl border border-rose-100/50 rounded-lg p-6 xl:p-8 2xl:p-10 clay-lift flex flex-col lg:flex-row gap-6 xl:gap-8 items-center relative overflow-hidden">
+                <div class="absolute -top-20 -right-20 w-72 h-72 bg-primary-container/25 rounded-full blur-[80px]"></div>
+                <div class="relative z-10 flex-1">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-surface-container/50 text-on-surface-variant rounded-full text-xs font-label uppercase tracking-wider mb-6 backdrop-blur-sm border border-outline-variant/10">
+                        <span class="material-symbols-outlined text-[14px]">event</span> Next Appointment
+                    </span>
+                    <div th:if="${nextAppointment != null}">
+                        <h2 class="text-2xl 2xl:text-3xl font-headline text-tertiary font-bold mb-3" th:text="${nextAppointment.service != null ? nextAppointment.service.name : 'Radiance Facial'}">Radiance Facial</h2>
+                        <p class="text-on-surface-variant flex items-center gap-2 mb-8">
+                            <span class="material-symbols-outlined text-primary text-sm" style="font-variation-settings: 'FILL' 1;">schedule</span>
+                            <span>
+                                <span th:text="${nextAppointment.appointmentDate}">Tomorrow</span>,
+                                <span th:text="${nextAppointment.appointmentTime}">10:00 AM</span>
+                                <span th:if="${nextAppointment.service != null}"> • <span th:text="${nextAppointment.service.durationMinutes}">60</span> min</span>
+                            </span>
+                        </p>
+                        <div class="flex flex-wrap gap-6 items-center">
+                            <div class="flex flex-col">
+                                <span class="text-xs text-outline uppercase tracking-wider">Date</span>
+                                <span class="font-bold text-on-surface" th:text="${nextAppointment.appointmentDate}">Oct 24, 2024</span>
+                            </div>
+                            <div class="w-px h-8 bg-outline-variant/30"></div>
+                            <div class="flex flex-col">
+                                <span class="text-xs text-outline uppercase tracking-wider">Time</span>
+                                <span class="font-bold text-on-surface" th:text="${nextAppointment.appointmentTime}">14:30</span>
+                            </div>
+                            <div class="w-px h-8 bg-outline-variant/30" th:if="${nextAppointment.staff != null}"></div>
+                            <div class="flex flex-col" th:if="${nextAppointment.staff != null}">
+                                <span class="text-xs text-outline uppercase tracking-wider">Therapist</span>
+                                <span class="font-bold text-on-surface" th:text="${nextAppointment.staff.firstName + ' ' + nextAppointment.staff.lastName}">Mia Chen</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap gap-4 mt-8">
+                            <a th:href="@{/customer/bookings}" class="px-6 2xl:px-8 py-3 bg-tertiary text-on-tertiary rounded-full font-label font-bold tracking-wide uppercase text-sm shadow-lg shadow-tertiary/20 hover:scale-[0.98] transition-transform duration-400" style="text-decoration:none;">View Details</a>
+                            <a th:href="@{/booking}" class="px-6 2xl:px-8 py-3 bg-transparent text-tertiary border border-outline-variant/30 rounded-full font-label font-bold tracking-wide uppercase text-sm hover:bg-surface-container-lowest transition-colors duration-400" style="text-decoration:none;">Reschedule</a>
+                        </div>
+                    </div>
+                    <div th:if="${nextAppointment == null}" class="py-4">
+                        <h2 class="text-3xl font-headline text-tertiary font-bold mb-3">Radiance Facial</h2>
+                        <p class="text-on-surface-variant font-body mb-8 max-w-md">Book your next salon visit and keep your Sakura Saki wellness rhythm glowing.</p>
+                        <a th:href="@{/booking}" class="inline-flex items-center gap-2 px-8 py-3 bg-primary text-on-primary rounded-full font-label text-xs font-bold uppercase tracking-wider hover:scale-105 transition-all" style="text-decoration:none;">
+                            Book Now <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="relative w-full lg:w-48 xl:w-52 2xl:w-64 h-48 2xl:h-64 shrink-0 rounded-lg overflow-hidden clay-lift">
+                    <img th:src="@{/images/stitch/skin-therapy.jpg}" alt="Spa treatment" class="absolute inset-0 w-full h-full object-cover">
+                </div>
+            </section>
+
+            <!-- Loyalty -->
+            <section class="md:col-span-4 self-start min-h-[320px] bg-primary text-white rounded-lg p-6 xl:p-8 2xl:p-10 clay-lift flex flex-col justify-between relative overflow-hidden">
+                <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+                <div class="relative z-10">
+                    <span class="font-label text-sm uppercase tracking-widest text-primary-container mb-2 block">Sakura Circle</span>
+                    <div class="text-6xl font-headline font-bold mb-1" th:text="${loyaltyPoints}">2,450</div>
+                    <p class="text-primary-container/80 text-sm">Points available</p>
+                </div>
+                <div class="relative z-10 mt-10">
+                    <div class="h-2 w-full bg-on-primary/20 rounded-full mb-3 overflow-hidden">
+                        <div class="h-full bg-white rounded-full" th:style="'width: ' + ${loyaltyProgress} + '%'"></div>
+                    </div>
+                    <a th:href="@{/customer/loyalty}" class="text-xs text-primary-container font-bold uppercase tracking-wider hover:text-white transition-colors" style="text-decoration:none;">Redeem Rewards →</a>
+                </div>
+            </section>
+
+            <!-- Routine Progress -->
+            <section class="md:col-span-7 self-start bg-white/70 backdrop-blur-2xl border border-rose-100/50 rounded-lg p-6 xl:p-8 2xl:p-10 clay-lift">
+                <div class="flex justify-between items-end gap-4 mb-10">
+                    <div>
+                        <span class="font-label text-xs uppercase tracking-widest text-primary mb-2 block">Routine Progress</span>
+                        <h3 class="text-2xl font-headline text-on-surface font-bold">Hydration Consistency</h3>
+                    </div>
+                </div>
+                
+                <div class="flex items-end justify-between h-48 gap-4 px-1">
+                    <div class="flex flex-col items-center gap-3 w-full">
+                        <div class="w-full max-w-[40px] mx-auto bg-primary-container/40 rounded-full h-24 relative overflow-hidden"><div class="absolute bottom-0 w-full bg-primary h-12 rounded-b-full"></div></div>
+                        <span class="text-[10px] text-outline font-bold uppercase tracking-tighter">M</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-3 w-full">
+                        <div class="w-full max-w-[40px] mx-auto bg-primary-container/40 rounded-full h-32 relative overflow-hidden"><div class="absolute bottom-0 w-full bg-primary h-20 rounded-b-full"></div></div>
+                        <span class="text-[10px] text-outline font-bold uppercase tracking-tighter">T</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-3 w-full">
+                        <div class="w-full max-w-[40px] mx-auto bg-primary-container/40 rounded-full h-40 relative overflow-hidden"><div class="absolute bottom-0 w-full bg-primary h-36 rounded-b-full"></div></div>
+                        <span class="text-[10px] text-primary font-bold uppercase tracking-tighter">W</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-3 w-full">
+                        <div class="w-full max-w-[40px] mx-auto bg-primary-container/40 rounded-full h-28 relative overflow-hidden"><div class="absolute bottom-0 w-full bg-primary h-16 rounded-b-full"></div></div>
+                        <span class="text-[10px] text-outline font-bold uppercase tracking-tighter">T</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-3 w-full">
+                        <div class="w-full max-w-[40px] mx-auto bg-primary-container/40 rounded-full h-36 relative overflow-hidden"><div class="absolute bottom-0 w-full bg-primary h-28 rounded-b-full"></div></div>
+                        <span class="text-[10px] text-outline font-bold uppercase tracking-tighter">F</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-3 w-full">
+                        <div class="w-full max-w-[40px] mx-auto bg-primary-container/40 rounded-full h-24 relative overflow-hidden"><div class="absolute bottom-0 w-full bg-primary h-8 rounded-b-full"></div></div>
+                        <span class="text-[10px] text-outline font-bold uppercase tracking-tighter">S</span>
+                    </div>
+                    <div class="flex flex-col items-center gap-3 w-full">
+                        <div class="w-full max-w-[40px] mx-auto bg-primary-container/40 rounded-full h-44 relative overflow-hidden"><div class="absolute bottom-0 w-full bg-primary h-36 rounded-b-full"></div></div>
+                        <span class="text-[10px] text-outline font-bold uppercase tracking-tighter">S</span>
+                    </div>
+                </div>
+                
+                <p class="text-sm text-on-surface-variant mt-10 text-center">You're on a 3-day streak. Keep glowing!</p>
+            </section>
+
+            <!-- Recent History -->
+            <section class="md:col-span-5 self-start bg-white/70 backdrop-blur-2xl border border-rose-100/50 rounded-lg p-6 xl:p-8 2xl:p-10 clay-lift overflow-hidden">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-2xl font-headline text-on-surface font-bold">Recent History</h3>
+                    <a th:href="@{/customer/bookings}" class="text-xs font-label text-primary hover:underline transition-all" style="text-decoration:none;">View All</a>
+                </div>
+                <div class="flex flex-col gap-5">
+                    <div th:each="appt : ${recentHistory}" class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined text-[20px]">self_care</span>
+                        </div>
+                        <div class="flex-grow min-w-0">
+                            <h4 class="font-medium text-tertiary text-sm truncate" th:text="${appt.service != null ? appt.service.name : 'Service'}">Deep Tissue Massage</h4>
+                            <p class="text-xs text-on-surface-variant mt-1" th:text="${appt.appointmentDate}">Oct 12, 2023</p>
+                        </div>
+                        
+                        <div class="shrink-0 flex items-center">
+                            <span th:if="${appt.status == 'COMPLETED'}" class="text-[10px] uppercase font-bold text-tertiary bg-surface-container px-2 py-0.5 rounded-full">Completed</span>
+                            <span th:if="${appt.status != 'COMPLETED'}" class="text-[10px] uppercase font-bold text-tertiary bg-surface-container px-2 py-0.5 rounded-full" th:text="${appt.status}">Completed</span>
+                        </div>
+                    </div>
+                    <div th:if="${#lists.isEmpty(recentHistory)}" class="text-center py-8 text-on-surface-variant text-sm">
+                        No appointment history yet.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Feature Cards -->
+            <a th:href="@{/customer/rituals}" class="md:col-span-4 self-start min-h-[120px] bg-white rounded-lg p-6 clay-lift flex items-center gap-5 hover:-translate-y-1 transition-all" style="text-decoration:none;">
+                <span class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center material-symbols-outlined text-amber-600">wb_sunny</span>
+                <div>
+                    <p class="font-headline text-lg font-bold text-on-surface">Morning Glow</p>
+                    <p class="text-xs text-on-surface-variant">View your daily beauty ritual.</p>
+                </div>
+            </a>
+            <a th:href="@{/services}" class="md:col-span-4 self-start min-h-[120px] bg-white rounded-lg p-6 clay-lift flex items-center gap-5 hover:-translate-y-1 transition-all" style="text-decoration:none;">
+                <span class="w-12 h-12 rounded-full bg-rose-100 flex items-center justify-center material-symbols-outlined text-rose-600">auto_awesome</span>
+                <div>
+                    <p class="font-headline text-lg font-bold text-on-surface">Recommended Care</p>
+                    <p class="text-xs text-on-surface-variant">Treatments matched to your routine.</p>
+                </div>
+            </a>
+            <a th:href="${recentHistory != null && !recentHistory.isEmpty() && recentHistory[0].service != null ? ((recentHistory[0].status == 'CANCELLED' || recentHistory[0].status == 'EXPIRED') ? '/booking?serviceId=' + recentHistory[0].service.id + '&amp;rescheduleId=' + recentHistory[0].id : '/booking?serviceId=' + recentHistory[0].service.id) : '/booking'}" class="md:col-span-4 self-start min-h-[120px] bg-white rounded-lg p-6 clay-lift flex items-center gap-5 hover:-translate-y-1 transition-all" style="text-decoration:none;">
+                <span class="w-12 h-12 rounded-full bg-primary-container/40 flex items-center justify-center material-symbols-outlined text-primary">event_available</span>
+                <div>
+                    <p class="font-headline text-lg font-bold text-on-surface">Book Again</p>
+                    <p class="text-xs text-on-surface-variant">Reserve your next Sakura Saki visit.</p>
+                </div>
+            </a>
+        </div>
+        </div>
+<footer th:replace="~{layout/fragments :: dashboard-footer}"></footer>
+    </main>
+</div>
+
+
+<th:block th:replace="~{layout/fragments :: sakura-js}" />
+
+<div th:replace="~{layout/fragments :: review-modal}"></div>
+<div th:replace="~{layout/fragments :: cancel-modal}"></div>
+
+</body>
+</html>

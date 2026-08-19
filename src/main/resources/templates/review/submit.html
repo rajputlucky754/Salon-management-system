@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Review — Sakura Saki</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link th:href="@{/css/admin-style.css}" rel="stylesheet">
+    <style>
+        .star-rating{display:flex;gap:.25rem;flex-direction:row-reverse;justify-content:flex-end;font-size:2rem;margin:.75rem 0;}
+        .star-rating input{display:none;}
+        .star-rating label{cursor:pointer;color:#ddd;transition:color .2s;}
+        .star-rating label:hover,.star-rating label:hover~label,.star-rating input:checked~label{color:#f59e0b;}
+    </style>
+</head>
+<body class="admin-body">
+<canvas id="sakura-canvas"></canvas>
+<aside class="admin-sidebar">
+    <div class="sidebar-brand"><h1>🌸 Sakura Saki</h1><p>Beauty & Wellness</p></div>
+    <nav class="sidebar-nav">
+        <a th:href="@{/profile}"><span class="material-symbols-outlined">person</span> Profile</a>
+        <a th:href="@{/services}"><span class="material-symbols-outlined">content_cut</span> Services</a>
+        <a th:href="@{/booking}"><span class="material-symbols-outlined">calendar_add_on</span> Book Now</a>
+        <a th:href="@{/my-appointments}"><span class="material-symbols-outlined">event_note</span> My Bookings</a>
+        <form th:action="@{/logout}" method="post" style="margin:0;">
+            <button type="submit" style="display:flex;align-items:center;gap:.75rem;background:none;border:none;color:inherit;font:inherit;cursor:pointer;padding:.75rem 1rem;width:100%;text-align:left;">
+                <span class="material-symbols-outlined">logout</span> Logout
+            </button>
+        </form>
+    </nav>
+</aside>
+<main class="admin-main">
+    <header class="page-header"><div><span class="kicker">Feedback</span><h2>Submit a Review</h2></div></header>
+    <div th:if="${error}" class="sakura-alert sakura-alert-error" th:text="${error}"></div>
+    <div th:if="${existingReview != null}" class="content-card glass-pane clay-lift" style="max-width:600px;">
+        <div style="margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid rgba(0,0,0,.06);">
+            <p style="color:var(--outline);font-size:.85rem;">Edit your review for:</p>
+            <h3 style="margin:.25rem 0;" th:text="${appointment.service.name}">Service</h3>
+            <p style="color:var(--outline);font-size:.9rem;">with <strong th:text="${appointment.staff != null ? appointment.staff.firstName + ' ' + appointment.staff.lastName : 'Staff'}">Staff</strong> on <span th:text="${appointment.appointmentDate}">Date</span></p>
+        </div>
+        <form th:action="@{/reviews/{id}/edit(id=${existingReview.id})}" method="post">
+            <div class="form-group" style="margin-bottom:1.25rem;">
+                <label>Rating</label>
+                <div class="star-rating">
+                    <input type="radio" id="estar5" name="rating" value="5" th:checked="${existingReview.rating == 5}"><label for="estar5">★</label>
+                    <input type="radio" id="estar4" name="rating" value="4" th:checked="${existingReview.rating == 4}"><label for="estar4">★</label>
+                    <input type="radio" id="estar3" name="rating" value="3" th:checked="${existingReview.rating == 3}"><label for="estar3">★</label>
+                    <input type="radio" id="estar2" name="rating" value="2" th:checked="${existingReview.rating == 2}"><label for="estar2">★</label>
+                    <input type="radio" id="estar1" name="rating" value="1" th:checked="${existingReview.rating == 1}"><label for="estar1">★</label>
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom:1.25rem;">
+                <label>Comment</label>
+                <textarea name="comment" class="input-recessed" rows="4" placeholder="Update your experience..." th:text="${existingReview.comment}"></textarea>
+            </div>
+            <button type="submit" class="btn-sakura btn-sakura-primary" style="width:100%;justify-content:center;">
+                <span class="material-symbols-outlined" style="font-size:1rem;">edit</span> Update Review
+            </button>
+        </form>
+        <div style="display:flex;gap:.75rem;margin-top:1rem;">
+            <a th:href="@{/customer/bookings}" class="btn-sakura btn-sakura-outline" style="flex:1;justify-content:center;text-decoration:none;">← Back</a>
+            <form th:action="@{/reviews/{id}/delete(id=${existingReview.id})}" method="post" style="flex:1;" onsubmit="return confirm('Are you sure you want to delete this review?');">
+                <button type="submit" class="btn-sakura" style="width:100%;justify-content:center;background:#ef4444;color:#fff;border:none;">
+                    <span class="material-symbols-outlined" style="font-size:1rem;">delete</span> Delete Review
+                </button>
+            </form>
+        </div>
+    </div>
+    <div th:if="${existingReview == null}" class="content-card glass-pane clay-lift" style="max-width:600px;">
+        <div style="margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid rgba(0,0,0,.06);">
+            <p style="color:var(--outline);font-size:.85rem;">Reviewing appointment for:</p>
+            <h3 style="margin:.25rem 0;" th:text="${appointment.service.name}">Service</h3>
+            <p style="color:var(--outline);font-size:.9rem;">with <strong th:text="${appointment.staff != null ? appointment.staff.firstName + ' ' + appointment.staff.lastName : 'Staff'}">Staff</strong> on <span th:text="${appointment.appointmentDate}">Date</span></p>
+        </div>
+        <form th:action="@{/reviews/submit}" method="post">
+            <input type="hidden" name="appointmentId" th:value="${appointment.id}">
+            <div class="form-group" style="margin-bottom:1.25rem;">
+                <label>Rating</label>
+                <div class="star-rating">
+                    <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
+                    <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+                    <input type="radio" id="star3" name="rating" value="3" checked><label for="star3">★</label>
+                    <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+                    <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom:1.25rem;">
+                <label>Comment</label>
+                <textarea name="comment" class="input-recessed" rows="4" placeholder="Share your experience..."></textarea>
+            </div>
+            <button type="submit" class="btn-sakura btn-sakura-primary" style="width:100%;justify-content:center;">
+                <span class="material-symbols-outlined" style="font-size:1rem;">send</span> Submit Review
+            </button>
+        </form>
+    </div>
+    
+</main>
+<script th:src="@{/js/sakura-petals.js}"></script>
+</body>
+</html>

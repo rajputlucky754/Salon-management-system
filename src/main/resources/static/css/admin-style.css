@@ -1,0 +1,763 @@
+/* =================================================================
+   Sakura Saki — Admin Panel Design System
+   Inspired by "Digital Serenity & Tactile Elegance" from Stitch
+   ================================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Manrope:wght@400;500;600;700&display=swap');
+
+/* ---------- Design Tokens ---------- */
+:root {
+    --primary: #864e5a;
+    --primary-container: #ffb7c5;
+    --on-primary: #ffffff;
+    --on-primary-container: #7b4551;
+    --secondary: #70585b;
+    --secondary-container: #f8d8db;
+    --surface: #f9f9f9;
+    --surface-container: #eeeeee;
+    --surface-container-low: #f3f3f3;
+    --surface-container-high: #e8e8e8;
+    --surface-container-highest: #e2e2e2;
+    --surface-container-lowest: #ffffff;
+    --on-surface: #1a1c1c;
+    --on-surface-variant: #514345;
+    --outline: #837375;
+    --outline-variant: #d6c2c4;
+    --error: #ba1a1a;
+    --error-container: #ffdad6;
+    --on-error-container: #93000a;
+
+    --font-headline: 'Noto Serif', serif;
+    --font-body: 'Manrope', sans-serif;
+    --font-label: 'Manrope', sans-serif;
+
+    --radius-default: 1rem;
+    --radius-lg: 2rem;
+    --radius-full: 9999px;
+}
+
+/* ---------- Base Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+body.admin-body {
+    margin: 0;
+    font-family: var(--font-body);
+    background: var(--surface);
+    color: var(--on-surface);
+    min-height: 100vh;
+    display: flex;
+    overflow-x: hidden;
+}
+
+/* Auth pages (no .admin-body class) */
+body:not(.admin-body) {
+    margin: 0;
+    font-family: var(--font-body);
+    background: linear-gradient(135deg, #ffe4ea, #fff5f7, #fce7f3);
+    color: var(--on-surface);
+    min-height: 100vh;
+}
+
+/* ---------- Glassmorphism & Claymorphism ---------- */
+.glass-pane {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 0.5px solid rgba(214, 194, 196, 0.15);
+}
+
+.clay-lift {
+    box-shadow: 0 40px 60px -15px rgba(26, 28, 28, 0.06),
+                inset 2px 2px 0px rgba(255, 255, 255, 1);
+}
+
+.recessed {
+    background: var(--surface-container-high);
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05);
+}
+
+/* ---------- Side Navigation ---------- */
+.admin-sidebar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 280px;
+    min-width: 280px;
+    height: 100vh;
+    background: #fafaf9;
+    border-radius: 0 3rem 3rem 0;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 0;
+    gap: 0.5rem;
+    box-shadow: 40px 0 60px -15px rgba(0,0,0,0.05);
+    z-index: 50;
+    overflow-y: auto;
+}
+
+.sidebar-brand {
+    padding: 0 2rem;
+    margin-bottom: 2.5rem;
+}
+
+.sidebar-brand h1 {
+    font-family: var(--font-headline);
+    font-size: 1.15rem;
+    color: #9f1239;
+    letter-spacing: -0.01em;
+    margin: 0;
+}
+
+.sidebar-brand p {
+    font-family: var(--font-label);
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: #94a3b8;
+    margin: 0.2rem 0 0 0;
+}
+
+.sidebar-nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    margin-left: 1rem;
+    margin-right: 0.5rem;
+    border-radius: var(--radius-full);
+    font-family: var(--font-label);
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    color: #94a3b8;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-nav a:hover {
+    background: rgba(255, 183, 197, 0.15);
+    color: var(--primary);
+    transform: translateX(4px);
+}
+
+.sidebar-nav a.active {
+    background: var(--surface-container-lowest);
+    color: var(--primary);
+    box-shadow: 0 2px 8px rgba(134, 78, 90, 0.08);
+    font-weight: 600;
+}
+
+.sidebar-nav a .material-symbols-outlined {
+    font-size: 1.25rem;
+}
+
+.sidebar-footer {
+    padding: 0 2rem;
+    margin-top: auto;
+}
+
+.sidebar-profile {
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    background: var(--surface-container);
+    border-radius: var(--radius-full);
+}
+
+.sidebar-profile .avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: var(--primary-container);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.75rem;
+    color: var(--on-primary-container);
+}
+
+.sidebar-profile .info {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-profile .info .name {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--on-surface);
+}
+
+.sidebar-profile .info .role {
+    font-size: 0.625rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* ---------- Main Content Area ---------- */
+.admin-main {
+    flex: 1;
+    padding: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow-y: auto;
+    position: relative;
+    /* z-index removed: was trapping Bootstrap modals inside this stacking context */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* ---------- Page Header ---------- */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 3rem;
+}
+
+.page-header .kicker {
+    font-family: var(--font-label);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.page-header h2 {
+    font-family: var(--font-headline);
+    font-size: 2.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--on-surface);
+    margin: 0;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* ---------- Search Bar ---------- */
+.search-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 1.5rem;
+    border-radius: var(--radius-full);
+    background: var(--surface-container-high);
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05);
+}
+
+.search-pill input {
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--on-surface-variant);
+    width: 12rem;
+    font-family: var(--font-body);
+}
+
+.search-pill input::placeholder { color: var(--outline); }
+
+/* ---------- Stat Cards ---------- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.stat-card {
+    padding: 1.5rem;
+    border-radius: var(--radius-default);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -10px rgba(134, 78, 90, 0.12),
+                inset 2px 2px 0px rgba(255,255,255,1);
+}
+
+.stat-card .stat-label {
+    font-family: var(--font-label);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--outline);
+    margin-bottom: 0.5rem;
+}
+
+.stat-card .stat-value {
+    font-family: var(--font-headline);
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--on-surface);
+    line-height: 1;
+}
+
+.stat-card .stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    background: var(--primary-container);
+    color: var(--on-primary-container);
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+.stat-card.highlight {
+    background: var(--primary-container);
+}
+
+.stat-card.highlight .stat-value {
+    color: var(--on-primary-container);
+}
+
+.stat-card.highlight .stat-icon {
+    background: rgba(255,255,255,0.5);
+    color: var(--primary);
+}
+
+/* ---------- Content Cards ---------- */
+.content-card {
+    border-radius: var(--radius-default);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.content-card h3 {
+    font-family: var(--font-headline);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+/* ---------- Data Tables ---------- */
+.sakura-table {
+    width: 100%;
+    text-align: left;
+    border-collapse: separate;
+    border-spacing: 0 0.75rem;
+}
+
+.sakura-table thead th {
+    font-family: var(--font-label);
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #94a3b8;
+    padding: 0 1rem 0.5rem;
+    font-weight: 600;
+    border: none;
+}
+
+.sakura-table tbody tr {
+    background: var(--surface-container-lowest);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    transition: all 0.3s ease;
+}
+
+.sakura-table tbody tr:hover {
+    box-shadow: 0 8px 24px rgba(134, 78, 90, 0.08);
+    transform: translateY(-2px);
+}
+
+.sakura-table tbody td {
+    padding: 1rem;
+    font-size: 0.875rem;
+    vertical-align: middle;
+    border: none;
+}
+
+.sakura-table tbody td:first-child { border-radius: var(--radius-default) 0 0 var(--radius-default); }
+.sakura-table tbody td:last-child { border-radius: 0 var(--radius-default) var(--radius-default) 0; }
+
+/* ---------- Badges ---------- */
+.badge-pill {
+    padding: 0.3rem 0.75rem;
+    font-size: 0.625rem;
+    font-weight: 700;
+    border-radius: var(--radius-full);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: inline-block;
+}
+
+.badge-admin { background: var(--primary-container); color: var(--on-primary-container); }
+.badge-user { background: var(--surface-container-high); color: var(--on-surface-variant); }
+.badge-active { background: #dcfce7; color: #166534; }
+.badge-inactive { background: var(--error-container); color: var(--on-error-container); }
+.badge-scheduled { background: var(--primary-container); color: var(--on-primary-container); }
+.badge-completed { background: #dcfce7; color: #166534; }
+.badge-cancelled { background: var(--error-container); color: var(--on-error-container); }
+
+/* ---------- Buttons ---------- */
+.btn-sakura {
+    padding: 0.6rem 1.5rem;
+    border-radius: var(--radius-full);
+    font-family: var(--font-label);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-sakura:hover {
+    transform: translateY(-2px);
+}
+
+.btn-sakura-primary {
+    background: var(--primary);
+    color: var(--on-primary);
+    box-shadow: 0 8px 24px rgba(134, 78, 90, 0.3);
+}
+
+.btn-sakura-primary:hover {
+    box-shadow: 0 12px 32px rgba(134, 78, 90, 0.45);
+    background: #7a4653;
+}
+
+.btn-sakura-outline {
+    background: transparent;
+    color: var(--primary);
+    border: 1.5px solid var(--outline-variant);
+}
+
+.btn-sakura-outline:hover {
+    background: rgba(255, 183, 197, 0.1);
+    border-color: var(--primary);
+}
+
+.btn-sakura-danger {
+    background: transparent;
+    color: var(--error);
+    border: 1.5px solid var(--error-container);
+}
+
+.btn-sakura-danger:hover {
+    background: var(--error-container);
+    color: var(--on-error-container);
+}
+
+.btn-sakura-sm {
+    padding: 0.4rem 1rem;
+    font-size: 0.65rem;
+}
+
+/* ---------- Form Inputs (Recessed) ---------- */
+.input-recessed {
+    background: var(--surface-container-high);
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05);
+    border: none;
+    border-radius: var(--radius-default);
+    padding: 0.75rem 1.25rem;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--on-surface);
+    width: 100%;
+    outline: none;
+    transition: box-shadow 0.3s ease;
+}
+
+.input-recessed:focus {
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05),
+                0 0 0 2px rgba(134, 78, 90, 0.2);
+}
+
+.input-recessed::placeholder { color: var(--outline); }
+
+/* ---------- Modals ---------- */
+.sakura-modal .modal-content {
+    border: none;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.sakura-modal .modal-header {
+    background: var(--surface-container-low);
+    border: none;
+    padding: 1.5rem 2rem;
+}
+
+.sakura-modal .modal-title {
+    font-family: var(--font-headline);
+    font-weight: 700;
+    font-size: 1.25rem;
+}
+
+.sakura-modal .modal-body {
+    padding: 2rem;
+}
+
+.sakura-modal .modal-footer {
+    border: none;
+    padding: 1rem 2rem 1.5rem;
+}
+
+/* ---------- Charts Container ---------- */
+.chart-container {
+    position: relative;
+    width: 100%;
+    height: 280px;
+}
+
+/* ---------- Footer ---------- */
+.admin-footer {
+    margin-top: auto;
+    padding: 3rem 0;
+    border-top: 1px solid rgba(255, 183, 197, 0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.admin-footer span {
+    font-family: var(--font-label);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #94a3b8;
+}
+
+.admin-footer a {
+    font-family: var(--font-label);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #94a3b8;
+    text-decoration: none;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.admin-footer a:hover {
+    color: var(--primary);
+    opacity: 1;
+}
+
+/* ---------- Site Footer (Auth Pages) ---------- */
+.site-footer {
+    width: 100%;
+    padding: 1.25rem 2rem;
+    text-align: center;
+    border-top: 1px solid rgba(255, 183, 197, 0.2);
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 10;
+    position: relative;
+}
+
+.site-footer span {
+    font-family: var(--font-label, 'Manrope', sans-serif);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: #94a3b8;
+}
+
+/* ---------- Sakura Petals Canvas ---------- */
+#sakura-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* ---------- Modal z-index fix ---------- */
+.modal-backdrop { z-index: 1050 !important; }
+.modal { z-index: 1055 !important; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1024px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+    body.admin-body { flex-direction: column; }
+    .admin-sidebar {
+        position: fixed;
+        width: 100%;
+        height: auto;
+        border-radius: 0;
+        flex-direction: row;
+        padding: 0.5rem;
+        overflow-x: auto;
+    }
+    .sidebar-brand, .sidebar-footer { display: none; }
+    .sidebar-nav { flex-direction: row; gap: 0; }
+    .sidebar-nav a { margin: 0; padding: 0.5rem 1rem; font-size: 0.75rem; }
+    .admin-main { padding: 1.5rem; margin-top: 4rem; }
+    .page-header { flex-direction: column; gap: 1rem; align-items: flex-start; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .page-header h2 { font-size: 1.5rem; }
+}
+
+/* ---------- Auth Pages ---------- */
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 440px;
+    border-radius: var(--radius-lg);
+    padding: 3rem;
+    position: relative;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 0.5px solid rgba(214, 194, 196, 0.15);
+    box-shadow: 0 40px 60px -15px rgba(26, 28, 28, 0.08);
+}
+
+.auth-card h2 {
+    font-family: var(--font-headline);
+    font-size: 1.75rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--on-surface);
+    margin-bottom: 0.5rem;
+}
+
+.auth-card .subtitle {
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--outline);
+    margin-bottom: 2rem;
+}
+
+.auth-card .form-group {
+    margin-bottom: 1.25rem;
+}
+
+.auth-card label {
+    font-family: var(--font-label);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--on-surface-variant);
+    margin-bottom: 0.4rem;
+    display: block;
+}
+
+.auth-brand {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-brand h1 {
+    font-family: var(--font-headline);
+    font-size: 1.75rem;
+    color: var(--primary);
+    margin: 0;
+}
+
+.auth-brand p {
+    font-family: var(--font-label);
+    font-size: 0.75rem;
+    color: var(--outline);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin: 0.25rem 0 0;
+}
+
+/* ---------- Utility: Initials Avatar ---------- */
+.initials-avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.625rem;
+    flex-shrink: 0;
+}
+
+/* ---------- Two-column grid ---------- */
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+@media (max-width: 768px) {
+    .grid-2 { grid-template-columns: 1fr; }
+}
+
+/* ---------- Alert ---------- */
+.sakura-alert {
+    padding: 0.75rem 1.25rem;
+    border-radius: var(--radius-default);
+    font-size: 0.875rem;
+    margin-bottom: 1.5rem;
+}
+
+.sakura-alert-error {
+    background: var(--error-container);
+    color: var(--on-error-container);
+}
+
+.sakura-alert-success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+/* ---------- Quick Access Cards ---------- */
+a.content-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(134, 78, 90, 0.12),
+                inset 2px 2px 0px rgba(255,255,255,1);
+}
+
+/* ---------- Responsive: stats-grid 5 cols ---------- */
+@media (max-width: 1200px) {
+    .stats-grid[style*="repeat(5"] {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+@media (max-width: 768px) {
+    .stats-grid[style*="repeat(5"] {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}

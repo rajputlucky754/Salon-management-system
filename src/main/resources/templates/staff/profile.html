@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile — Sakura Saki Staff</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link th:href="@{/css/admin-style.css}" rel="stylesheet">
+</head>
+<body class="admin-body">
+<canvas id="sakura-canvas"></canvas>
+
+<!-- ========== SIDEBAR ========== -->
+<aside class="admin-sidebar">
+    <div class="sidebar-brand">
+        <h1>🌸 Staff Portal</h1>
+        <p>Sakura Saki</p>
+    </div>
+    <nav class="sidebar-nav">
+        <a th:href="@{/staff/dashboard}"><span class="material-symbols-outlined">dashboard</span> Dashboard</a>
+        <a th:href="@{/services}"><span class="material-symbols-outlined">content_cut</span> Services</a>
+        <a th:href="@{/profile}" class="active"><span class="material-symbols-outlined">person</span> Profile</a>
+        <a th:href="@{/logout}"><span class="material-symbols-outlined">logout</span> Logout</a>
+    </nav>
+    <div class="sidebar-footer">
+        <div class="sidebar-profile">
+            <div class="avatar" th:text="${staff != null ? #strings.toUpperCase(#strings.substring(staff.firstName, 0, 1)) + #strings.toUpperCase(#strings.substring(staff.lastName, 0, 1)) : 'ST'}">ST</div>
+            <div class="info">
+                <span class="name" th:text="${username}">staff</span>
+                <span class="role">Staff Member</span>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- ========== MAIN CONTENT ========== -->
+<main class="admin-main">
+
+    <header class="page-header">
+        <div>
+            <span class="kicker">Account</span>
+            <h2>My Profile</h2>
+        </div>
+    </header>
+
+    <div th:if="${success}" class="sakura-alert sakura-alert-success" th:text="${success}"></div>
+    <div th:if="${error}" class="sakura-alert sakura-alert-error" th:text="${error}"></div>
+
+    <div class="grid-2">
+        <!-- Personal Info Card -->
+        <div class="content-card glass-pane clay-lift">
+            <h3>Personal Information</h3>
+            <div th:if="${staff != null}">
+                <div style="display:flex;align-items:center;gap:1.25rem;margin-bottom:1.5rem;">
+                    <div style="width:4rem;height:4rem;border-radius:50%;background:var(--primary);display:flex;align-items:center;justify-content:center;font-family:var(--font-headline);font-size:1.5rem;font-weight:700;color:#fff;"
+                         th:text="${#strings.toUpperCase(#strings.substring(staff.firstName,0,1)) + #strings.toUpperCase(#strings.substring(staff.lastName,0,1))}">SK</div>
+                    <div>
+                        <div style="font-family:var(--font-headline);font-size:1.25rem;font-weight:700;" th:text="${staff.firstName + ' ' + staff.lastName}">Name</div>
+                        <div style="font-size:.85rem;color:var(--outline);" th:text="${staff.email}">email</div>
+                    </div>
+                </div>
+                <table style="width:100%;font-size:.9rem;">
+                    <tr style="border-bottom:1px solid rgba(0,0,0,.04);">
+                        <td style="padding:.75rem 0;color:var(--outline);width:40%;">Staff Type</td>
+                        <td style="padding:.75rem 0;font-weight:600;"><span class="badge-pill badge-active" th:text="${staff.staffType}">General</span></td>
+                    </tr>
+                    <tr style="border-bottom:1px solid rgba(0,0,0,.04);">
+                        <td style="padding:.75rem 0;color:var(--outline);">Specialization</td>
+                        <td style="padding:.75rem 0;font-weight:600;" th:text="${staff.specialization ?: '—'}">—</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid rgba(0,0,0,.04);">
+                        <td style="padding:.75rem 0;color:var(--outline);">Phone</td>
+                        <td style="padding:.75rem 0;font-weight:600;" th:text="${staff.phone ?: '—'}">—</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid rgba(0,0,0,.04);">
+                        <td style="padding:.75rem 0;color:var(--outline);">Username</td>
+                        <td style="padding:.75rem 0;font-weight:600;" th:text="${username}">user</td>
+                    </tr>
+                    <tr style="border-bottom:1px solid rgba(0,0,0,.04);">
+                        <td style="padding:.75rem 0;color:var(--outline);">Working Days</td>
+                        <td style="padding:.75rem 0;font-weight:600;" th:text="${staff.workingDays ?: '—'}">—</td>
+                    </tr>
+                    <tr>
+                        <td style="padding:.75rem 0;color:var(--outline);">Working Hours</td>
+                        <td style="padding:.75rem 0;font-weight:600;" th:text="${(staff.startTime != null ? staff.startTime : '09:00') + ' — ' + (staff.endTime != null ? staff.endTime : '17:00')}">09:00 — 17:00</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- Change Password Card -->
+        <div class="content-card glass-pane clay-lift">
+            <h3>Change Password</h3>
+            <form th:action="@{/profile/change-password}" method="post">
+                <div class="form-group" style="margin-bottom:1rem;">
+                    <label>Current Password</label>
+                    <input name="currentPassword" type="password" class="input-recessed" required>
+                </div>
+                <div class="form-group" style="margin-bottom:1rem;">
+                    <label>New Password</label>
+                    <input name="newPassword" type="password" class="input-recessed" required>
+                </div>
+                <button type="submit" class="btn-sakura btn-sakura-primary" style="width:100%;justify-content:center;">
+                    <span class="material-symbols-outlined" style="font-size:1rem;">lock_reset</span> Update Password
+                </button>
+            </form>
+        </div>
+    </div>
+
+    
+<footer th:replace="~{layout/fragments :: dashboard-footer}"></footer>
+</main>
+
+<script th:src="@{/js/sakura-petals.js}"></script>
+</body>
+</html>

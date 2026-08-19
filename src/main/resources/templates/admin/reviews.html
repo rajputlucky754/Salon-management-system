@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout/fragments :: head('Reviews — Sakura Saki Admin')}"></head>
+<body class="bg-surface text-on-surface font-body">
+<th:block th:replace="~{layout/fragments :: sakura-canvas}" />
+
+<div class="flex min-h-screen w-full relative z-10 md:pl-72">
+    <!-- Sidebar -->
+    <aside th:replace="~{layout/fragments :: admin-sidebar('reviews')}"></aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-6 pt-6 md:px-10 pt-10 lg:px-14 pt-14 relative flex flex-col pb-2">
+        <!-- Page Header -->
+        <header class="flex justify-between items-end mb-12 flex-wrap gap-4">
+            <div>
+                <span class="text-primary font-label text-xs font-bold tracking-[0.2em] uppercase block mb-2">Moderation</span>
+                <h1 class="font-headline text-4xl text-tertiary font-bold">Customer Reviews</h1>
+            </div>
+        </header>
+
+        <!-- Alerts -->
+        <div th:if="${success}" class="mb-6 p-4 rounded-2xl bg-tertiary-container/30 border border-tertiary-container text-tertiary-fixed-variant font-body text-sm flex items-center gap-3">
+            <span class="material-symbols-outlined">check_circle</span> <span th:text="${success}"></span>
+        </div>
+        <div th:if="${error}" class="mb-6 p-4 rounded-2xl bg-error-container/30 border border-error-container text-on-error-container font-body text-sm flex items-center gap-3">
+            <span class="material-symbols-outlined">error</span> <span th:text="${error}"></span>
+        </div>
+
+        <!-- Content List -->
+        <div class="glass-pane bg-surface-container-lowest rounded-[2rem] p-6 lg:p-8 clay-lift border border-outline-variant/30 flex-1">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse min-w-[900px]">
+                    <thead>
+                        <tr class="border-b border-outline-variant/30">
+                            <th class="pb-4 font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider">Customer</th>
+                            <th class="pb-4 font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider">Service</th>
+                            <th class="pb-4 font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider">Rating</th>
+                            <th class="pb-4 font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider w-1/3">Comment</th>
+                            <th class="pb-4 font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider">Date</th>
+                            <th class="pb-4 font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider">Visibility</th>
+                            <th class="pb-4 font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="r : ${reviews}" class="border-b border-outline-variant/10 hover:bg-surface-container-low/50 transition-colors group">
+                            <td class="py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-[10px] shadow-sm"
+                                         th:text="${#strings.substring(r.customer.firstName,0,1) + #strings.substring(r.customer.lastName,0,1)}">CU</div>
+                                    <span class="font-body font-bold text-sm text-on-surface" th:text="${r.customer.firstName + ' ' + r.customer.lastName}">Customer</span>
+                                </div>
+                            </td>
+                            <td class="py-4">
+                                <p class="font-body text-sm text-on-surface-variant" th:text="${r.service.name}">Service</p>
+                            </td>
+                            <td class="py-4">
+                                <div class="flex gap-0.5 text-primary text-sm">
+                                    <span class="material-symbols-outlined fill-current" th:each="i : ${#numbers.sequence(1,r.rating)}">star</span>
+                                    <span class="material-symbols-outlined text-outline-variant" th:if="${r.rating < 5}" th:each="i : ${#numbers.sequence(r.rating + 1, 5)}">star</span>
+                                </div>
+                            </td>
+                            <td class="py-4 pr-6">
+                                <p class="font-body text-sm text-on-surface italic line-clamp-2" th:text="${r.comment ?: '—'}">"Great service..."</p>
+                            </td>
+                            <td class="py-4 font-body text-sm text-on-surface-variant" th:text="${#temporals.format(r.createdAt, 'dd MMM yyyy')}">Date</td>
+                            <td class="py-4">
+                                <span class="px-3 py-1 rounded-full font-label text-[10px] font-bold uppercase tracking-wider"
+                                      th:classappend="${r.visible} ? 'bg-tertiary-container/30 text-tertiary-fixed-variant' : 'bg-surface-container text-outline'"
+                                      th:text="${r.visible ? 'Visible' : 'Hidden'}">Visible</span>
+                            </td>
+                            <td class="py-4 text-right">
+                                <div class="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <form th:action="@{'/admin/reviews/' + ${r.id} + '/toggle-visibility'}" method="post">
+                                        <button type="submit" class="w-8 h-8 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors" th:title="${r.visible} ? 'Hide' : 'Show'">
+                                            <span class="material-symbols-outlined text-sm" th:text="${r.visible} ? 'visibility_off' : 'visibility'"></span>
+                                        </button>
+                                    </form>
+                                    <form th:action="@{'/admin/reviews/' + ${r.id} + '/delete'}" method="post" onsubmit="return confirm('Delete this review completely?');">
+                                        <button type="submit" class="w-8 h-8 rounded-full bg-error-container/20 hover:bg-error-container text-on-error-container flex items-center justify-center transition-colors" title="Delete">
+                                            <span class="material-symbols-outlined text-sm">delete</span>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(reviews)}">
+                            <td colspan="7" class="py-16 text-center">
+                                <span class="material-symbols-outlined text-5xl text-outline mb-2 block opacity-30">reviews</span>
+                                <p class="text-on-surface-variant font-body text-sm">No reviews found.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        
+<footer th:replace="~{layout/fragments :: dashboard-footer}"></footer>
+    </main>
+</div>
+
+
+<th:block th:replace="~{layout/fragments :: sakura-js}" />
+</body>
+</html>

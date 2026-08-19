@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Team — Sakura Saki</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link th:href="@{/css/admin-style.css}" rel="stylesheet">
+    <style>
+        body{margin:0;font-family:var(--font-body);color:var(--on-surface);background:var(--surface);}
+        .public-topnav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:rgba(255,255,255,.6);backdrop-filter:blur(24px);border-bottom:.5px solid rgba(214,194,196,.12);}
+        .public-topnav .brand{font-family:var(--font-headline);font-size:1.15rem;font-weight:700;color:var(--primary);text-decoration:none;}
+        .public-topnav .nav-links{display:flex;gap:2rem;align-items:center;}
+        .public-topnav .nav-links a{font-family:var(--font-label);font-size:.8rem;font-weight:500;color:var(--on-surface-variant);text-decoration:none;transition:color .3s;}
+        .public-topnav .nav-links a:hover{color:var(--primary);}
+        .page-hero{padding:7rem 2rem 3rem;text-align:center;background:linear-gradient(135deg,#ffe4ea,#fff5f7,#fce7f3);}
+        .page-hero h1{font-family:var(--font-headline);font-size:2.5rem;font-weight:700;letter-spacing:-.02em;margin:0 0 .75rem;}
+        .page-hero p{color:var(--outline);font-size:1rem;max-width:500px;margin:0 auto;}
+        .container{max-width:1100px;margin:0 auto;padding:3rem 2rem;}
+        .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+        .team-card{background:rgba(255,255,255,.7);backdrop-filter:blur(16px);border-radius:var(--radius-lg);padding:2rem;text-align:center;border:.5px solid rgba(214,194,196,.12);transition:all .4s cubic-bezier(.4,0,.2,1);}
+        .team-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px -10px rgba(134,78,90,.12);}
+        .team-avatar{width:5rem;height:5rem;border-radius:50%;background:var(--primary-container);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-family:var(--font-headline);font-size:1.75rem;font-weight:700;color:var(--on-primary-container);}
+        .team-card h3{font-family:var(--font-headline);font-size:1.1rem;margin:0 0 .25rem;}
+        .team-card .type{font-family:var(--font-label);font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--primary);margin-bottom:.75rem;}
+        .team-card .spec{font-size:.85rem;color:var(--outline);margin-bottom:.75rem;}
+        .team-card .schedule{font-size:.75rem;color:var(--on-surface-variant);background:var(--surface-container-high);border-radius:var(--radius-full);padding:.4rem .75rem;display:inline-block;}
+
+        @media(max-width:768px){.team-grid{grid-template-columns:1fr;}}
+    </style>
+</head>
+<body style="display:flex;flex-direction:column;min-height:100vh;">
+<canvas id="sakura-canvas"></canvas>
+<main style="flex:1;">
+<nav class="public-topnav">
+    <a th:href="@{/}" class="brand">🌸 Sakura Saki</a>
+    <div class="nav-links">
+        <a th:href="@{/services}">Services</a>
+        <a th:href="@{/staff}" style="color:var(--primary);font-weight:600;">Our Team</a>
+        <a th:if="${!isLoggedIn}" th:href="@{/login}" class="btn-sakura btn-sakura-primary" style="padding:.5rem 1.25rem;">Sign In</a>
+        <a th:if="${isLoggedIn}" th:href="@{/profile}" class="btn-sakura btn-sakura-outline" style="padding:.5rem 1.25rem;display:flex;align-items:center;gap:.25rem;">
+            <span class="material-symbols-outlined" style="font-size:1.1rem;">person</span> <span th:text="${username}">Profile</span>
+        </a>
+    </div>
+</nav>
+
+<div class="page-hero">
+    <span style="font-family:var(--font-label);font-size:.65rem;text-transform:uppercase;letter-spacing:.2em;color:var(--primary);">Our Experts</span>
+    <h1>Meet the Team</h1>
+    <p>Our certified professionals bring passion, skill, and artistry to every appointment.</p>
+</div>
+
+<div class="container">
+    <div class="team-grid">
+        <div class="team-card" th:each="s : ${staffList}">
+            <div class="team-avatar" th:text="${#strings.toUpperCase(#strings.substring(s.firstName,0,1)) + #strings.toUpperCase(#strings.substring(s.lastName,0,1))}">MH</div>
+            <h3 th:text="${s.firstName + ' ' + s.lastName}">Staff</h3>
+            <div class="type" th:text="${s.staffType}">Stylist</div>
+            <p class="spec" th:text="${s.specialization ?: 'Beauty Specialist'}">Specialization</p>
+            <span class="schedule" th:if="${s.workingDays != null}" th:text="${s.workingDays}">Schedule</span>
+        </div>
+    </div>
+    <p th:if="${staffList == null || staffList.isEmpty()}" style="text-align:center;color:var(--outline);padding:3rem 0;">Our team information is being updated. Please check back soon!</p>
+</div>
+</main>
+
+<footer th:replace="~{layout/fragments :: site-footer}"></footer>
+<script th:src="@{/js/sakura-petals.js}"></script>
+</body>
+</html>

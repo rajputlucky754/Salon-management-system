@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html class="scroll-smooth light" lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Sakura Saki | Service Catalog</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#574144",
+                        "on-tertiary-fixed-variant": "#474747",
+                        "primary-fixed": "#ffd9df",
+                        "outline": "#837375",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#555555",
+                        "on-primary-fixed-variant": "#6b3743",
+                        "on-secondary-fixed": "#281719",
+                        "surface-tint": "#864e5a",
+                        "tertiary-fixed-dim": "#c8c6c6",
+                        "on-surface-variant": "#514345",
+                        "primary": "#864e5a",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#fbb3c1",
+                        "outline-variant": "#d6c2c4",
+                        "surface-container-low": "#f3f3f3",
+                        "surface-dim": "#dadada",
+                        "on-error": "#ffffff",
+                        "surface-container": "#eeeeee",
+                        "on-primary-container": "#7b4551",
+                        "background": "#f9f9f9",
+                        "secondary-fixed": "#fbdbde",
+                        "on-background": "#1a1c1c",
+                        "on-secondary-container": "#755d5f",
+                        "surface-container-highest": "#e2e2e2",
+                        "secondary-container": "#f8d8db",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f9f9f9",
+                        "tertiary": "#5f5e5e",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#e4e2e1",
+                        "inverse-on-surface": "#f1f1f1",
+                        "error-container": "#ffdad6",
+                        "secondary": "#70585b",
+                        "inverse-surface": "#2f3131",
+                        "tertiary-container": "#cccaca",
+                        "secondary-fixed-dim": "#debfc2",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#ffb7c5",
+                        "on-surface": "#1a1c1c",
+                        "surface-container-high": "#e8e8e8",
+                        "on-tertiary-fixed": "#1b1c1c",
+                        "primary-fixed-dim": "#fbb3c1",
+                        "on-primary-fixed": "#360c19",
+                        "surface-variant": "#e2e2e2",
+                        "surface-bright": "#f9f9f9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Noto Serif"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 0.5px solid rgba(255, 255, 255, 0.3);
+        }
+        .clay-shadow {
+            box-shadow: 0 40px 60px -15px rgba(26, 28, 28, 0.06), inset 2px 2px 4px rgba(255, 255, 255, 0.8);
+        }
+        .service-card:hover {
+            transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) scale(1.02);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased relative">
+    <!-- Sakura Canvas -->
+    <canvas class="fixed inset-0 pointer-events-none z-0 opacity-70" id="sakura-canvas"></canvas>
+
+    <!-- Top Navigation Shell -->
+    <div th:replace="~{layout/fragments :: topnav('services')}"></div>
+
+    <main class="pt-32 pb-2 px-6 max-w-7xl mx-auto relative z-10 mb-8">
+        <!-- Hero Header -->
+        <header class="mb-16 text-center md:text-left flex flex-col md:flex-row md:items-end justify-between gap-8">
+            <div class="max-w-2xl">
+                <span class="font-label text-primary uppercase tracking-[0.15em] text-xs font-bold mb-4 block">Artisanal Beauty</span>
+                <h1 class="font-headline text-5xl md:text-7xl text-on-surface font-bold tracking-tight leading-none mb-6">Service Catalog</h1>
+                <p class="text-tertiary text-lg max-w-lg leading-relaxed">Experience the delicate harmony of Japanese aesthetics and modern wellness. Each treatment is a ritual designed for your serenity.</p>
+            </div>
+            <div class="flex flex-wrap justify-center md:justify-end gap-3">
+                <a th:href="@{/booking}" class="px-8 py-3 rounded-full bg-primary text-white font-label text-sm uppercase tracking-widest transition-all duration-400 hover:scale-105 clay-shadow block text-center" style="text-decoration:none;">Book Now</a>
+            </div>
+        </header>
+
+        <!-- Filters Section -->
+        <section class="mb-12">
+            <div class="flex overflow-x-auto pb-4 gap-4 no-scrollbar items-center">
+                <a th:href="@{/services}" th:classappend="${activeCategory == null ? 'bg-primary text-white' : 'bg-white text-primary border border-primary-container shadow-sm'}" class="flex-shrink-0 px-6 py-3 rounded-full font-label text-xs uppercase tracking-widest transition-all duration-300" style="text-decoration:none;">All Rituals</a>
+                <a th:each="cat : ${categories}" th:href="@{/services(category=${cat})}" th:text="${cat}" th:classappend="${activeCategory == cat ? 'bg-primary text-white' : 'bg-white text-primary border border-primary-container shadow-sm'}" class="flex-shrink-0 px-6 py-3 rounded-full font-label text-xs uppercase tracking-widest transition-all duration-300" style="text-decoration:none;">Category</a>
+            </div>
+        </section>
+
+        <!-- Service Grid (Bento Style Layout) -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+            <div th:each="s, stat : ${services}"
+                 th:classappend="${stat.index % 5 == 0} ? 'md:col-span-8' : (${stat.index % 5 == 1} ? 'md:col-span-4 flex flex-col' : 'md:col-span-4')"
+                 class="group relative overflow-hidden rounded-lg service-card transition-all duration-500 clay-shadow glass-card">
+                
+                <div th:classappend="${stat.index % 5 == 0 or stat.index % 5 == 1} ? 'h-64 sm:h-72 md:h-80 lg:h-96 xl:h-[452px] w-full' : 'aspect-[4/3]'" class="overflow-hidden relative shrink-0">
+                    <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                         th:src="${s.imageUrl != null and !s.imageUrl.isEmpty() ? s.imageUrl : (stat.index % 5 == 0 ? 'https://lh3.googleusercontent.com/aida-public/AB6AXuDeWpC51Otw39WPnoS34IVa4m2qD_lkkaonTo27UAlp1HljleGuSy1fzEbD1d_vwHYqREtBmKCvxjy4mjpAKi2mHGJi0JR3SKacUnAeqvrurLcI7dey-llIlvd-w82kSbI7P2E37iDiQH7zxw7uJL_3Ysb8R-3wDj1FvP-KG7q5huXT6of0B_5h6Vll0FZvXxfjq41oCC9bfI6Y9s6uVLRxpCTK3RBpr5_yUpJQu0kuWdpbP9SOFxIswnY0usT-KlHGrfq6VY5avhBw' : 
+                                  (stat.index % 5 == 1 ? 'https://lh3.googleusercontent.com/aida-public/AB6AXuA0AttB9AKJdcFHymHLvxLMcnsWWiUu9q9Dmf3FOJzdB-GHCiudo-HUIX7WWq6UifQutO0Y3LAJm8Dx5wn2umlIGautxIZl3ZiXueCmerOTGlPQ2nv2AZi-Gp36ttMdxUxwHPd2WkS922CY8r6ddIGKuMfajsp__W3YI53WtQ3zdKb9XGGxL4kgv1EhlVkhbpMJWSNTr7xPcZNXu1wpNhYbMwdrL1YWPiysO5DGl8x66HewLHzSz3Hb7B_VdQqBobRF5m-qOFl9zswR' : 
+                                  'https://lh3.googleusercontent.com/aida-public/AB6AXuDWRC_taj5s-TU98jH53tRoaoaFwtaUPmFBTgtplLVqC_8KTYYkK_9KK835QjzEkE4GmFh4v1t4o_b9CkjmmzjjyaDDJmxmKvz0sGqU9SVVSn7fT7CqAGTml_UtdUEveEHWuhYvGxTIkdg7s3NjJoDvmZFXuOrzN6MCDmKnl0GrEgXjTU47KW6vQ4F7Ig5cDZzw5nYnOKv5LLL4RjIiCSsm6spSoMLqVJfWGR_6CiDyVmBfKgMaH4Lwc6eYSn1q0WE27E-AbiINlHwa'))}" />
+                </div>
+                
+                <div th:classappend="${stat.index % 5 == 0} ? 'p-8 md:p-12 relative z-10' : (${stat.index % 5 == 1} ? 'p-8 flex-grow flex flex-col justify-between' : 'p-8')">
+                    <div>
+                        <span class="font-label text-primary text-xs uppercase tracking-widest font-bold" th:text="${s.category ?: 'General'}">Category</span>
+                        <h3 th:classappend="${stat.index % 5 == 0} ? 'font-headline text-3xl md:text-4xl text-on-surface mt-2 font-bold mb-4' : 'font-headline text-xl text-on-surface mt-2 font-bold mb-4'" th:text="${s.name}">Service Name</h3>
+                        <p th:if="${stat.index % 5 == 0 or stat.index % 5 == 1}" 
+                           th:classappend="${stat.index % 5 == 0} ? 'text-tertiary max-w-xl mb-10 leading-relaxed' : 'text-tertiary text-sm mb-6 leading-relaxed line-clamp-3'" 
+                           th:text="${s.description}">Description</p>
+                    </div>
+                    
+                    <div>
+                        <div class="flex items-center justify-between mb-6">
+                            <span th:classappend="${stat.index % 5 == 0} ? 'text-2xl font-serif text-primary' : 'text-lg font-serif text-primary'" th:text="'₹' + ${#numbers.formatDecimal(s.price,1,2)}">Price</span>
+                            <span class="text-xs text-tertiary uppercase" th:text="${s.durationMinutes} + ' min'">Duration</span>
+                        </div>
+                        
+                        <a th:href="@{'/services/' + ${s.id}}" th:if="${stat.index % 5 != 0}" class="block w-full py-3 rounded-full bg-surface-container-high text-on-surface font-label text-xs uppercase tracking-widest hover:bg-primary hover:text-white transition-all duration-400 text-center" style="text-decoration:none;">View Details</a>
+                        
+                        <div th:if="${stat.index % 5 == 0}" class="flex items-center gap-6">
+                            <a th:href="@{'/services/' + ${s.id}}" class="group/btn flex items-center gap-3 text-primary font-label text-sm uppercase tracking-widest" style="text-decoration:none;">
+                                View Details 
+                                <span class="h-[1px] w-8 bg-primary transition-all duration-300 group-hover/btn:w-12"></span>
+                            </a>
+                            <a th:href="@{'/booking?serviceId=' + ${s.id}}" class="px-6 py-2 rounded-full border border-primary text-primary font-label text-xs uppercase tracking-widest hover:bg-primary hover:text-white transition-all duration-400" style="text-decoration:none;">Quick Book</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div th:if="${stat.index % 5 == 0}" class="absolute -bottom-10 -right-10 w-40 h-40 bg-primary-container/20 rounded-full blur-3xl pointer-events-none"></div>
+            </div>
+        </div>
+
+        <!-- Special Promotion Section (Packages) -->
+        <section th:if="${packages != null && !packages.isEmpty()}" th:with="pkg=${packages[0]}" class="mt-24 grid md:grid-cols-2 gap-12 items-center bg-primary-container/20 rounded-xl p-8 md:p-16 relative overflow-hidden">
+            <div class="relative z-10">
+                <span class="font-label text-primary text-xs uppercase tracking-[0.2em] font-bold mb-6 block">Seasonal Curations</span>
+                <h2 class="font-headline text-4xl md:text-5xl text-on-surface font-bold mb-6 leading-tight" th:text="${pkg.name}">The Blooming Autumn Retreat</h2>
+                <p class="text-on-primary-container/80 text-lg mb-10 leading-relaxed" th:text="${pkg.description}">Description</p>
+                <div class="flex gap-4 items-center">
+                    <span class="font-headline text-3xl text-primary font-bold" th:text="'₹' + ${#numbers.formatDecimal(pkg.getDiscountedPrice(),1,2)}">Price</span>
+                    <span class="text-outline line-through text-sm" th:text="'₹' + ${#numbers.formatDecimal(pkg.getTotalPrice(),1,2)}">Orig Price</span>
+                </div>
+                <div class="flex gap-4 mt-8">
+                    <a th:href="@{'/services/package/' + ${pkg.id}}" class="px-10 py-4 rounded-full bg-primary text-white font-label text-sm uppercase tracking-widest clay-shadow hover:scale-105 transition-all duration-400 text-center inline-block" style="text-decoration:none;">Learn More</a>
+                </div>
+            </div>
+            <div class="relative flex justify-center items-center z-10">
+                <div class="w-full max-w-md aspect-square rounded-full overflow-hidden border-[12px] border-white/50 clay-shadow">
+                    <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBBhfxDdZdWR4jBjuYw_UGeBeBFafI1jPTIcOxX5neL-1VBdAfMR532TDMaykst9-aJx8nFa_vxxiZCPZFuoEWSEz2ICAbbUsI2JmXIxolE2sYo1GLty5Pcs4fyNHbt-m02P3so7qcW3_5b7EqL8zEmUccgu4RihvzMKg-ibr_p-llp_YW11u_K_s2iLtC6K8CfIvc6g9GJLxSBIaFFkrQGXiutt-G7zp03ajSfSAA1JBbDY8VSoduveo9lkXxLzejyd8EV-3V6cQG"/>
+                </div>
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/40 backdrop-blur-xl rounded-full border border-white/60 clay-shadow flex items-center justify-center">
+                    <span class="material-symbols-outlined text-primary scale-150">spa</span>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer th:replace="~{layout/fragments :: site-footer}"></footer>
+
+    <!-- Quick Book FAB & Modal -->
+    <div x-data="quickBookCalendar()" class="relative z-[60]">
+        <!-- The Floating Action Button -->
+        <button @click="openCalendar()" class="fixed bottom-10 right-10 w-16 h-16 rounded-full bg-primary text-white shadow-2xl flex items-center justify-center transition-all duration-400 hover:scale-110 active:scale-95 clay-shadow border-none cursor-pointer">
+            <span class="material-symbols-outlined text-2xl">calendar_month</span>
+        </button>
+
+        <!-- The Pop-up Calendar Widget (positioned above the FAB) -->
+        <div x-show="isOpen" @click.away="isOpen = false" class="fixed bottom-32 right-10 z-[100]" style="display: none;"
+             x-transition:enter="transition ease-out duration-300 transform origin-bottom-right"
+             x-transition:enter-start="opacity-0 scale-90 translate-y-4"
+             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-200 transform origin-bottom-right"
+             x-transition:leave-start="opacity-100 scale-100 translate-y-0"
+             x-transition:leave-end="opacity-0 scale-90 translate-y-4">
+            
+            <div class="bg-white/95 backdrop-blur-2xl rounded-3xl p-6 w-[320px] shadow-2xl border border-rose-100/50 flex flex-col relative">
+                
+                <button @click="isOpen = false" class="absolute top-3 right-3 material-symbols-outlined text-slate-400 hover:text-rose-600 transition-colors bg-transparent border-none cursor-pointer text-sm">close</button>
+                
+                <div class="text-center mb-4 mt-2">
+                    <span class="material-symbols-outlined text-3xl text-primary mb-1">calendar_add_on</span>
+                    <h3 class="text-lg font-headline font-bold text-rose-900">Select Date</h3>
+                </div>
+
+                <!-- Calendar Header -->
+                <div class="flex items-center justify-between mb-3 bg-surface-container-lowest p-2 rounded-2xl border border-rose-50">
+                    <button @click="prevMonth" class="w-8 h-8 rounded-full flex items-center justify-center text-rose-900 hover:bg-rose-50 transition-colors cursor-pointer border-none bg-transparent">
+                        <span class="material-symbols-outlined text-sm">chevron_left</span>
+                    </button>
+                    <h4 class="font-headline text-sm font-bold text-rose-900" x-text="monthName + ' ' + year"></h4>
+                    <button @click="nextMonth" class="w-8 h-8 rounded-full flex items-center justify-center text-rose-900 hover:bg-rose-50 transition-colors cursor-pointer border-none bg-transparent">
+                        <span class="material-symbols-outlined text-sm">chevron_right</span>
+                    </button>
+                </div>
+                
+                <!-- Calendar Grid -->
+                <div class="grid grid-cols-7 gap-y-1 gap-x-1 text-center font-body text-sm mb-2">
+                    <template x-for="day in ['Su','Mo','Tu','We','Th','Fr','Sa']">
+                        <div class="text-slate-400 font-label text-[10px] uppercase tracking-wider pb-1" x-text="day"></div>
+                    </template>
+                    
+                    <template x-for="blank in blanks">
+                        <div class="text-transparent w-8 h-8"></div>
+                    </template>
+                    
+                    <template x-for="date in daysInMonth" :key="date">
+                        <div class="flex items-center justify-center">
+                            <button @click="selectDate(date)" 
+                                    :disabled="isPastDate(date)"
+                                    class="w-8 h-8 rounded-full flex items-center justify-center transition-colors text-xs border-none cursor-pointer"
+                                    :class="{
+                                        'text-slate-300 cursor-not-allowed bg-transparent': isPastDate(date),
+                                        'hover:bg-primary hover:text-white text-rose-900 bg-transparent': !isPastDate(date) && !isToday(date),
+                                        'bg-rose-100 text-primary font-bold': isToday(date)
+                                    }"
+                                    x-text="date"></button>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('quickBookCalendar', () => ({
+                isOpen: false,
+                month: new Date().getMonth(),
+                year: new Date().getFullYear(),
+                daysInMonth: [],
+                blanks: [],
+                monthName: '',
+                
+                openCalendar() {
+                    this.isOpen = true;
+                    this.calculateDays();
+                },
+                
+                calculateDays() {
+                    let daysInMonth = new Date(this.year, this.month + 1, 0).getDate();
+                    let dayOfWeek = new Date(this.year, this.month, 1).getDay();
+                    let blankdaysArray = [];
+                    for (var i = 1; i <= dayOfWeek; i++) {
+                        blankdaysArray.push(i);
+                    }
+                    let daysArray = [];
+                    for (var i = 1; i <= daysInMonth; i++) {
+                        daysArray.push(i);
+                    }
+                    this.blanks = blankdaysArray;
+                    this.daysInMonth = daysArray;
+                    
+                    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                    this.monthName = monthNames[this.month];
+                },
+                
+                prevMonth() {
+                    if (this.month == 0) {
+                        this.year--;
+                        this.month = 11;
+                    } else {
+                        this.month--;
+                    }
+                    this.calculateDays();
+                },
+                
+                nextMonth() {
+                    if (this.month == 11) {
+                        this.year++;
+                        this.month = 0;
+                    } else {
+                        this.month++;
+                    }
+                    this.calculateDays();
+                },
+                
+                isToday(date) {
+                    const today = new Date();
+                    const d = new Date(this.year, this.month, date);
+                    return today.toDateString() === d.toDateString();
+                },
+                
+                isPastDate(date) {
+                    const today = new Date();
+                    today.setHours(0,0,0,0);
+                    const d = new Date(this.year, this.month, date);
+                    return d < today;
+                },
+                
+                selectDate(date) {
+                    const d = new Date(this.year, this.month, date);
+                    const year = d.getFullYear();
+                    const month = String(d.getMonth() + 1).padStart(2, '0');
+                    const day = String(d.getDate()).padStart(2, '0');
+                    window.location.href = `/booking?date=${year}-${month}-${day}`;
+                }
+            }));
+        });
+    </script>
+
+    <script>
+        const canvas = document.getElementById('sakura-canvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        const petals = [];
+        const numPetals = 45;
+        let mouseX = -1000;
+        let mouseY = -1000;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        class Petal {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height - height;
+                this.size = Math.random() * 12 + 8;
+                this.speedY = Math.random() * 1.5 + 0.5;
+                this.speedX = Math.random() * 2 - 1;
+                this.angle = Math.random() * 360;
+                this.spin = Math.random() * 0.05 - 0.025;
+                this.opacity = Math.random() * 0.6 + 0.2;
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.angle += this.spin;
+
+                const dx = mouseX - this.x;
+                const dy = mouseY - this.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < 120) {
+                    const force = (120 - dist) / 120;
+                    this.x -= (dx / dist) * force * 3;
+                    this.y -= (dy / dist) * force * 3;
+                }
+
+                if (this.y > height + this.size) {
+                    this.y = -this.size;
+                    this.x = Math.random() * width;
+                }
+                if (this.x > width + this.size) this.x = -this.size;
+                if (this.x < -this.size) this.x = width + this.size;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+                ctx.fillStyle = `rgba(255, 183, 197, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.quadraticCurveTo(this.size * 0.8, -this.size * 0.8, this.size * 1.2, 0);
+                ctx.quadraticCurveTo(this.size * 0.8, this.size * 0.8, 0, 0);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < numPetals; i++) {
+            petals.push(new Petal());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            petals.forEach(petal => {
+                petal.update();
+                petal.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout/fragments :: head('Admin Management — Sakura Saki Admin')}"></head>
+<body class="bg-surface text-on-surface font-body">
+<th:block th:replace="~{layout/fragments :: sakura-canvas}" />
+
+<div class="flex min-h-screen w-full relative z-10 md:pl-72">
+    <!-- Sidebar -->
+    <aside th:replace="~{layout/fragments :: admin-sidebar('manage')}"></aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-6 pt-6 md:px-10 pt-10 lg:px-14 pt-14 relative flex flex-col pb-2">
+        <!-- Page Header -->
+        <header class="flex justify-between items-end mb-12 flex-wrap gap-4">
+            <div>
+                <span class="text-primary font-label text-xs font-bold tracking-[0.2em] uppercase block mb-2">Admin Management</span>
+                <h1 class="font-headline text-4xl text-tertiary font-bold">Manage Administrators</h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <button data-modal-target="createAdminModal" class="bg-primary text-on-primary px-6 py-3 rounded-full font-label text-xs font-bold uppercase tracking-wider hover:bg-primary-fixed-variant transition-colors flex items-center gap-2 shadow-md">
+                    <span class="material-symbols-outlined text-sm">person_add</span> New Admin
+                </button>
+            </div>
+        </header>
+
+        <!-- Alerts -->
+        <div th:if="${success}" class="mb-6 p-4 rounded-2xl bg-tertiary-container/30 border border-tertiary-container text-tertiary-fixed-variant font-body text-sm flex items-center gap-3">
+            <span class="material-symbols-outlined">check_circle</span> <span th:text="${success}"></span>
+        </div>
+        <div th:if="${error}" class="mb-6 p-4 rounded-2xl bg-error-container/30 border border-error-container text-on-error-container font-body text-sm flex items-center gap-3">
+            <span class="material-symbols-outlined">error</span> <span th:text="${error}"></span>
+        </div>
+
+        <!-- Content List -->
+        <div class="glass-pane bg-surface-container-lowest rounded-[2rem] p-6 lg:p-8 clay-lift border border-outline-variant/30 flex-1 flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-headline text-xl font-bold text-tertiary">
+                    <span th:text="${admins.totalElements}">0</span> administrators
+                </h3>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse min-w-[700px]">
+                    <thead>
+                        <tr class="border-b border-outline-variant/30">
+                            <th class="pb-4 font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider">Admin</th>
+                            <th class="pb-4 font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider">Email</th>
+                            <th class="pb-4 font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider">Level</th>
+                            <th class="pb-4 font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider">Status</th>
+                            <th class="pb-4 font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="a : ${admins.content}" class="border-b border-outline-variant/10 hover:bg-surface-container-low/50 transition-colors group">
+                            <td class="py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold text-xs shadow-sm"
+                                         th:text="${#strings.toUpperCase(#strings.substring(a.username, 0, 2))}">AD</div>
+                                    <div>
+                                        <div class="flex items-center gap-2">
+                                            <p class="font-body font-bold text-sm text-on-surface" th:text="${a.username}">admin</p>
+                                            <span th:if="${a.username == 'admin'}" class="bg-primary-container text-primary-fixed-variant px-2 py-0.5 rounded font-label text-[9px] font-bold uppercase tracking-wider">Super Admin</span>
+                                        </div>
+                                        <p class="font-body text-[11px] text-outline mt-0.5">ID: <span th:text="${a.id}">1</span></p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="py-4 font-body text-sm text-on-surface-variant" th:text="${a.email}">admin@mail.com</td>
+                            <td class="py-4">
+                                <span class="px-3 py-1 bg-primary-container/80 text-primary-fixed-variant rounded-full font-label text-[10px] font-bold uppercase tracking-wider" th:text="${a.adminLevel ?: 'ADMIN'}">ADMIN</span>
+                            </td>
+                            <td class="py-4">
+                                <span class="px-3 py-1 rounded-full font-label text-[10px] font-bold uppercase tracking-wider"
+                                      th:classappend="${a.enabled} ? 'bg-tertiary-container/30 text-tertiary-fixed-variant' : 'bg-surface-container text-outline'"
+                                      th:text="${a.enabled ? 'Active' : 'Disabled'}">Active</span>
+                            </td>
+                            <td class="py-4 text-right">
+                                <div class="flex items-center justify-end gap-2">
+                                    <!-- Super Admin Protected Badge -->
+                                    <span th:if="${a.username == 'admin'}" class="px-3 py-1 bg-surface-container-high text-outline rounded-full font-label text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-xs">lock</span> Protected
+                                    </span>
+                                    
+                                    <div th:if="${a.username != 'admin'}" class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button th:data-modal-target="'editModal' + ${a.id}" class="w-8 h-8 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors" title="Edit">
+                                            <span class="material-symbols-outlined text-sm">edit</span>
+                                        </button>
+                                        <form th:action="@{'/admin/manage/' + ${a.id} + '/demote'}" method="post" onsubmit="return confirm('Demote this admin to a regular user?');">
+                                            <button type="submit" class="w-8 h-8 rounded-full bg-secondary-container hover:bg-secondary-fixed text-on-secondary-container flex items-center justify-center transition-colors shadow-sm" title="Demote to User">
+                                                <span class="material-symbols-outlined text-sm">arrow_downward</span>
+                                            </button>
+                                        </form>
+                                        <form th:if="${a.enabled}" th:action="@{'/admin/manage/' + ${a.id} + '/deactivate'}" method="post" onsubmit="return confirm('Are you sure you want to deactivate this admin?');">
+                                            <button type="submit" class="w-8 h-8 rounded-full bg-error-container/20 hover:bg-error-container text-on-error-container flex items-center justify-center transition-colors shadow-sm" title="Deactivate">
+                                                <span class="material-symbols-outlined text-sm">block</span>
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div th:if="${a.username == 'admin'}" class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <button th:data-modal-target="'editModal' + ${a.id}" class="w-8 h-8 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface flex items-center justify-center transition-colors" title="Edit">
+                                            <span class="material-symbols-outlined text-sm">edit</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${admins.empty}">
+                            <td colspan="5" class="py-16 text-center">
+                                <span class="material-symbols-outlined text-5xl text-outline mb-2 block opacity-30">admin_panel_settings</span>
+                                <p class="text-on-surface-variant font-body text-sm">No administrators found.</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <th:block th:replace="~{layout/fragments :: pagination-controls(page=${admins}, url='/admin/manage')}" />
+        </div>
+
+        <!-- Footer -->
+        
+<footer th:replace="~{layout/fragments :: dashboard-footer}"></footer>
+    </main>
+</div>
+
+<!-- Create Admin Modal -->
+<div id="createAdminModal" class="sakura-modal hidden fixed inset-0 z-[100] items-center justify-center bg-on-surface/20 backdrop-blur-sm transition-all duration-300">
+    <div class="modal-content bg-surface-container-lowest w-full max-w-md rounded-[2rem] shadow-2xl p-8 scale-95 opacity-0 transition-all duration-300 transform border border-outline-variant/30">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="font-headline text-2xl font-bold text-tertiary">Create New Administrator</h3>
+            <button data-modal-close class="text-outline hover:text-on-surface transition-colors">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <form th:action="@{/admin/manage/create}" method="post">
+            <div class="space-y-4">
+                <div>
+                    <label class="block font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Username</label>
+                    <input name="username" type="text" class="w-full px-4 py-3 rounded-xl bg-surface-container-high border-none font-body text-sm text-on-surface focus:ring-2 focus:ring-primary/30 shadow-inner" placeholder="Enter username" th:value="${prevUsername}" required>
+                </div>
+                <div>
+                    <label class="block font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Email</label>
+                    <input name="email" type="email" class="w-full px-4 py-3 rounded-xl bg-surface-container-high border-none font-body text-sm text-on-surface focus:ring-2 focus:ring-primary/30 shadow-inner" placeholder="admin@sakurasaki.com" th:value="${prevEmail}" required>
+                </div>
+                <div>
+                    <label class="block font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Admin Level</label>
+                    <select name="adminLevel" class="w-full px-4 py-3 rounded-xl bg-surface-container-high border-none font-body text-sm text-on-surface focus:ring-2 focus:ring-primary/30 shadow-inner" required>
+                        <option value="ADMIN" th:selected="${prevAdminLevel == 'ADMIN'}">Admin</option>
+                        <option value="MANAGER" th:selected="${prevAdminLevel == 'MANAGER'}">Manager</option>
+                        <option value="CEO" th:selected="${prevAdminLevel == 'CEO'}">CEO</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Password</label>
+                    <input name="password" type="password" class="w-full px-4 py-3 rounded-xl bg-surface-container-high border-none font-body text-sm text-on-surface focus:ring-2 focus:ring-primary/30 shadow-inner" placeholder="Create a password" required>
+                </div>
+            </div>
+            <div class="mt-8 flex justify-end gap-3">
+                <button type="button" data-modal-close class="px-6 py-3 rounded-full font-label text-xs font-bold text-on-surface uppercase tracking-wider hover:bg-surface-container transition-colors">Cancel</button>
+                <button type="submit" class="bg-primary text-on-primary px-6 py-3 rounded-full font-label text-xs font-bold uppercase tracking-wider hover:bg-primary-fixed-variant transition-colors shadow-md">Create Admin</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Edit Admin Modals -->
+<th:block th:each="a : ${admins}">
+    <div th:id="'editModal' + ${a.id}" class="sakura-modal hidden fixed inset-0 z-[100] items-center justify-center bg-on-surface/20 backdrop-blur-sm transition-all duration-300">
+        <div class="modal-content bg-surface-container-lowest w-full max-w-md rounded-[2rem] shadow-2xl p-8 scale-95 opacity-0 transition-all duration-300 transform border border-outline-variant/30">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-headline text-2xl font-bold text-tertiary">Edit Admin: <span th:text="${a.username}" class="text-primary">admin</span></h3>
+                <button data-modal-close class="text-outline hover:text-on-surface transition-colors">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <form th:action="@{'/admin/manage/' + ${a.id} + '/update'}" method="post">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Username</label>
+                        <input name="username" type="text" class="w-full px-4 py-3 rounded-xl bg-surface-container-high border-none font-body text-sm text-on-surface focus:ring-2 focus:ring-primary/30 shadow-inner" th:value="${a.username}" required>
+                    </div>
+                    <div>
+                        <label class="block font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Email</label>
+                        <input name="email" type="email" class="w-full px-4 py-3 rounded-xl bg-surface-container-high border-none font-body text-sm text-on-surface focus:ring-2 focus:ring-primary/30 shadow-inner" th:value="${a.email}" required>
+                    </div>
+                    <div>
+                        <label class="block font-label text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-2">Admin Level</label>
+                        <select name="adminLevel" class="w-full px-4 py-3 rounded-xl bg-surface-container-high border-none font-body text-sm text-on-surface focus:ring-2 focus:ring-primary/30 shadow-inner" required>
+                            <option value="ADMIN" th:selected="${a.adminLevel == 'ADMIN'}">Admin</option>
+                            <option value="MANAGER" th:selected="${a.adminLevel == 'MANAGER'}">Manager</option>
+                            <option value="CEO" th:selected="${a.adminLevel == 'CEO'}">CEO</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-8 flex justify-end gap-3">
+                    <button type="button" data-modal-close class="px-6 py-3 rounded-full font-label text-xs font-bold text-on-surface uppercase tracking-wider hover:bg-surface-container transition-colors">Cancel</button>
+                    <button type="submit" class="bg-primary text-on-primary px-6 py-3 rounded-full font-label text-xs font-bold uppercase tracking-wider hover:bg-primary-fixed-variant transition-colors shadow-md">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</th:block>
+
+<th:block th:replace="~{layout/fragments :: sakura-js}" />
+<script th:if="${openModal}">
+    document.addEventListener('DOMContentLoaded', () => {
+        const modalId = '[[${openModal}]]';
+        const modal = document.getElementById(modalId);
+        if (modal) {
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                const content = modal.querySelector('.modal-content');
+                if (content) {
+                    content.classList.remove('scale-95', 'opacity-0');
+                    content.classList.add('scale-100', 'opacity-100');
+                }
+            }, 10);
+        }
+    });
+</script>
+</body>
+</html>

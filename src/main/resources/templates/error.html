@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout/fragments :: head('Something went wrong - Sakura Saki')}"></head>
+<body class="bg-surface text-on-surface font-body min-h-screen flex flex-col">
+<main class="flex-1 flex items-center justify-center px-6 py-24 pb-2">
+    <section class="bg-white rounded-lg clay-lift p-8 md:p-12 max-w-xl w-full text-center">
+        <span class="material-symbols-outlined text-primary text-5xl mb-4">error</span>
+        <h1 class="font-headline text-3xl md:text-4xl font-bold mb-3">Something went wrong</h1>
+        <h2 class="text-on-surface-variant font-label text-sm uppercase tracking-widest mb-4" th:text="${status} + ' ' + ${error}">404 Not Found</h2>
+        <p class="text-on-surface-variant mb-2" th:text="${message}">Error message</p>
+        <p class="text-xs text-slate-400 mb-8" th:text="${path}">/path</p>
+        <a th:href="@{/}" class="inline-flex items-center justify-center px-8 py-3 bg-primary text-on-primary rounded-full font-label text-xs font-bold uppercase tracking-wider" style="text-decoration:none;">Go Home</a>
+    </section>
+</main>
+<footer th:replace="~{layout/fragments :: site-footer}"></footer>
+</body>
+</html>

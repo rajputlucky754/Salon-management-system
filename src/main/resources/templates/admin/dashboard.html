@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout/fragments :: head('Dashboard — Sakura Saki Admin')}"></head>
+<body class="bg-surface text-on-surface font-body">
+<th:block th:replace="~{layout/fragments :: sakura-canvas}" />
+
+<div class="flex min-h-screen w-full relative z-10 md:pl-72">
+    <!-- Overlay for mobile sidebar -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-on-surface/20 backdrop-blur-sm z-40 hidden md:hidden"></div>
+    <!-- Sidebar -->
+    <aside th:replace="~{layout/fragments :: admin-sidebar('dashboard')}"></aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 px-6 pt-6 md:px-12 pt-12 relative z-10 w-full flex flex-col pb-2">
+        <!-- Mobile TopAppBar -->
+        <header class="md:hidden flex justify-between items-center w-full bg-surface-container-lowest/60 backdrop-blur-xl shadow-sm sticky top-0 z-30 -mt-12 mb-8 -mx-12 px-12 py-4" style="width: calc(100% + 6rem);">
+            <div class="flex items-center gap-3">
+                <button class="material-symbols-outlined text-primary mobile-menu-btn bg-transparent border-none p-0 cursor-pointer">menu</button>
+                <h1 class="font-headline text-2xl font-bold tracking-tight text-primary">Sakura Saki</h1>
+            </div>
+            <div class="flex items-center gap-4 text-primary">
+                <span class="material-symbols-outlined scale-95">notifications</span>
+            </div>
+        </header>
+
+        <!-- Header Section -->
+        <header class="flex justify-between items-end mb-8 flex-wrap gap-4">
+            <div>
+                <span class="font-label text-xs uppercase tracking-[0.2em] text-primary mb-2 block">WELCOME BACK</span>
+                <h2 class="font-headline text-4xl text-on-surface font-bold tracking-tight">Good morning, <span th:text="${username}">Admin</span>.</h2>
+            </div>
+            <div class="flex items-center gap-4">
+                <form th:action="@{/admin/users}" method="get" class="recessed rounded-full px-6 py-3 flex items-center gap-3">
+                    <span class="material-symbols-outlined text-outline">search</span>
+                    <input name="search" class="bg-transparent border-none focus:ring-0 text-sm font-medium text-on-surface-variant w-48 outline-none" placeholder="Search data..." type="text">
+                </form>
+                <div class="w-12 h-12 glass-pane rounded-full flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors cursor-pointer">
+                    <span class="material-symbols-outlined">notifications</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- KPI Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 xl:gap-8 items-start mb-12">
+            <div class="glass-pane clay-lift rounded-lg p-5 xl:p-8 flex flex-col gap-4 min-h-[170px]">
+                <div class="w-12 h-12 rounded-full bg-primary-container/40 flex items-center justify-center"><span class="material-symbols-outlined text-primary">group</span></div>
+                <div><p class="font-label text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant mb-1">Total Customers</p><p class="font-headline text-3xl font-bold text-on-surface" th:text="${summary.totalCustomers}">0</p></div>
+            </div>
+            <div class="glass-pane clay-lift rounded-lg p-5 xl:p-8 flex flex-col gap-4 min-h-[170px]">
+                <div class="w-12 h-12 rounded-full bg-primary-container/40 flex items-center justify-center"><span class="material-symbols-outlined text-primary">content_cut</span></div>
+                <div><p class="font-label text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant mb-1">Active Services</p><p class="font-headline text-3xl font-bold text-on-surface" th:text="${summary.totalServices}">0</p></div>
+            </div>
+            <div class="glass-pane clay-lift rounded-lg p-5 xl:p-8 flex flex-col gap-4 min-h-[170px]">
+                <div class="w-12 h-12 rounded-full bg-primary-container/40 flex items-center justify-center"><span class="material-symbols-outlined text-primary">badge</span></div>
+                <div><p class="font-label text-[10px] font-bold uppercase tracking-[0.1em] text-on-surface-variant mb-1">Total Staff</p><p class="font-headline text-3xl font-bold text-on-surface" th:text="${summary.totalStaff}">0</p></div>
+            </div>
+            <div class="rounded-lg p-5 xl:p-8 flex flex-col gap-4 shadow-sm min-h-[170px] clay-lift bg-primary text-white">
+                <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center"><span class="material-symbols-outlined text-white">payments</span></div>
+                <div><p class="font-label text-[10px] font-bold uppercase tracking-[0.1em] text-white/90 mb-1">Total Revenue</p><p class="font-headline text-2xl font-bold text-white" th:text="'₹' + ${#numbers.formatDecimal(summary.totalRevenue,1,'COMMA',0,'POINT')}">$0</p></div>
+            </div>
+        </div>
+
+        <!-- Metrics Grid (Bento Style) -->
+        <div class="grid grid-cols-12 gap-8 mb-12">
+            <!-- Monthly Revenue Chart -->
+            <div class="col-span-12 lg:col-span-8 glass-pane rounded-lg p-8 clay-lift flex flex-col min-h-[380px]">
+                <div class="flex justify-between items-center mb-10">
+                    <h3 class="font-headline text-xl font-bold">Monthly Revenue</h3>
+                    <div class="flex items-center gap-2 text-xs font-label uppercase tracking-wider text-slate-500">
+                        <span>Last 6 Months</span>
+                    </div>
+                </div>
+                <div class="flex-1 relative min-h-[280px]">
+                    <canvas id="monthlyRevenueChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Staff Performance Kicker -->
+            <div class="col-span-12 lg:col-span-4 flex flex-col gap-8">
+                <div class="bg-primary text-white rounded-lg p-8 clay-lift flex-1 flex flex-col justify-between">
+                    <div>
+                        <span class="font-label text-[10px] uppercase tracking-widest block opacity-70 mb-1">Top Performer</span>
+                        <h4 class="font-headline text-2xl font-bold">Yumi Tanaka</h4>
+                    </div>
+                    <div class="flex items-end justify-between">
+                        <div>
+                            <span class="text-4xl font-serif font-bold italic">98%</span>
+                            <span class="text-[10px] block opacity-70">Client Satisfaction</span>
+                        </div>
+                        <div class="w-16 h-16 rounded-full overflow-hidden border-2 border-white/50 bg-white flex items-center justify-center">
+                            <span class="material-symbols-outlined text-3xl text-primary">face_3</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-pane rounded-lg p-8 clay-lift flex-1">
+                    <h3 class="font-label text-[10px] uppercase tracking-widest text-slate-400 mb-4">Quick Stats</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm font-medium">New Clients</span>
+                            <span class="text-sm font-bold text-primary">+24%</span>
+                        </div>
+                        <div class="w-full h-1 bg-surface-container rounded-full overflow-hidden">
+                            <div class="h-full bg-primary w-[74%] rounded-full"></div>
+                        </div>
+                        <div class="flex justify-between items-center mt-4">
+                            <span class="text-sm font-medium">Repeat Rate</span>
+                            <span class="text-sm font-bold text-primary">82%</span>
+                        </div>
+                        <div class="w-full h-1 bg-surface-container rounded-full overflow-hidden">
+                            <div class="h-full bg-primary w-[82%] rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Appointment Trends & Table Row -->
+        <div class="grid grid-cols-12 gap-8 items-start mb-12">
+            <!-- Appointment Trends -->
+            <div class="col-span-12 lg:col-span-6 glass-pane rounded-lg p-8 clay-lift h-full flex flex-col min-h-[410px]">
+                <div class="flex justify-between items-start mb-8">
+                    <h3 class="font-headline text-xl font-bold">Appointment Trends</h3>
+                    <div class="text-right">
+                        <span class="text-3xl font-serif font-bold italic text-primary leading-none" th:text="${summary.todayAppointments}">142</span>
+                        <span class="text-[10px] block font-label uppercase text-slate-400 mt-1">Total Bookings Today</span>
+                    </div>
+                </div>
+                <div class="relative flex-1 min-h-[250px] w-full">
+                    <canvas id="trendChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Upcoming Appointments Table -->
+            <div class="col-span-12 lg:col-span-6 glass-pane rounded-lg p-8 clay-lift h-full flex flex-col">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="font-headline text-xl font-bold">Upcoming Appointments</h3>
+                    <a th:href="@{/admin/appointments}" class="text-primary font-label text-xs uppercase tracking-widest hover:underline" style="text-decoration:none;">View All</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-separate border-spacing-y-4">
+                        <thead>
+                            <tr class="text-slate-400 font-label text-[10px] uppercase tracking-widest">
+                                <th class="pb-2 pl-4">Client</th>
+                                <th class="pb-2">Service</th>
+                                <th class="pb-2">Time</th>
+                                <th class="pb-2">Status</th>
+                                <th class="pb-2 pr-4 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm">
+                            <tr th:each="appt, iter : ${appointments}" th:if="${iter.index < 4}" class="bg-surface-container-lowest rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                                <td class="py-4 pl-4 rounded-l-lg">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-bold text-[10px]"
+                                             th:text="${appt.customer != null ? #strings.toUpperCase(#strings.substring(appt.customer.firstName, 0, 1)) + #strings.toUpperCase(#strings.substring(appt.customer.lastName, 0, 1)) : 'NA'}">MK</div>
+                                        <span class="font-semibold" th:text="${appt.customer != null ? appt.customer.firstName + ' ' + appt.customer.lastName : 'Unknown'}">Client Name</span>
+                                    </div>
+                                </td>
+                                <td class="py-4" th:text="${appt.service != null ? appt.service.name : 'Service'}">Service</td>
+                                <td class="py-4" th:text="${appt.appointmentTime}">14:30 PM</td>
+                                <td class="py-4">
+                                    <span class="px-3 py-1 text-[10px] font-bold rounded-full uppercase tracking-tighter"
+                                          th:classappend="${appt.status == 'SCHEDULED' ? 'bg-primary-container text-on-primary-container' : (appt.status == 'COMPLETED' ? 'bg-green-100 text-green-700' : (appt.status == 'CANCELLED' ? 'bg-error-container text-on-error-container' : 'bg-surface-container text-on-surface'))}"
+                                          th:text="${appt.status}">Booked</span>
+                                </td>
+                                <td class="py-4 pr-4 rounded-r-lg text-right">
+                                    <div x-data="{ open: false }" class="relative inline-block text-left">
+                                        <button @click="open = !open" @click.away="open = false" class="material-symbols-outlined text-outline cursor-pointer hover:text-primary border-none bg-transparent p-0">more_horiz</button>
+                                        <div x-show="open" x-transition class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50 text-left overflow-hidden" style="display: none;">
+                                            <div class="py-1">
+                                                <a th:href="@{/admin/appointments}" class="block px-4 py-3 text-sm text-slate-700 hover:bg-rose-50 hover:text-primary font-medium" style="text-decoration:none;">View Details</a>
+                                                <a th:href="@{/admin/appointments}" class="block px-4 py-3 text-sm text-slate-700 hover:bg-rose-50 hover:text-primary font-medium border-t border-slate-100" style="text-decoration:none;">Edit Appointment</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(appointments)}">
+                                <td colspan="5" class="py-8 text-center text-slate-400 text-sm rounded-lg bg-surface-container-lowest">No upcoming appointments.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+<footer th:replace="~{layout/fragments :: dashboard-footer}"></footer>
+    </main>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script th:inline="javascript">
+    // Monthly Revenue Chart (Bar)
+    const revCtx = document.getElementById('monthlyRevenueChart').getContext('2d');
+    new Chart(revCtx, {
+        type: 'bar',
+        data: {
+            labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN'],
+            datasets: [{
+                label: 'Revenue ($)',
+                data: [12000, 18000, 24000, 16000, 21000, 28000],
+                backgroundColor: '#e38d9d',
+                hoverBackgroundColor: '#864e5a',
+                borderRadius: Number.MAX_VALUE,
+                borderSkipped: false,
+                barThickness: 48
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { grid: { display: false }, ticks: { font: { family: 'Manrope', size: 10 } } },
+                x: { grid: { display: false }, ticks: { font: { family: 'Manrope', size: 10 } } }
+            }
+        }
+    });
+
+    // Appointment Trends (Line)
+    (async function() {
+        const today = new Date();
+        const weekAgo = new Date();
+        weekAgo.setDate(today.getDate() - 7);
+        const fmt = d => d.toISOString().split('T')[0];
+        try {
+            const res = await fetch(`/admin/reports/appointments?from=${fmt(weekAgo)}&to=${fmt(today)}`);
+            const json = await res.json();
+            const labels = Object.keys(json.data).map(d => { const p = d.split('-'); return p[2] + '/' + p[1]; });
+            const values = Object.values(json.data);
+            const trendCtx = document.getElementById('trendChart').getContext('2d');
+            const gradient = trendCtx.createLinearGradient(0, 0, 0, 200);
+            gradient.addColorStop(0, 'rgba(255, 183, 197, 0.4)');
+            gradient.addColorStop(1, 'rgba(255, 183, 197, 0)');
+            new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Appointments',
+                        data: values,
+                        borderColor: '#864e5a',
+                        backgroundColor: gradient,
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 3,
+                        pointBackgroundColor: '#864e5a',
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { stepSize: 1, font: { family: 'Manrope', size: 10 } }, grid: { color: 'rgba(0,0,0,0.03)' } },
+                        x: { ticks: { font: { family: 'Manrope', size: 10 } }, grid: { display: false } }
+                    }
+                }
+            });
+        } catch(e) {
+            console.log('Could not load trend chart:', e);
+        }
+    })();
+</script>
+<th:block th:replace="~{layout/fragments :: sakura-js}" />
+</body>
+</html>

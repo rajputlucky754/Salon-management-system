@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html class="light" lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Sakura Saki | Digital Serenity</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed-variant": "#574144",
+                        "on-tertiary-fixed-variant": "#474747",
+                        "primary-fixed": "#ffd9df",
+                        "outline": "#837375",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#555555",
+                        "on-primary-fixed-variant": "#6b3743",
+                        "on-secondary-fixed": "#281719",
+                        "surface-tint": "#864e5a",
+                        "tertiary-fixed-dim": "#c8c6c6",
+                        "on-surface-variant": "#514345",
+                        "primary": "#864e5a",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#fbb3c1",
+                        "outline-variant": "#d6c2c4",
+                        "surface-container-low": "#f3f3f3",
+                        "surface-dim": "#dadada",
+                        "on-error": "#ffffff",
+                        "surface-container": "#eeeeee",
+                        "on-primary-container": "#7b4551",
+                        "background": "#f9f9f9",
+                        "secondary-fixed": "#fbdbde",
+                        "on-background": "#1a1c1c",
+                        "on-secondary-container": "#755d5f",
+                        "surface-container-highest": "#e2e2e2",
+                        "secondary-container": "#f8d8db",
+                        "on-tertiary": "#ffffff",
+                        "surface": "#f9f9f9",
+                        "tertiary": "#5f5e5e",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "tertiary-fixed": "#e4e2e1",
+                        "inverse-on-surface": "#f1f1f1",
+                        "error-container": "#ffdad6",
+                        "secondary": "#70585b",
+                        "inverse-surface": "#2f3131",
+                        "tertiary-container": "#cccaca",
+                        "secondary-fixed-dim": "#debfc2",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#ffb7c5",
+                        "on-surface": "#1a1c1c",
+                        "surface-container-high": "#e8e8e8",
+                        "on-tertiary-fixed": "#1b1c1c",
+                        "primary-fixed-dim": "#fbb3c1",
+                        "on-primary-fixed": "#360c19",
+                        "surface-variant": "#e2e2e2",
+                        "surface-bright": "#f9f9f9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Noto Serif"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: 'Manrope', sans-serif; background-color: #f9f9f9; }
+        .font-serif { font-family: 'Noto Serif', serif; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(24px);
+            border: 0.5px solid rgba(214, 194, 196, 0.3);
+        }
+        .clay-card {
+            background: #ffffff;
+            box-shadow: 0 40px 60px -15px rgba(26, 28, 28, 0.06), 
+                        inset 2px 2px 4px rgba(255, 255, 255, 0.8);
+        }
+        .text-glow {
+            text-shadow: 0 0 20px rgba(255, 183, 197, 0.4);
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(calc(-50% - 1rem)); }
+        }
+        .animate-marquee {
+            animation: marquee 35s linear infinite;
+        }
+        .animate-marquee:hover {
+            animation-play-state: paused;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+    <canvas class="fixed inset-0 pointer-events-none z-[1] opacity-70" id="sakura-canvas"></canvas>
+
+    <!-- TopNavBar -->
+    <div th:replace="~{layout/fragments :: topnav('home')}"></div>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-[972px] flex items-center justify-center pt-20 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-primary-container/30 to-surface z-0"></div>
+        <div class="absolute top-1/4 -left-10 w-64 h-64 bg-primary-container/20 rounded-full blur-3xl opacity-60"></div>
+        <div class="absolute bottom-1/4 -right-10 w-96 h-96 bg-secondary-container/20 rounded-full blur-3xl opacity-60"></div>
+        <div class="max-w-[1600px] mx-auto px-8 w-full relative z-10 grid grid-cols-1 lg:grid-cols-[1.2fr_0.8fr] gap-12 items-center">
+            <div class="space-y-8">
+                <div class="drop-shadow-sm">
+                    <span class="text-primary font-label text-sm font-extrabold tracking-[0.2em] uppercase mb-4 block drop-shadow">Artisanal Beauty &amp; Wellness</span>
+                    <h1 class="font-headline text-6xl md:text-8xl text-on-surface leading-[1.05] tracking-tight font-bold drop-shadow-xl bg-white/30 backdrop-blur-sm p-4 rounded-3xl inline-block lg:bg-transparent lg:backdrop-blur-none lg:p-0">
+                        Unveil Your <br/>
+                        <span class="text-primary italic">Eternal Bloom</span>
+                    </h1>
+                </div>
+                <p class="text-body text-lg text-secondary max-w-lg leading-relaxed drop-shadow-sm bg-white/40 backdrop-blur-sm p-4 rounded-xl lg:bg-transparent lg:backdrop-blur-none lg:p-0">
+                    A sensory journey where traditional Japanese precision meets modern aesthetic innovation. Experience beauty as a form of meditation.
+                </p>
+                <div class="flex flex-wrap gap-6 pt-4">
+                    <a th:href="@{/booking}" class="px-10 py-5 bg-primary text-on-primary rounded-full font-label font-bold tracking-wider text-sm shadow-xl hover:scale-[1.02] transition-all duration-400 active:scale-[0.98] inline-block text-center" style="text-decoration:none;">
+                        BOOK AN APPOINTMENT
+                    </a>
+                    <a th:href="@{/services}" class="px-10 py-5 border-2 border-primary/20 text-primary rounded-full font-label font-bold tracking-wider text-sm hover:bg-primary/5 transition-all duration-400 inline-block text-center" style="text-decoration:none;">
+                        OUR PHILOSOPHY
+                    </a>
+                </div>
+            </div>
+            
+            <!-- 3D Glassmorphism Centerpiece -->
+            <div class="relative flex justify-center items-center h-[500px] lg:h-full">
+                <div class="glass-panel w-full max-w-md aspect-[4/5] rounded-xl relative z-20 overflow-hidden shadow-2xl flex flex-col items-center justify-center p-8 group"
+                     x-data="{ activeSlide: 0, 
+                               slides: [
+                                   { title: 'Skin Rituals', desc: 'Tailored treatments infused with Sakura extracts for a translucent glow.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCNooYEtdTIDbwDNHvzdG_78UsrA0C8I46Zt2F7DlxId4YJMAjjMpZh2izNeipx5tt6iJMXd133rut49wQOO_r3wawlPPBu7tNXLk6hDEW7Ct7mnH_hLeJK8pXm-GaSXOsm3JWW5NUB6O7AYk7UQq9y_NfbXIj-LnQ7c12TRMbwrKr9S7bTo3pos9Xhw2hAnqu50H9aGWtsM4NYObOgYifsymtQ1AOMeIzoDSQOrD-HtBwvdEiDd7NzCT_ruKiSvHA433V9RpFKP3tr', bg: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAkbKR7PNv2z0Ao9G1c1NLMl4T74kL10Gm9IuT345a-Gcfo12jYIBtrn8jihoH2xgurlF8I0bU-bt0a1tt_PeMqm0BtVjmFJ9CSeqk_tZCHNtGKfJZ6lfM0toMH-henqIJE33-xDG_BWSt_SkPBPEbuDEVhwFpEZXso7L--XIbFE07aTiFoQdTXzEjIXXiKkibi8tVivBJvaH2HCcUX1UibFxhNd1keXptT_uGfzFYt3xJus-pg00g-f8e2_ccMZB9u8pjTlY6XWEFU' },
+                                   { title: 'Hair Rituals', desc: 'Deep nourishing therapy to restore your hair\'s natural vitality and shine.', img: 'https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=600&auto=format&fit=crop', bg: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=800&auto=format&fit=crop' },
+                                   { title: 'Body Rituals', desc: 'Holistic massage and body wellness to relax your mind and soothe your soul.', img: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=600&auto=format&fit=crop', bg: 'https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?q=80&w=800&auto=format&fit=crop' }
+                               ],
+                               init() {
+                                   setInterval(() => {
+                                       this.activeSlide = (this.activeSlide + 1) % this.slides.length;
+                                   }, 5000);
+                               }
+                             }">
+                    
+                    <template x-for="(slide, index) in slides" :key="index">
+                        <div x-show="activeSlide === index" 
+                             x-transition:enter="transition ease-out duration-700" 
+                             x-transition:enter-start="opacity-0 translate-x-8" 
+                             x-transition:enter-end="opacity-100 translate-x-0" 
+                             x-transition:leave="transition ease-in duration-700 absolute inset-0" 
+                             x-transition:leave-start="opacity-100 translate-x-0" 
+                             x-transition:leave-end="opacity-0 -translate-x-8"
+                             class="absolute inset-0 flex flex-col items-center justify-center p-8">
+                            
+                            <div class="absolute inset-0 -z-10">
+                                <img :alt="slide.title" class="w-full h-full object-cover opacity-30 scale-110 group-hover:scale-100 transition-transform duration-[2000ms]" :src="slide.bg"/>
+                            </div>
+                            <div class="w-48 h-48 relative mb-8">
+                                <div class="absolute inset-0 bg-primary-container/40 rounded-full blur-xl scale-125"></div>
+                                <img :alt="slide.title" class="w-full h-full object-cover rounded-full shadow-inner border-4 border-white/40 relative z-10" :src="slide.img"/>
+                            </div>
+                            <div class="text-center space-y-4 relative z-10">
+                                <h3 class="font-serif text-2xl font-bold text-on-primary-container" x-text="slide.title"></h3>
+                                <p class="text-sm font-medium text-on-secondary-fixed-variant max-w-[240px]" x-text="slide.desc"></p>
+                            </div>
+                        </div>
+                    </template>
+                    
+                    <!-- Navigation Dots -->
+                    <div class="absolute bottom-8 flex justify-center gap-2 pt-2 z-20">
+                        <template x-for="(_, index) in slides" :key="index">
+                            <button @click="activeSlide = index" 
+                                    class="w-2 h-2 rounded-full transition-all duration-300 border-none cursor-pointer"
+                                    :class="activeSlide === index ? 'bg-primary w-4' : 'bg-primary/30 hover:bg-primary/50'"></button>
+                        </template>
+                    </div>
+                </div>
+                <!-- Decorative Layered Blobs -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-primary-container rounded-full blur-2xl -z-10 mix-blend-multiply opacity-50"></div>
+                <div class="absolute bottom-10 left-0 w-40 h-40 bg-secondary-container rounded-full blur-3xl -z-10 mix-blend-multiply opacity-50"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Services Bento Grid -->
+    <section class="py-32 px-8 max-w-[1600px] mx-auto">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+            <div class="max-w-xl">
+                <span class="text-primary font-label text-xs font-extrabold tracking-[0.3em] uppercase mb-4 block">Curated Experience</span>
+                <h2 class="font-headline text-5xl text-on-surface font-bold">Services Crafted <br/>for Your Essence</h2>
+            </div>
+            <p class="text-secondary md:text-right max-w-xs text-sm leading-relaxed">
+                Every treatment is a bespoke ceremony designed to restore your natural balance and luminosity.
+            </p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+            <!-- Service Card 1 -->
+            <div class="clay-card md:col-span-8 rounded-lg p-10 flex flex-col md:flex-row gap-8 items-center group overflow-hidden">
+                <div class="w-full md:w-1/2 aspect-square rounded-lg overflow-hidden order-2 md:order-1">
+                    <img alt="Woman receiving a facial massage" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMVmauqXvwu-XPflLT6_tc7BAOCxLUAMerznAYD3ep-cA75N01-c0M0jV1ztBu7cnB2D8y7SiBuXRFnE4yFWu_uxb3EOl2faSywTB6fKXVipFFH9_BseBEMAF6N3S7xNifA1XAPu4SXAphtEuUAGRBWPK8T1yK99Ed-GRZOX0wDGmnBqtMrwNnAwysI9JwNcgGFb7WW3P57J4jLJQz7dkX41QbHQIrJEPBl33hwE-W3WdAcFoCVw8eNvgUcHCpzPbGq2xf_67pKuZS"/>
+                </div>
+                <div class="w-full md:w-1/2 space-y-6 order-1 md:order-2">
+                    <span class="material-symbols-outlined text-primary text-4xl" data-icon="face_retouching_natural">face_retouching_natural</span>
+                    <h3 class="font-serif text-3xl font-bold text-on-surface">Rejuvenating Facials</h3>
+                    <p class="text-secondary text-sm leading-loose">Deeply cleansing and hydrating rituals using authentic Japanese pearl powder and silk proteins.</p>
+                    <ul class="space-y-2 text-xs font-bold text-on-surface-variant uppercase tracking-widest">
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span> Hydra-Glow Ritual</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span> Zen Lifting Therapy</li>
+                    </ul>
+                    <a th:href="@{/services}" class="inline-block text-primary font-label text-sm font-bold border-b border-primary-container pb-1 hover:border-primary transition-colors" style="text-decoration:none;">Explore Rituals</a>
+                </div>
+            </div>
+
+            <!-- Service Card 2 -->
+            <div class="clay-card md:col-span-4 rounded-lg p-8 flex flex-col justify-between group">
+                <div class="aspect-square rounded-lg overflow-hidden mb-8">
+                    <img alt="Beautifully manicured nails" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVnmyWYt0yAS0QFQ7OZAzGL_3gm-rhLott5pdF2G5DKaMVS2ejFiEy0h4Hq_IwfZRo66RIU2e85Qy080PYoU3FhAGH6SrU7eOQP2YBGgVJmNYK7wp4KMLZ2VhPT-MtxvfrkNrHmvGYZLYQWGHmNEEWKAQ8jmlfXl0OfRCyadstyC6Fgp7rwe8eACmraOb44ToTqAffCB6oLl1sJinMxKFLlCMifnJEA5PRtX6ciJZKKRl-PnTbhDMmzZccoGK4n_Ko1-JMWKVD1FYi"/>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="font-serif text-2xl font-bold text-on-surface">Artisan Nails</h3>
+                    <p class="text-secondary text-sm">Minimalist elegance meets meticulous care for your hands and feet.</p>
+                    <div class="pt-4 flex justify-between items-center">
+                        <span class="text-primary font-bold">from ₹1,800</span>
+                        <a th:href="@{/services}"><span class="material-symbols-outlined text-primary" data-icon="arrow_forward">arrow_forward</span></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Card 3 -->
+            <div class="clay-card md:col-span-4 rounded-lg p-8 flex flex-col justify-between group">
+                <div class="aspect-square rounded-lg overflow-hidden mb-8">
+                    <img alt="Selection of organic essential oils" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuGXM18yNJfvYyW8FWijrS5vbnIDkFyfDbJws-PCm0ep5tSxAOoW7wAW9F_FqEb-GNyHMCC6efDHL6_5bQupdCun9O_yX1baw3mm6siddpeqdq9JHgg0zRNB3r2TdTvQzUPdbkewoJYOFZUnebLnFG1PHRNovxg9NEV3vcNZXlnEG3ZEnBIapQuF7Tv8_NM7Ki9O2Z6rEBeDI4wF1weyJx-JCBYapoFhWJDVnLqFHRkLO5MZZkQEKnyeu9fhp-hzoKxRaFC5r64Eye"/>
+                </div>
+                <div class="space-y-4">
+                    <h3 class="font-serif text-2xl font-bold text-on-surface">Scalp Therapy</h3>
+                    <p class="text-secondary text-sm">Traditional head spa techniques to promote hair health and mental clarity.</p>
+                    <div class="pt-4 flex justify-between items-center">
+                        <span class="text-primary font-bold">from ₹5,600</span>
+                        <a th:href="@{/services}"><span class="material-symbols-outlined text-primary" data-icon="arrow_forward">arrow_forward</span></a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Service Card 4 -->
+            <div class="clay-card md:col-span-8 rounded-lg p-10 flex flex-col md:flex-row gap-8 items-center group overflow-hidden bg-primary-container/20">
+                <div class="w-full md:w-1/2 space-y-6">
+                    <span class="material-symbols-outlined text-primary text-4xl" data-icon="spa">spa</span>
+                    <h3 class="font-serif text-3xl font-bold text-on-surface">Body Harmonization</h3>
+                    <p class="text-secondary text-sm leading-loose">Experience the transformative power of Japanese Shiatsu and hot stone treatments in a serene environment.</p>
+                    <a th:href="@{/services}" class="inline-block px-8 py-4 bg-primary text-on-primary rounded-full font-label font-bold tracking-wider text-xs" style="text-decoration:none;">VIEW FULL MENU</a>
+                </div>
+                <div class="w-full md:w-1/2 aspect-[4/3] rounded-lg overflow-hidden shadow-lg">
+                    <img alt="Smooth basalt stones" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpmY8u3lvCFodVohOMTsvUWPsJfUNkDeGGhmEm28830d9xe4GBw7ixJejz1jv657oghTYYGJjDVernhM-5F98BUq5sf4vNH-XjPT9E4NFvVx94FoNmp6AI3hVyiLYNkB54QEF6Pzz_3bIW6jvgh86zGelWbeFvfZe3PevVoyUwc1j4-SDJohy7__zr82qIORX1Sds9_idV8J7-umrbDJ-yYCnZE5oLt9J5nQbwRmsPiAAb9bmv7jG3nIRwJfYouNGGn60mG9nvbCFC"/>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section: Different for logged-in vs guest -->
+    <section th:if="${!isLoggedIn}" class="py-32 px-8">
+        <div class="max-w-[1600px] mx-auto glass-panel rounded-xl p-12 md:p-24 relative overflow-hidden text-center shadow-inner">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 bg-[radial-gradient(circle_at_center,rgba(255,183,197,0.2)_0%,transparent_70%)]"></div>
+            <div class="max-w-3xl mx-auto space-y-10">
+                <h2 class="font-headline text-4xl md:text-6xl text-on-surface font-bold leading-tight">Become a Sakura <br/>Circle Member</h2>
+                <p class="text-secondary text-lg leading-relaxed">
+                    Enjoy exclusive access to early bookings, member-only rituals, and a seasonal gift box curated by our lead estheticians.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-6 pt-6">
+                    <a th:href="@{/register}" class="w-full sm:w-auto px-12 py-5 bg-on-background text-surface rounded-full font-label font-bold tracking-widest text-sm hover:bg-primary transition-all duration-400 inline-block text-center" style="text-decoration:none;">
+                        REGISTER NOW
+                    </a>
+                </div>
+                <p class="text-xs text-slate-400 uppercase tracking-widest font-bold">Complimentary 15-min consultation for all new members</p>
+            </div>
+        </div>
+    </section>
+
+    <section th:if="${isLoggedIn}" class="py-32 px-8">
+        <div class="max-w-7xl mx-auto glass-panel rounded-xl p-12 md:p-24 relative overflow-hidden text-center shadow-inner">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 bg-[radial-gradient(circle_at_center,rgba(255,183,197,0.2)_0%,transparent_70%)]"></div>
+            <div class="max-w-3xl mx-auto space-y-10">
+                <h2 class="font-headline text-4xl md:text-6xl text-on-surface font-bold leading-tight">Ready for Your <br/><span class="text-primary italic">Next Ritual?</span></h2>
+                <p class="text-secondary text-lg leading-relaxed">
+                    Explore our curated services and book your next appointment in just a few taps.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-6 pt-6">
+                    <a th:href="@{/booking}" class="w-full sm:w-auto px-12 py-5 bg-primary text-on-primary rounded-full font-label font-bold tracking-widest text-sm hover:scale-[1.02] transition-all duration-400 inline-block text-center shadow-xl" style="text-decoration:none;">
+                        NEW BOOKING
+                    </a>
+                    <a th:href="@{/customer/dashboard}" class="w-full sm:w-auto px-12 py-5 border-2 border-primary/20 text-primary rounded-full font-label font-bold tracking-widest text-sm hover:bg-primary/5 transition-all duration-400 inline-block text-center" style="text-decoration:none;">
+                        MY DASHBOARD
+                    </a>
+                </div>
+                <p class="text-xs text-slate-400 uppercase tracking-widest font-bold">Your personalized beauty journey awaits</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="py-24 overflow-hidden">
+        <div class="text-center mb-16 px-8">
+            <span class="text-primary font-label text-xs font-extrabold tracking-[0.3em] uppercase mb-4 block">Testimonials</span>
+            <h2 class="font-headline text-4xl md:text-5xl text-on-surface font-bold">What Our Clients Say</h2>
+        </div>
+        
+        <div th:if="${not #lists.isEmpty(recentReviews)}" class="relative w-full flex">
+            <!-- Fade gradients -->
+            <div class="absolute left-0 top-0 bottom-0 w-16 md:w-48 bg-gradient-to-r from-surface to-transparent z-10 pointer-events-none"></div>
+            <div class="absolute right-0 top-0 bottom-0 w-16 md:w-48 bg-gradient-to-l from-surface to-transparent z-10 pointer-events-none"></div>
+            
+            <div class="flex gap-8 w-max animate-marquee px-4">
+                <!-- Duplicate reviews for infinite scrolling -->
+                <th:block th:each="loop : ${#numbers.sequence(1, 2)}">
+                    <div th:each="review : ${recentReviews}" class="clay-card w-[350px] shrink-0 rounded-xl p-8 relative group hover:-translate-y-1 transition-all duration-400 whitespace-normal flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-1 mb-4">
+                                <span th:if="${review.rating > 0}" th:each="i : ${#numbers.sequence(1, review.rating)}" class="material-symbols-outlined text-amber-400 text-lg" style="font-variation-settings: 'FILL' 1;">star</span>
+                                <span th:if="${review.rating < 5}" th:each="i : ${#numbers.sequence(review.rating + 1, 5)}" class="material-symbols-outlined text-slate-200 text-lg">star</span>
+                            </div>
+                            <p class="text-secondary text-sm leading-relaxed mb-6" th:text="${review.comment}">Great service!</p>
+                        </div>
+                        <div class="flex items-center gap-3 pt-4 border-t border-rose-100/50 mt-auto">
+                            <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-xs shrink-0" th:text="${review.customer != null ? #strings.substring(review.customer.firstName, 0, 1) + #strings.substring(review.customer.lastName, 0, 1) : '?'}">AB</div>
+                            <div class="overflow-hidden">
+                                <p class="text-sm font-bold text-on-surface truncate" th:text="${review.customer != null ? review.customer.firstName + ' ' + review.customer.lastName : 'Anonymous'}">Customer</p>
+                                <p class="text-xs text-slate-400 truncate" th:text="${review.service != null ? review.service.name : ''}">Service</p>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+        
+        <div th:if="${#lists.isEmpty(recentReviews)}" class="text-center py-12 text-slate-400 px-8">
+            <span class="material-symbols-outlined text-4xl mb-4 block">rate_review</span>
+            <p class="text-sm">No reviews yet — be the first to share your experience!</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer th:replace="~{layout/fragments :: site-footer}"></footer>
+
+    <!-- Bottom Navigation for Mobile -->
+    <div class="md:hidden fixed bottom-0 left-0 right-0 glass-panel h-20 z-50 flex items-center justify-around px-4 rounded-t-xl">
+        <a th:href="@{/}" class="flex flex-col items-center gap-1 text-rose-500" style="text-decoration:none;">
+            <span class="material-symbols-outlined" data-icon="home" data-weight="fill" style="font-variation-settings: 'FILL' 1;">home</span>
+            <span class="text-[10px] font-bold uppercase tracking-tighter">Home</span>
+        </a>
+        <a th:href="@{/services}" class="flex flex-col items-center gap-1 text-slate-400" style="text-decoration:none;">
+            <span class="material-symbols-outlined" data-icon="spa">spa</span>
+            <span class="text-[10px] font-bold uppercase tracking-tighter">Services</span>
+        </a>
+        <a th:href="@{/booking}" class="flex flex-col items-center gap-1 text-slate-400" style="text-decoration:none;">
+            <span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+            <span class="text-[10px] font-bold uppercase tracking-tighter">Book</span>
+        </a>
+        <a th:if="${isLoggedIn}" th:href="@{/profile}" class="flex flex-col items-center gap-1 text-slate-400" style="text-decoration:none;">
+            <span class="material-symbols-outlined" data-icon="person">person</span>
+            <span class="text-[10px] font-bold uppercase tracking-tighter">Profile</span>
+        </a>
+        <a th:if="${!isLoggedIn}" th:href="@{/login}" class="flex flex-col items-center gap-1 text-slate-400" style="text-decoration:none;">
+            <span class="material-symbols-outlined" data-icon="login">login</span>
+            <span class="text-[10px] font-bold uppercase tracking-tighter">Login</span>
+        </a>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('sakura-canvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        const petals = [];
+        const numPetals = 45;
+        let mouseX = -1000;
+        let mouseY = -1000;
+
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        class Petal {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height - height;
+                this.size = Math.random() * 12 + 8;
+                this.speedY = Math.random() * 1.5 + 0.5;
+                this.speedX = Math.random() * 2 - 1;
+                this.angle = Math.random() * 360;
+                this.spin = Math.random() * 0.05 - 0.025;
+                this.opacity = Math.random() * 0.6 + 0.2;
+            }
+
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.angle += this.spin;
+
+                const dx = mouseX - this.x;
+                const dy = mouseY - this.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+
+                if (dist < 120) {
+                    const force = (120 - dist) / 120;
+                    this.x -= (dx / dist) * force * 3;
+                    this.y -= (dy / dist) * force * 3;
+                }
+
+                if (this.y > height + this.size) {
+                    this.y = -this.size;
+                    this.x = Math.random() * width;
+                }
+                if (this.x > width + this.size) this.x = -this.size;
+                if (this.x < -this.size) this.x = width + this.size;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+                ctx.fillStyle = `rgba(255, 183, 197, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.quadraticCurveTo(this.size * 0.8, -this.size * 0.8, this.size * 1.2, 0);
+                ctx.quadraticCurveTo(this.size * 0.8, this.size * 0.8, 0, 0);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        for (let i = 0; i < numPetals; i++) {
+            petals.push(new Petal());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            petals.forEach(petal => {
+                petal.update();
+                petal.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

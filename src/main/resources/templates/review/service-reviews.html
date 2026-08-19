@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews — Sakura Saki</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link th:href="@{/css/admin-style.css}" rel="stylesheet">
+    <style>
+        body{margin:0;font-family:var(--font-body);color:var(--on-surface);background:var(--surface);}
+        .public-topnav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:1rem 3rem;background:rgba(255,255,255,.6);backdrop-filter:blur(24px);border-bottom:.5px solid rgba(214,194,196,.12);}
+        .public-topnav .brand{font-family:var(--font-headline);font-size:1.15rem;font-weight:700;color:var(--primary);text-decoration:none;}
+        .public-topnav .nav-links{display:flex;gap:2rem;align-items:center;}
+        .public-topnav .nav-links a{font-family:var(--font-label);font-size:.8rem;font-weight:500;color:var(--on-surface-variant);text-decoration:none;}
+        .container{max-width:800px;margin:0 auto;padding:6rem 2rem 3rem;}
+        .review-card{background:rgba(255,255,255,.7);backdrop-filter:blur(16px);border-radius:var(--radius-lg);padding:1.5rem;margin-bottom:1rem;border:.5px solid rgba(214,194,196,.12);}
+    </style>
+</head>
+<body style="display:flex;flex-direction:column;min-height:100vh;">
+<canvas id="sakura-canvas"></canvas>
+<main style="flex:1;">
+<nav class="public-topnav">
+    <a th:href="@{/}" class="brand">🌸 Sakura Saki</a>
+    <div class="nav-links">
+        <a th:href="@{/services}">Services</a>
+        <a th:href="@{/staff}">Our Team</a>
+        <a th:href="@{/login}" class="btn-sakura btn-sakura-primary" style="padding:.5rem 1.25rem;">Sign In</a>
+    </div>
+</nav>
+
+<div class="container">
+    <a th:href="@{'/services/' + ${serviceId}}" style="color:var(--primary);text-decoration:none;font-size:.85rem;">← Back to Service</a>
+    <h1 style="font-family:var(--font-headline);margin-top:1rem;">Customer Reviews</h1>
+    <div th:if="${avgRating != null}" style="margin-bottom:1.5rem;">
+        <span style="font-size:1.5rem;font-weight:700;color:var(--primary);" th:text="${#numbers.formatDecimal(avgRating,1,1)}">4.5</span>
+        <span style="color:var(--outline);"> / 5 average rating</span>
+    </div>
+    <p th:if="${reviews.isEmpty()}" style="color:var(--outline);text-align:center;padding:3rem;">No reviews yet for this service.</p>
+    <div class="review-card" th:each="r : ${reviews}">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+                <strong th:text="${r.customer.firstName + ' ' + r.customer.lastName}">Customer</strong>
+                <span style="color:var(--outline);font-size:.8rem;margin-left:.5rem;" th:text="${#temporals.format(r.createdAt, 'dd MMM yyyy')}">Date</span>
+            </div>
+            <div><span th:each="i : ${#numbers.sequence(1, r.rating)}">⭐</span></div>
+        </div>
+        <p style="color:var(--on-surface);margin-top:.75rem;" th:text="${r.comment ?: 'No comment'}">Comment</p>
+    </div>
+</div>
+</main>
+<footer th:replace="~{layout/fragments :: site-footer}"></footer>
+<script th:src="@{/js/sakura-petals.js}"></script>
+</body>
+</html>

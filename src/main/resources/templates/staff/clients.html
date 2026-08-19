@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="~{layout/fragments :: head('Clients — Sakura Saki')}"></head>
+<body class="bg-background text-on-surface font-body">
+<th:block th:replace="~{layout/fragments :: sakura-canvas}" />
+
+<div class="flex min-h-screen w-full relative z-10 md:pl-72">
+    <aside th:replace="~{layout/fragments :: staff-sidebar('clients')}"></aside>
+
+    <main class="flex-1 px-6 pt-6 md:px-10 pt-10 lg:px-14 pt-14 relative flex flex-col pb-2">
+        <header class="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
+            <div>
+                <h2 class="font-headline text-3xl md:text-4xl text-tertiary tracking-tight font-bold">My Clients</h2>
+                <p class="font-body text-on-surface-variant mt-2">Customers you've served recently</p>
+            </div>
+        </header>
+
+        <!-- Client cards from appointments -->
+        <section class="glass-pane rounded-[2rem] p-6 md:p-8 clay-lift">
+            <div th:if="${appointments == null || appointments.isEmpty()}" class="text-center py-12">
+                <span class="material-symbols-outlined text-outline-variant text-5xl mb-4 block">group_off</span>
+                <p class="text-on-surface-variant font-medium">No client records yet. Appointments will populate your client list.</p>
+            </div>
+            <div th:if="${appointments != null && !appointments.isEmpty()}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div th:each="appt : ${appointments}" th:if="${appt.customer != null}"
+                     class="bg-surface-container-lowest rounded-2xl p-6 border border-outline-variant/10 hover:shadow-lg transition-all clay-lift">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-sm"
+                             th:text="${#strings.substring(appt.customer.firstName,0,1) + #strings.substring(appt.customer.lastName,0,1)}">JD</div>
+                        <div>
+                            <p class="font-bold text-on-surface" th:text="${appt.customer.firstName + ' ' + appt.customer.lastName}">Name</p>
+                            <p class="text-xs text-on-surface-variant" th:text="${appt.customer.email}">email</p>
+                        </div>
+                    </div>
+                    <div class="border-t border-outline-variant/10 pt-4 flex justify-between text-xs text-on-surface-variant">
+                        <span>Last Visit</span>
+                        <span class="font-semibold text-on-surface" th:text="${appt.appointmentDate}">Date</span>
+                    </div>
+                    <div class="flex justify-between text-xs text-on-surface-variant mt-2">
+                        <span>Service</span>
+                        <span class="font-semibold text-on-surface" th:text="${appt.service.name}">Service</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+<footer th:replace="~{layout/fragments :: dashboard-footer}"></footer>
+    </main>
+</div>
+
+
+<th:block th:replace="~{layout/fragments :: sakura-js}" />
+</body>
+</html>
