@@ -33,7 +33,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * Creates a predictable development dataset for Sakura Saki.
+ * Creates a predictable development dataset for Veda Wellness.
  *
  * Local H2 databases are reset on startup so UI demos and tests always start
  * from the same clean state. External databases are only reset when
@@ -134,7 +134,7 @@ public class DataInitializer implements CommandLineRunner {
         Admin admin = new Admin();
         admin.setUsername("admin");
         admin.setPassword(passwordEncoder.encode("Admin@123"));
-        admin.setEmail("admin@sakurasaki.com");
+        admin.setEmail("admin@vedawellness.com");
         admin.setFirstName("Airi");
         admin.setLastName("Kobayashi");
         admin.setPhone("0112001001");
@@ -146,7 +146,7 @@ public class DataInitializer implements CommandLineRunner {
         Admin manager = new Admin();
         manager.setUsername("manager");
         manager.setPassword(passwordEncoder.encode("Manager@123"));
-        manager.setEmail("manager@sakurasaki.com");
+        manager.setEmail("manager@vedawellness.com");
         manager.setFirstName("Nori");
         manager.setLastName("Hayashi");
         manager.setPhone("0112001002");
@@ -187,7 +187,7 @@ public class DataInitializer implements CommandLineRunner {
     private void createServices() {
         saveService("Signature Haircut", "Precision cut, wash, blow dry, and soft finish.", 1800.00, 45, "Hair", "/images/stitch/hair-styling.jpg");
         saveService("Gloss Color Ritual", "Full color refresh with shine treatment and scalp care.", 5200.00, 105, "Hair", "/images/stitch/hair-color.jpg");
-        saveService("Sakura Radiance Facial", "Deep cleanse, steam, mask, and calming facial massage.", 3600.00, 70, "Skin", "/images/stitch/skin-therapy.jpg");
+        saveService("Veda Radiance Facial", "Deep cleanse, steam, mask, and calming facial massage.", 3600.00, 70, "Skin", "/images/stitch/skin-therapy.jpg");
         saveService("Hydration Facial", "Moisture-focused facial for dry or tired skin.", 3200.00, 60, "Skin", "/images/stitch/facial-care.jpg");
         saveService("Botanical Manicure", "Nail shaping, cuticle care, polish, and hand massage.", 1500.00, 45, "Nails", "/images/stitch/nail-care.jpg");
         saveService("Gel Pedicure", "Foot soak, exfoliation, gel polish, and heel care.", 2400.00, 60, "Nails", "/images/stitch/pedicure.jpg");
@@ -211,7 +211,7 @@ public class DataInitializer implements CommandLineRunner {
         Stylist mika = new Stylist();
         mika.setUsername("mika.honda");
         mika.setPassword(passwordEncoder.encode("Staff@123"));
-        mika.setEmail("mika@sakurasaki.com");
+        mika.setEmail("mika@vedawellness.com");
         mika.setFirstName("Mika");
         mika.setLastName("Honda");
         mika.setPhone("0111234567");
@@ -227,7 +227,7 @@ public class DataInitializer implements CommandLineRunner {
         Stylist koji = new Stylist();
         koji.setUsername("koji.yamamoto");
         koji.setPassword(passwordEncoder.encode("Staff@123"));
-        koji.setEmail("koji@sakurasaki.com");
+        koji.setEmail("koji@vedawellness.com");
         koji.setFirstName("Koji");
         koji.setLastName("Yamamoto");
         koji.setPhone("0119876543");
@@ -243,7 +243,7 @@ public class DataInitializer implements CommandLineRunner {
         Therapist yui = new Therapist();
         yui.setUsername("yui.nakamura");
         yui.setPassword(passwordEncoder.encode("Staff@123"));
-        yui.setEmail("yui@sakurasaki.com");
+        yui.setEmail("yui@vedawellness.com");
         yui.setFirstName("Yui");
         yui.setLastName("Nakamura");
         yui.setPhone("0115554321");
@@ -259,7 +259,7 @@ public class DataInitializer implements CommandLineRunner {
         Therapist aiko = new Therapist();
         aiko.setUsername("aiko.mori");
         aiko.setPassword(passwordEncoder.encode("Staff@123"));
-        aiko.setEmail("aiko@sakurasaki.com");
+        aiko.setEmail("aiko@vedawellness.com");
         aiko.setFirstName("Aiko");
         aiko.setLastName("Mori");
         aiko.setPhone("0113338899");
@@ -279,7 +279,7 @@ public class DataInitializer implements CommandLineRunner {
 
         savePackage("Bridal Bliss", "Makeup, glow facial, hair finish, and nails for wedding day prep.", 15.0,
                 services.get("Bridal Glow Makeup"),
-                services.get("Sakura Radiance Facial"),
+                services.get("Veda Radiance Facial"),
                 services.get("Signature Haircut"),
                 services.get("Botanical Manicure"));
 
@@ -293,8 +293,8 @@ public class DataInitializer implements CommandLineRunner {
                 services.get("Signature Haircut"),
                 services.get("Brow Shaping"));
 
-        savePackage("Sakura Essentials", "Quick glow basics for recurring customer visits.", 8.0,
-                services.get("Sakura Radiance Facial"),
+        savePackage("Veda Essentials", "Quick glow basics for recurring customer visits.", 8.0,
+                services.get("Veda Radiance Facial"),
                 services.get("Botanical Manicure"),
                 services.get("Brow Shaping"));
     }
@@ -325,14 +325,14 @@ public class DataInitializer implements CommandLineRunner {
         saveAppointment(customers.get("mei"), services.get("Signature Haircut"), staff.get("mika.honda"), today.plusDays(6), LocalTime.of(14, 30), "SCHEDULED", "Polished blow dry after cut.");
         saveAppointment(customers.get("sakura"), services.get("Gloss Color Ritual"), staff.get("koji.yamamoto"), today.plusDays(3), LocalTime.of(9, 30), "SCHEDULED", "Refresh warm brown tone.");
         saveAppointment(customers.get("hana"), services.get("Gloss Color Ritual"), staff.get("koji.yamamoto"), today.plusDays(7), LocalTime.of(11, 0), "SCHEDULED", "Root touch-up and gloss.");
-        saveAppointment(customers.get("yuki"), services.get("Sakura Radiance Facial"), staff.get("yui.nakamura"), today.plusDays(1), LocalTime.of(15, 0), "SCHEDULED", "Focus on calming redness.");
+        saveAppointment(customers.get("yuki"), services.get("Veda Radiance Facial"), staff.get("yui.nakamura"), today.plusDays(1), LocalTime.of(15, 0), "SCHEDULED", "Focus on calming redness.");
         saveAppointment(customers.get("mei"), services.get("Hydration Facial"), staff.get("yui.nakamura"), today.plusDays(4), LocalTime.of(10, 30), "SCHEDULED", "Hydrating mask preference.");
         saveAppointment(customers.get("sakura"), services.get("Aromatherapy Massage"), staff.get("aiko.mori"), today.plusDays(6), LocalTime.of(16, 0), "SCHEDULED", "Relaxing lavender blend.");
         saveAppointment(customers.get("hana"), services.get("Gel Pedicure"), staff.get("aiko.mori"), today.plusDays(8), LocalTime.of(13, 30), "SCHEDULED", "Cherry blossom nail art.");
         saveAppointment(customers.get("mei"), services.get("Brow Shaping"), staff.get("aiko.mori"), today.plusDays(9), LocalTime.of(11, 30), "SCHEDULED", "Soft bridal brow shaping.");
         saveAppointment(customers.get("yuki"), services.get("Botanical Manicure"), staff.get("aiko.mori"), today.plusDays(10), LocalTime.of(17, 0), "SCHEDULED", "Classic nude polish.");
 
-        Appointment c1 = saveAppointment(customers.get("sakura"), services.get("Sakura Radiance Facial"), staff.get("yui.nakamura"), today.minusDays(3), LocalTime.of(10, 0), "COMPLETED", "Customer loved the calming mask.");
+        Appointment c1 = saveAppointment(customers.get("sakura"), services.get("Veda Radiance Facial"), staff.get("yui.nakamura"), today.minusDays(3), LocalTime.of(10, 0), "COMPLETED", "Customer loved the calming mask.");
         Appointment c2 = saveAppointment(customers.get("yuki"), services.get("Signature Haircut"), staff.get("mika.honda"), today.minusDays(4), LocalTime.of(14, 0), "COMPLETED", "Trim and blow dry completed.");
         Appointment c3 = saveAppointment(customers.get("hana"), services.get("Aromatherapy Massage"), staff.get("aiko.mori"), today.minusDays(7), LocalTime.of(16, 0), "COMPLETED", "Lavender oil preference.");
         Appointment c4 = saveAppointment(customers.get("mei"), services.get("Gloss Color Ritual"), staff.get("koji.yamamoto"), today.minusDays(8), LocalTime.of(9, 30), "COMPLETED", "Gloss color: warm chestnut.");
@@ -343,7 +343,7 @@ public class DataInitializer implements CommandLineRunner {
         Appointment c9 = saveAppointment(customers.get("yuki"), services.get("Gloss Color Ritual"), staff.get("koji.yamamoto"), today.minusDays(11), LocalTime.of(10, 30), "COMPLETED", "Cool ash gloss completed.");
         Appointment c10 = saveAppointment(customers.get("hana"), services.get("Brow Shaping"), staff.get("koji.yamamoto"), today.minusDays(16), LocalTime.of(16, 0), "COMPLETED", "Brow tidy before event.");
         Appointment c11 = saveAppointment(customers.get("mei"), services.get("Hydration Facial"), staff.get("yui.nakamura"), today.minusDays(13), LocalTime.of(12, 30), "COMPLETED", "Extra hydration serum used.");
-        Appointment c12 = saveAppointment(customers.get("yuki"), services.get("Sakura Radiance Facial"), staff.get("yui.nakamura"), today.minusDays(20), LocalTime.of(11, 0), "COMPLETED", "Post-travel skin recovery.");
+        Appointment c12 = saveAppointment(customers.get("yuki"), services.get("Veda Radiance Facial"), staff.get("yui.nakamura"), today.minusDays(20), LocalTime.of(11, 0), "COMPLETED", "Post-travel skin recovery.");
 
         saveAppointment(customers.get("hana"), services.get("Botanical Manicure"), staff.get("aiko.mori"), today.minusDays(1), LocalTime.of(9, 30), "CANCELLED", "Customer requested reschedule.");
         saveAppointment(customers.get("yuki"), services.get("Hydration Facial"), staff.get("yui.nakamura"), today.plusDays(3), LocalTime.of(14, 30), "CANCELLED", "Staff unavailable.");

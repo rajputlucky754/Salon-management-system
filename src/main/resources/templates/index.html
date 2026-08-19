@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Sakura Saki | Digital Serenity</title>
+    <title>Veda Wellness | Ayurvedic Serenity</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
@@ -91,7 +91,7 @@
                         inset 2px 2px 4px rgba(255, 255, 255, 0.8);
         }
         .text-glow {
-            text-shadow: 0 0 20px rgba(255, 183, 197, 0.4);
+            text-shadow: 0 0 20px rgba(255, 153, 51, 0.4);
         }
         @keyframes marquee {
             0% { transform: translateX(0%); }
@@ -106,7 +106,7 @@
     </style>
 </head>
 <body class="bg-surface text-on-surface selection:bg-primary-container selection:text-on-primary-container">
-    <canvas class="fixed inset-0 pointer-events-none z-[1] opacity-70" id="sakura-canvas"></canvas>
+    <canvas class="fixed inset-0 pointer-events-none z-[1] opacity-70" id="veda-canvas"></canvas>
 
     <!-- TopNavBar -->
     <div th:replace="~{layout/fragments :: topnav('home')}"></div>
@@ -126,7 +126,7 @@
                     </h1>
                 </div>
                 <p class="text-body text-lg text-secondary max-w-lg leading-relaxed drop-shadow-sm bg-white/40 backdrop-blur-sm p-4 rounded-xl lg:bg-transparent lg:backdrop-blur-none lg:p-0">
-                    A sensory journey where traditional Japanese precision meets modern aesthetic innovation. Experience beauty as a form of meditation.
+                    A sensory journey where traditional Ayurvedic precision meets modern aesthetic innovation. Experience beauty as a form of meditation.
                 </p>
                 <div class="flex flex-wrap gap-6 pt-4">
                     <a th:href="@{/booking}" class="px-10 py-5 bg-primary text-on-primary rounded-full font-label font-bold tracking-wider text-sm shadow-xl hover:scale-[1.02] transition-all duration-400 active:scale-[0.98] inline-block text-center" style="text-decoration:none;">
@@ -143,9 +143,9 @@
                 <div class="glass-panel w-full max-w-md aspect-[4/5] rounded-xl relative z-20 overflow-hidden shadow-2xl flex flex-col items-center justify-center p-8 group"
                      x-data="{ activeSlide: 0, 
                                slides: [
-                                   { title: 'Skin Rituals', desc: 'Tailored treatments infused with Sakura extracts for a translucent glow.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCNooYEtdTIDbwDNHvzdG_78UsrA0C8I46Zt2F7DlxId4YJMAjjMpZh2izNeipx5tt6iJMXd133rut49wQOO_r3wawlPPBu7tNXLk6hDEW7Ct7mnH_hLeJK8pXm-GaSXOsm3JWW5NUB6O7AYk7UQq9y_NfbXIj-LnQ7c12TRMbwrKr9S7bTo3pos9Xhw2hAnqu50H9aGWtsM4NYObOgYifsymtQ1AOMeIzoDSQOrD-HtBwvdEiDd7NzCT_ruKiSvHA433V9RpFKP3tr', bg: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAkbKR7PNv2z0Ao9G1c1NLMl4T74kL10Gm9IuT345a-Gcfo12jYIBtrn8jihoH2xgurlF8I0bU-bt0a1tt_PeMqm0BtVjmFJ9CSeqk_tZCHNtGKfJZ6lfM0toMH-henqIJE33-xDG_BWSt_SkPBPEbuDEVhwFpEZXso7L--XIbFE07aTiFoQdTXzEjIXXiKkibi8tVivBJvaH2HCcUX1UibFxhNd1keXptT_uGfzFYt3xJus-pg00g-f8e2_ccMZB9u8pjTlY6XWEFU' },
-                                   { title: 'Hair Rituals', desc: 'Deep nourishing therapy to restore your hair\'s natural vitality and shine.', img: 'https://images.unsplash.com/photo-1522337660859-02fbefca4702?q=80&w=600&auto=format&fit=crop', bg: 'https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=800&auto=format&fit=crop' },
-                                   { title: 'Body Rituals', desc: 'Holistic massage and body wellness to relax your mind and soothe your soul.', img: 'https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=600&auto=format&fit=crop', bg: 'https://images.unsplash.com/photo-1600334089648-b0d9d3028eb2?q=80&w=800&auto=format&fit=crop' }
+                                   { title: 'Skin Rituals', desc: 'Tailored treatments infused with Veda extracts for a translucent glow.', img: '/images/stitch/skin-therapy.jpg', bg: '/images/stitch/ayurvedic-spa.jpg' },
+                                   { title: 'Hair Rituals', desc: 'Deep nourishing therapy to restore your hair\'s natural vitality and shine.', img: '/images/stitch/hair-styling.jpg', bg: '/images/stitch/ayurvedic-spa.jpg' },
+                                   { title: 'Body Rituals', desc: 'Holistic massage and body wellness to relax your mind and soothe your soul.', img: '/images/stitch/massage.jpg', bg: '/images/stitch/spa-interior.jpg' }
                                ],
                                init() {
                                    setInterval(() => {
@@ -210,15 +210,15 @@
             <!-- Service Card 1 -->
             <div class="clay-card md:col-span-8 rounded-lg p-10 flex flex-col md:flex-row gap-8 items-center group overflow-hidden">
                 <div class="w-full md:w-1/2 aspect-square rounded-lg overflow-hidden order-2 md:order-1">
-                    <img alt="Woman receiving a facial massage" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMVmauqXvwu-XPflLT6_tc7BAOCxLUAMerznAYD3ep-cA75N01-c0M0jV1ztBu7cnB2D8y7SiBuXRFnE4yFWu_uxb3EOl2faSywTB6fKXVipFFH9_BseBEMAF6N3S7xNifA1XAPu4SXAphtEuUAGRBWPK8T1yK99Ed-GRZOX0wDGmnBqtMrwNnAwysI9JwNcgGFb7WW3P57J4jLJQz7dkX41QbHQIrJEPBl33hwE-W3WdAcFoCVw8eNvgUcHCpzPbGq2xf_67pKuZS"/>
+                    <img alt="Woman receiving a facial massage" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="/images/stitch/facial-care.jpg"/>
                 </div>
                 <div class="w-full md:w-1/2 space-y-6 order-1 md:order-2">
                     <span class="material-symbols-outlined text-primary text-4xl" data-icon="face_retouching_natural">face_retouching_natural</span>
                     <h3 class="font-serif text-3xl font-bold text-on-surface">Rejuvenating Facials</h3>
-                    <p class="text-secondary text-sm leading-loose">Deeply cleansing and hydrating rituals using authentic Japanese pearl powder and silk proteins.</p>
+                    <p class="text-secondary text-sm leading-loose">Deeply cleansing and hydrating rituals using authentic Ayurvedic saffron and neem extracts.</p>
                     <ul class="space-y-2 text-xs font-bold text-on-surface-variant uppercase tracking-widest">
                         <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span> Hydra-Glow Ritual</li>
-                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span> Zen Lifting Therapy</li>
+                        <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span> Prana Lifting Therapy</li>
                     </ul>
                     <a th:href="@{/services}" class="inline-block text-primary font-label text-sm font-bold border-b border-primary-container pb-1 hover:border-primary transition-colors" style="text-decoration:none;">Explore Rituals</a>
                 </div>
@@ -227,7 +227,7 @@
             <!-- Service Card 2 -->
             <div class="clay-card md:col-span-4 rounded-lg p-8 flex flex-col justify-between group">
                 <div class="aspect-square rounded-lg overflow-hidden mb-8">
-                    <img alt="Beautifully manicured nails" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDVnmyWYt0yAS0QFQ7OZAzGL_3gm-rhLott5pdF2G5DKaMVS2ejFiEy0h4Hq_IwfZRo66RIU2e85Qy080PYoU3FhAGH6SrU7eOQP2YBGgVJmNYK7wp4KMLZ2VhPT-MtxvfrkNrHmvGYZLYQWGHmNEEWKAQ8jmlfXl0OfRCyadstyC6Fgp7rwe8eACmraOb44ToTqAffCB6oLl1sJinMxKFLlCMifnJEA5PRtX6ciJZKKRl-PnTbhDMmzZccoGK4n_Ko1-JMWKVD1FYi"/>
+                    <img alt="Beautifully manicured nails" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="/images/stitch/nail-care.jpg"/>
                 </div>
                 <div class="space-y-4">
                     <h3 class="font-serif text-2xl font-bold text-on-surface">Artisan Nails</h3>
@@ -242,7 +242,7 @@
             <!-- Service Card 3 -->
             <div class="clay-card md:col-span-4 rounded-lg p-8 flex flex-col justify-between group">
                 <div class="aspect-square rounded-lg overflow-hidden mb-8">
-                    <img alt="Selection of organic essential oils" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuGXM18yNJfvYyW8FWijrS5vbnIDkFyfDbJws-PCm0ep5tSxAOoW7wAW9F_FqEb-GNyHMCC6efDHL6_5bQupdCun9O_yX1baw3mm6siddpeqdq9JHgg0zRNB3r2TdTvQzUPdbkewoJYOFZUnebLnFG1PHRNovxg9NEV3vcNZXlnEG3ZEnBIapQuF7Tv8_NM7Ki9O2Z6rEBeDI4wF1weyJx-JCBYapoFhWJDVnLqFHRkLO5MZZkQEKnyeu9fhp-hzoKxRaFC5r64Eye"/>
+                    <img alt="Selection of organic essential oils" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="/images/stitch/massage.jpg"/>
                 </div>
                 <div class="space-y-4">
                     <h3 class="font-serif text-2xl font-bold text-on-surface">Scalp Therapy</h3>
@@ -259,11 +259,11 @@
                 <div class="w-full md:w-1/2 space-y-6">
                     <span class="material-symbols-outlined text-primary text-4xl" data-icon="spa">spa</span>
                     <h3 class="font-serif text-3xl font-bold text-on-surface">Body Harmonization</h3>
-                    <p class="text-secondary text-sm leading-loose">Experience the transformative power of Japanese Shiatsu and hot stone treatments in a serene environment.</p>
+                    <p class="text-secondary text-sm leading-loose">Experience the transformative power of Ayurvedic Abhyanga and hot stone treatments in a serene environment.</p>
                     <a th:href="@{/services}" class="inline-block px-8 py-4 bg-primary text-on-primary rounded-full font-label font-bold tracking-wider text-xs" style="text-decoration:none;">VIEW FULL MENU</a>
                 </div>
                 <div class="w-full md:w-1/2 aspect-[4/3] rounded-lg overflow-hidden shadow-lg">
-                    <img alt="Smooth basalt stones" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpmY8u3lvCFodVohOMTsvUWPsJfUNkDeGGhmEm28830d9xe4GBw7ixJejz1jv657oghTYYGJjDVernhM-5F98BUq5sf4vNH-XjPT9E4NFvVx94FoNmp6AI3hVyiLYNkB54QEF6Pzz_3bIW6jvgh86zGelWbeFvfZe3PevVoyUwc1j4-SDJohy7__zr82qIORX1Sds9_idV8J7-umrbDJ-yYCnZE5oLt9J5nQbwRmsPiAAb9bmv7jG3nIRwJfYouNGGn60mG9nvbCFC"/>
+                    <img alt="Smooth basalt stones" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" src="/images/stitch/ayurvedic-spa.jpg"/>
                 </div>
             </div>
         </div>
@@ -272,9 +272,9 @@
     <!-- CTA Section: Different for logged-in vs guest -->
     <section th:if="${!isLoggedIn}" class="py-32 px-8">
         <div class="max-w-[1600px] mx-auto glass-panel rounded-xl p-12 md:p-24 relative overflow-hidden text-center shadow-inner">
-            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 bg-[radial-gradient(circle_at_center,rgba(255,183,197,0.2)_0%,transparent_70%)]"></div>
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 bg-[radial-gradient(circle_at_center,rgba(255,153,51,0.2)_0%,transparent_70%)]"></div>
             <div class="max-w-3xl mx-auto space-y-10">
-                <h2 class="font-headline text-4xl md:text-6xl text-on-surface font-bold leading-tight">Become a Sakura <br/>Circle Member</h2>
+                <h2 class="font-headline text-4xl md:text-6xl text-on-surface font-bold leading-tight">Become a Veda <br/>Circle Member</h2>
                 <p class="text-secondary text-lg leading-relaxed">
                     Enjoy exclusive access to early bookings, member-only rituals, and a seasonal gift box curated by our lead estheticians.
                 </p>
@@ -290,7 +290,7 @@
 
     <section th:if="${isLoggedIn}" class="py-32 px-8">
         <div class="max-w-7xl mx-auto glass-panel rounded-xl p-12 md:p-24 relative overflow-hidden text-center shadow-inner">
-            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 bg-[radial-gradient(circle_at_center,rgba(255,183,197,0.2)_0%,transparent_70%)]"></div>
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 bg-[radial-gradient(circle_at_center,rgba(255,153,51,0.2)_0%,transparent_70%)]"></div>
             <div class="max-w-3xl mx-auto space-y-10">
                 <h2 class="font-headline text-4xl md:text-6xl text-on-surface font-bold leading-tight">Ready for Your <br/><span class="text-primary italic">Next Ritual?</span></h2>
                 <p class="text-secondary text-lg leading-relaxed">
@@ -378,7 +378,7 @@
     </div>
 
     <script>
-        const canvas = document.getElementById('sakura-canvas');
+        const canvas = document.getElementById('veda-canvas');
         const ctx = canvas.getContext('2d');
         let width = canvas.width = window.innerWidth;
         let height = canvas.height = window.innerHeight;
@@ -437,7 +437,7 @@
                 ctx.save();
                 ctx.translate(this.x, this.y);
                 ctx.rotate(this.angle);
-                ctx.fillStyle = `rgba(255, 183, 197, ${this.opacity})`;
+                ctx.fillStyle = `rgba(255, 153, 51, ${this.opacity})`;
                 ctx.beginPath();
                 ctx.moveTo(0, 0);
                 ctx.quadraticCurveTo(this.size * 0.8, -this.size * 0.8, this.size * 1.2, 0);

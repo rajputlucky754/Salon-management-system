@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Sakura Saki | Service Catalog</title>
+    <title>Veda Wellness | Service Catalog</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Manrope:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
@@ -96,8 +96,8 @@
     </style>
 </head>
 <body class="bg-surface font-body text-on-surface antialiased relative">
-    <!-- Sakura Canvas -->
-    <canvas class="fixed inset-0 pointer-events-none z-0 opacity-70" id="sakura-canvas"></canvas>
+    <!-- Veda Canvas -->
+    <canvas class="fixed inset-0 pointer-events-none z-0 opacity-70" id="veda-canvas"></canvas>
 
     <!-- Top Navigation Shell -->
     <div th:replace="~{layout/fragments :: topnav('services')}"></div>
@@ -108,7 +108,7 @@
             <div class="max-w-2xl">
                 <span class="font-label text-primary uppercase tracking-[0.15em] text-xs font-bold mb-4 block">Artisanal Beauty</span>
                 <h1 class="font-headline text-5xl md:text-7xl text-on-surface font-bold tracking-tight leading-none mb-6">Service Catalog</h1>
-                <p class="text-tertiary text-lg max-w-lg leading-relaxed">Experience the delicate harmony of Japanese aesthetics and modern wellness. Each treatment is a ritual designed for your serenity.</p>
+                <p class="text-tertiary text-lg max-w-lg leading-relaxed">Experience the delicate harmony of Ayurvedic aesthetics and modern wellness. Each treatment is a ritual designed for your serenity.</p>
             </div>
             <div class="flex flex-wrap justify-center md:justify-end gap-3">
                 <a th:href="@{/booking}" class="px-8 py-3 rounded-full bg-primary text-white font-label text-sm uppercase tracking-widest transition-all duration-400 hover:scale-105 clay-shadow block text-center" style="text-decoration:none;">Book Now</a>
@@ -131,9 +131,9 @@
                 
                 <div th:classappend="${stat.index % 5 == 0 or stat.index % 5 == 1} ? 'h-64 sm:h-72 md:h-80 lg:h-96 xl:h-[452px] w-full' : 'aspect-[4/3]'" class="overflow-hidden relative shrink-0">
                     <img class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
-                         th:src="${s.imageUrl != null and !s.imageUrl.isEmpty() ? s.imageUrl : (stat.index % 5 == 0 ? 'https://lh3.googleusercontent.com/aida-public/AB6AXuDeWpC51Otw39WPnoS34IVa4m2qD_lkkaonTo27UAlp1HljleGuSy1fzEbD1d_vwHYqREtBmKCvxjy4mjpAKi2mHGJi0JR3SKacUnAeqvrurLcI7dey-llIlvd-w82kSbI7P2E37iDiQH7zxw7uJL_3Ysb8R-3wDj1FvP-KG7q5huXT6of0B_5h6Vll0FZvXxfjq41oCC9bfI6Y9s6uVLRxpCTK3RBpr5_yUpJQu0kuWdpbP9SOFxIswnY0usT-KlHGrfq6VY5avhBw' : 
-                                  (stat.index % 5 == 1 ? 'https://lh3.googleusercontent.com/aida-public/AB6AXuA0AttB9AKJdcFHymHLvxLMcnsWWiUu9q9Dmf3FOJzdB-GHCiudo-HUIX7WWq6UifQutO0Y3LAJm8Dx5wn2umlIGautxIZl3ZiXueCmerOTGlPQ2nv2AZi-Gp36ttMdxUxwHPd2WkS922CY8r6ddIGKuMfajsp__W3YI53WtQ3zdKb9XGGxL4kgv1EhlVkhbpMJWSNTr7xPcZNXu1wpNhYbMwdrL1YWPiysO5DGl8x66HewLHzSz3Hb7B_VdQqBobRF5m-qOFl9zswR' : 
-                                  'https://lh3.googleusercontent.com/aida-public/AB6AXuDWRC_taj5s-TU98jH53tRoaoaFwtaUPmFBTgtplLVqC_8KTYYkK_9KK835QjzEkE4GmFh4v1t4o_b9CkjmmzjjyaDDJmxmKvz0sGqU9SVVSn7fT7CqAGTml_UtdUEveEHWuhYvGxTIkdg7s3NjJoDvmZFXuOrzN6MCDmKnl0GrEgXjTU47KW6vQ4F7Ig5cDZzw5nYnOKv5LLL4RjIiCSsm6spSoMLqVJfWGR_6CiDyVmBfKgMaH4Lwc6eYSn1q0WE27E-AbiINlHwa'))}" />
+                         th:src="${s.imageUrl != null and !s.imageUrl.isEmpty() ? s.imageUrl : (stat.index % 5 == 0 ? '/images/stitch/ayurvedic-spa.jpg' : 
+                                  (stat.index % 5 == 1 ? '/images/stitch/ayurvedic-spa.jpg' : 
+                                  '/images/stitch/ayurvedic-spa.jpg'))}" />
                 </div>
                 
                 <div th:classappend="${stat.index % 5 == 0} ? 'p-8 md:p-12 relative z-10' : (${stat.index % 5 == 1} ? 'p-8 flex-grow flex flex-col justify-between' : 'p-8')">
@@ -183,49 +183,7 @@
             </div>
             <div class="relative flex justify-center items-center z-10">
                 <div class="w-full max-w-md aspect-square rounded-full overflow-hidden border-[12px] border-white/50 clay-shadow">
-                    <img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDBBhfxDdZdWR4jBjuYw_UGeBeBFafI1jPTIcOxX5neL-1VBdAfMR532TDMaykst9-aJx8nFa_vxxiZCPZFuoEWSEz2ICAbbUsI2JmXIxolE2sYo1GLty5Pcs4fyNHbt-m02P3so7qcW3_5b7EqL8zEmUccgu4RihvzMKg-ibr_p-llp_YW11u_K_s2iLtC6K8CfIvc6g9GJLxSBIaFFkrQGXiutt-G7zp03ajSfSAA1JBbDY8VSoduveo9lkXxLzejyd8EV-3V6cQG"/>
-                </div>
-                <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/40 backdrop-blur-xl rounded-full border border-white/60 clay-shadow flex items-center justify-center">
-                    <span class="material-symbols-outlined text-primary scale-150">spa</span>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <footer th:replace="~{layout/fragments :: site-footer}"></footer>
-
-    <!-- Quick Book FAB & Modal -->
-    <div x-data="quickBookCalendar()" class="relative z-[60]">
-        <!-- The Floating Action Button -->
-        <button @click="openCalendar()" class="fixed bottom-10 right-10 w-16 h-16 rounded-full bg-primary text-white shadow-2xl flex items-center justify-center transition-all duration-400 hover:scale-110 active:scale-95 clay-shadow border-none cursor-pointer">
-            <span class="material-symbols-outlined text-2xl">calendar_month</span>
-        </button>
-
-        <!-- The Pop-up Calendar Widget (positioned above the FAB) -->
-        <div x-show="isOpen" @click.away="isOpen = false" class="fixed bottom-32 right-10 z-[100]" style="display: none;"
-             x-transition:enter="transition ease-out duration-300 transform origin-bottom-right"
-             x-transition:enter-start="opacity-0 scale-90 translate-y-4"
-             x-transition:enter-end="opacity-100 scale-100 translate-y-0"
-             x-transition:leave="transition ease-in duration-200 transform origin-bottom-right"
-             x-transition:leave-start="opacity-100 scale-100 translate-y-0"
-             x-transition:leave-end="opacity-0 scale-90 translate-y-4">
-            
-            <div class="bg-white/95 backdrop-blur-2xl rounded-3xl p-6 w-[320px] shadow-2xl border border-rose-100/50 flex flex-col relative">
-                
-                <button @click="isOpen = false" class="absolute top-3 right-3 material-symbols-outlined text-slate-400 hover:text-rose-600 transition-colors bg-transparent border-none cursor-pointer text-sm">close</button>
-                
-                <div class="text-center mb-4 mt-2">
-                    <span class="material-symbols-outlined text-3xl text-primary mb-1">calendar_add_on</span>
-                    <h3 class="text-lg font-headline font-bold text-rose-900">Select Date</h3>
-                </div>
-
-                <!-- Calendar Header -->
-                <div class="flex items-center justify-between mb-3 bg-surface-container-lowest p-2 rounded-2xl border border-rose-50">
-                    <button @click="prevMonth" class="w-8 h-8 rounded-full flex items-center justify-center text-rose-900 hover:bg-rose-50 transition-colors cursor-pointer border-none bg-transparent">
-                        <span class="material-symbols-outlined text-sm">chevron_left</span>
-                    </button>
-                    <h4 class="font-headline text-sm font-bold text-rose-900" x-text="monthName + ' ' + year"></h4>
+                    <img class="w-full h-full object-cover" src="/images/stitch/ayurvedic-spa.jpg' ' + year"></h4>
                     <button @click="nextMonth" class="w-8 h-8 rounded-full flex items-center justify-center text-rose-900 hover:bg-rose-50 transition-colors cursor-pointer border-none bg-transparent">
                         <span class="material-symbols-outlined text-sm">chevron_right</span>
                     </button>
@@ -337,7 +295,7 @@
     </script>
 
     <script>
-        const canvas = document.getElementById('sakura-canvas');
+        const canvas = document.getElementById('veda-canvas');
         const ctx = canvas.getContext('2d');
         let width = canvas.width = window.innerWidth;
         let height = canvas.height = window.innerHeight;
@@ -396,7 +354,7 @@
                 ctx.save();
                 ctx.translate(this.x, this.y);
                 ctx.rotate(this.angle);
-                ctx.fillStyle = `rgba(255, 183, 197, ${this.opacity})`;
+                ctx.fillStyle = `rgba(255, 153, 51, ${this.opacity})`;
                 ctx.beginPath();
                 ctx.moveTo(0, 0);
                 ctx.quadraticCurveTo(this.size * 0.8, -this.size * 0.8, this.size * 1.2, 0);

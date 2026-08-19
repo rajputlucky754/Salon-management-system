@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head th:replace="~{layout/fragments :: head('My Bookings — Sakura Saki')}">
+<head th:replace="~{layout/fragments :: head('My Bookings — Veda Wellness')}">
     <!-- Required styling injected in the layout but we can ensure clay-card exists in a style block -->
 </head>
 <body class="antialiased min-h-screen bg-gradient-to-br from-surface to-secondary-container/30 flex text-on-surface" x-data="actionSystem">
 
-<th:block th:replace="~{layout/fragments :: sakura-canvas}" />
+<th:block th:replace="~{layout/fragments :: veda-canvas}" />
 <div id="sidebar-overlay" class="fixed inset-0 bg-on-surface/20 backdrop-blur-sm z-40 hidden md:hidden"></div>
 
 <style>
@@ -35,7 +35,7 @@
             <header class="md:hidden flex justify-between items-center w-full bg-surface-container-lowest/60 backdrop-blur-xl shadow-sm sticky top-0 z-30 -mt-8 mb-8 -mx-6 px-6 py-4" style="width: calc(100% + 3rem);">
                 <div class="flex items-center gap-3">
                     <button class="material-symbols-outlined text-primary mobile-menu-btn bg-transparent border-none p-0 cursor-pointer">menu</button>
-                    <h1 class="font-headline text-2xl font-bold tracking-tight text-primary">Sakura Saki</h1>
+                    <h1 class="font-headline text-2xl font-bold tracking-tight text-primary">Veda Wellness</h1>
                 </div>
                 <div class="flex items-center gap-4 text-primary">
                     <a th:href="@{/customer/settings}" class="material-symbols-outlined scale-95" style="text-decoration:none;">settings</a>
@@ -91,7 +91,7 @@
                                         </span>
                                         <span class="font-body text-sm text-tertiary" th:text="${appt.appointmentTime}">10:00 AM</span>
                                     </div>
-                                    <h4 class="font-headline text-xl text-on-surface font-semibold mb-1" th:text="${appt.service != null ? appt.service.name : 'Service'}">Sakura Signature Hair Ritual</h4>
+                                    <h4 class="font-headline text-xl text-on-surface font-semibold mb-1" th:text="${appt.service != null ? appt.service.name : 'Service'}">Veda Signature Hair Ritual</h4>
                                     <p class="font-body text-on-surface-variant text-sm mb-4" th:text="${appt.service != null ? appt.service.description : 'A deeply restorative treatment.'}">A deeply restorative scalp and hair treatment.</p>
                                     
                                     <div class="flex items-center gap-2 text-sm text-on-surface-variant font-body" th:if="${appt.staff != null}">

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head th:replace="~{layout/fragments :: head('Profile Settings — Sakura Saki')}"></head>
+<head th:replace="~{layout/fragments :: head('Profile Settings — Veda Wellness')}"></head>
 <body class="bg-surface text-on-surface">
-<th:block th:replace="~{layout/fragments :: sakura-canvas}" />
+<th:block th:replace="~{layout/fragments :: veda-canvas}" />
 
 <div class="flex min-h-screen w-full relative z-10 md:pl-72">
     <aside th:replace="~{layout/fragments :: customer-sidebar('settings')}"></aside>
@@ -92,7 +92,7 @@
             <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 relative clay-lift">
                 <span class="material-symbols-outlined text-red-500 text-5xl mb-4 block">warning</span>
                 <h3 class="font-headline text-2xl font-bold text-on-surface mb-2">Are you absolutely sure?</h3>
-                <p class="text-on-surface-variant text-sm mb-8">This action will permanently delete your account and log you out immediately. All your appointment history and reviews will be erased. You will no longer be able to access Sakura Saki services using this account.</p>
+                <p class="text-on-surface-variant text-sm mb-8">This action will permanently delete your account and log you out immediately. All your appointment history and reviews will be erased. You will no longer be able to access Veda Wellness services using this account.</p>
                 
                 <div class="flex gap-4">
                     <button type="button" onclick="document.getElementById('deleteAccountModal').classList.add('hidden')" class="flex-1 px-4 py-3 bg-surface-container-high text-on-surface rounded-full font-label text-xs font-bold uppercase tracking-wider hover:bg-surface-container-highest transition-colors">

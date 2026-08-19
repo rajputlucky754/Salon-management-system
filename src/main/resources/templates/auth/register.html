@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register — Sakura Saki</title>
+    <title>Register — Veda Wellness</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     <link th:href="@{/css/admin-style.css}" rel="stylesheet">
 </head>
 <body style="display:flex;flex-direction:column;min-height:100vh;">
-<canvas id="sakura-canvas"></canvas>
+<canvas id="veda-canvas"></canvas>
 <main style="flex:1;display:flex;align-items:center;justify-content:center;padding:2rem;">
     <div class="auth-card" style="max-width:520px;">
         <div class="auth-brand">
-            <h1>🌸 Sakura Saki</h1>
-            <p>Experience Digital Serenity</p>
+            <h1>🌸 Veda Wellness</h1>
+            <p>Experience Ayurvedic Serenity</p>
         </div>
         <h2>Create Account</h2>
-        <p class="subtitle">Get started with Sakura Saki</p>
+        <p class="subtitle">Get started with Veda Wellness</p>
         <div th:if="${error}" class="sakura-alert sakura-alert-error" th:text="${error}"></div>
         <form th:action="@{/register}" method="post">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">

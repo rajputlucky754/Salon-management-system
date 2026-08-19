@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <th:block th:replace="~{layout/fragments :: head('Calendar — Sakura Saki')}"></th:block>
+    <th:block th:replace="~{layout/fragments :: head('Calendar — Veda Wellness')}"></th:block>
     <!-- FullCalendar CDN -->
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
 </head>
 <body class="bg-background text-on-surface font-body">
-<th:block th:replace="~{layout/fragments :: sakura-canvas}" />
+<th:block th:replace="~{layout/fragments :: veda-canvas}" />
 
 <div class="flex min-h-screen w-full relative z-10 md:pl-72">
     <aside th:replace="~{layout/fragments :: staff-sidebar('calendar')}"></aside>
@@ -128,7 +128,7 @@
                 
                 if (isToday) {
                     // Today Styling
-                    cell.className = 'rounded-xl bg-primary-container/20 border border-primary/30 p-2 flex flex-col shadow-[inset_0_0_10px_rgba(255,183,197,0.2)] transition-all duration-300 min-h-[80px] overflow-hidden relative';
+                    cell.className = 'rounded-xl bg-primary-container/20 border border-primary/30 p-2 flex flex-col shadow-[inset_0_0_10px_rgba(255,153,51,0.2)] transition-all duration-300 min-h-[80px] overflow-hidden relative';
                     let contentHTML = `<span class="text-sm font-bold text-primary mb-1 flex items-center justify-between">
                             ${day} <span class="w-2 h-2 bg-primary rounded-full"></span>
                         </span>

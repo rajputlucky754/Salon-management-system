@@ -1,6 +1,6 @@
-/* Sakura Petal Animation — Interactive Canvas */
+/* Veda Petal Animation — Interactive Canvas */
 (function() {
-    const canvas = document.getElementById('sakura-canvas');
+    const canvas = document.getElementById('veda-canvas');
     if (!canvas) return;
 
     const ctx = canvas.getContext('2d');
@@ -61,7 +61,7 @@
             ctx.save();
             ctx.translate(this.x, this.y);
             ctx.rotate(this.angle);
-            ctx.fillStyle = `rgba(255, 183, 197, ${this.opacity})`;
+            ctx.fillStyle = `rgba(255, 153, 51, ${this.opacity})`;
             ctx.beginPath();
             ctx.moveTo(0, 0);
             ctx.quadraticCurveTo(this.size * 0.8, -this.size * 0.8, this.size * 1.2, 0);

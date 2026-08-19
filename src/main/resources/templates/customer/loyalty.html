@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head th:replace="~{layout/fragments :: head('Sakura Circle — Sakura Saki')}"></head>
+<head th:replace="~{layout/fragments :: head('Veda Circle — Veda Wellness')}"></head>
 <body class="bg-surface text-on-surface">
-<th:block th:replace="~{layout/fragments :: sakura-canvas}" />
+<th:block th:replace="~{layout/fragments :: veda-canvas}" />
 
 <div class="flex min-h-screen w-full relative z-10 md:pl-72">
     <aside th:replace="~{layout/fragments :: customer-sidebar('loyalty')}"></aside>
@@ -10,7 +10,7 @@
     <main class="flex-1 pt-12 px-12 relative flex flex-col pb-2">
         <header class="mb-12">
             <span class="text-primary font-label text-xs font-extrabold tracking-[0.2em] uppercase block mb-2">Membership</span>
-            <h1 class="font-headline text-4xl text-on-surface font-bold">Sakura Circle</h1>
+            <h1 class="font-headline text-4xl text-on-surface font-bold">Veda Circle</h1>
         </header>
 
         <div th:if="${success}" class="mb-8 p-4 bg-green-100 border border-green-200 text-green-800 rounded-lg text-sm font-medium flex items-center gap-3">

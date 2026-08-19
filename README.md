@@ -1,6 +1,6 @@
-# 🌸 桜咲き Sakura Saki – Beauty Salon Appointment System
+# 🌿 Veda Wellness – Beauty Salon Appointment System
 
-Sakura Saki is a Spring Boot and Thymeleaf based web application for managing salon and spa operations. It provides public service browsing, customer appointment booking, staff dashboards, admin management tools, service/package management, review moderation, and a loyalty voucher system.
+Veda Wellness is an Ayurvedic Indian Salon & Spa appointment system built with Spring Boot and Thymeleaf. It provides public service browsing, customer appointment booking, staff dashboards, admin management tools, service/package management, review moderation, and a loyalty voucher system.
 
 The project is designed as a full-stack Java MVC application using Spring Security, Spring Data JPA, Hibernate, MySQL, Thymeleaf templates, Docker, and GitHub Actions/Render deployment support.
 
@@ -38,7 +38,7 @@ The project is designed as a full-stack Java MVC application using Spring Securi
 
 ## Project Overview
 
-Sakura Saki is built for a beauty salon/spa business that needs to manage customers, staff, services, packages, bookings, reviews, reports, loyalty points, and reward vouchers from one web application.
+Veda Wellness is built for a beauty salon/spa business that needs to manage customers, staff, services, packages, bookings, reviews, reports, loyalty points, and reward vouchers from one web application.
 
 The application follows a server-side rendered MVC pattern using Spring Boot controllers, service classes, repositories, JPA entities, and Thymeleaf pages.
 
@@ -46,7 +46,7 @@ The application follows a server-side rendered MVC pattern using Spring Boot con
 
 ## Live Demo
 
-🔗 [View Sakura Saki Live](https://sakura-saki.onrender.com)
+🔗 [View Veda Wellness Live](https://veda-wellness.onrender.com)
 
 ---
 
@@ -454,7 +454,7 @@ These accounts are intended for local development/demo use only. Change or remov
 |---|---|---|
 | Admin | `admin` | `Admin@123` |
 | Manager/Admin | `manager` | `Manager@123` |
-| Customer | `sakura` | `User@123` |
+| Customer | `veda_user` | `User@123` |
 | Customer | `yuki` | `User@123` |
 | Customer | `hana` | `User@123` |
 | Customer | `mei` | `User@123` |
@@ -500,7 +500,7 @@ export SPRING_DATASOURCE_PASSWORD="your_mysql_password"
 
 ```bash
 git clone https://github.com/CJChANu/Sakura_Saki.git
-cd Sakura_Saki
+cd Veda_Wellness
 ```
 
 ### 2. Check Java Version
@@ -585,7 +585,7 @@ Do not commit local database credentials.
 ### Build Image
 
 ```bash
-docker build -t sakura-saki .
+docker build -t veda-wellness .
 ```
 
 ### Run Container
@@ -596,7 +596,7 @@ docker run -p 8080:8080 \
   -e SPRING_DATASOURCE_URL="your_db_url" \
   -e SPRING_DATASOURCE_USERNAME="your_db_user" \
   -e SPRING_DATASOURCE_PASSWORD="your_db_password" \
-  sakura-saki
+  veda-wellness
 ```
 
 ---
@@ -625,7 +625,7 @@ RENDER_DEPLOY_HOOK_URL
 The Postman collection is available at:
 
 ```text
-docs/postman/Sakura_Saki_Postman_Collection.json
+docs/postman/Veda_Wellness_Postman_Collection.json
 ```
 
 Import it into Postman to test authentication, admin service management, staff management, appointment flows, booking, reviews, and customer account actions.
@@ -635,16 +635,16 @@ Import it into Postman to test authentication, admin service management, staff m
 ## Project Structure
 
 ```text
-Sakura_Saki/
+Veda_Wellness/
 ├── .github/
 │   └── workflows/
 │       └── deploy.yml
 ├── docs/
 │   └── postman/
-│       └── Sakura_Saki_Postman_Collection.json
+│       └── Veda_Wellness_Postman_Collection.json
 ├── src/
 │   ├── main/
-│   │   ├── java/com/cjcc/yakalabs/sakurasaki/
+│   │   ├── java/com/cjcc/yakalabs/veda_usersaki/
 │   │   │   ├── config/
 │   │   │   ├── controller/
 │   │   │   ├── dto/

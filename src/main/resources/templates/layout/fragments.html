@@ -5,7 +5,7 @@
 <th:block th:fragment="head(title)">
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title th:text="${title}">Sakura Saki</title>
+    <title th:text="${title}">Veda Wellness</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
@@ -88,11 +88,11 @@
             font-family: 'Manrope', sans-serif;
             background-color: #f9f9f9;
         }
-        .sakura-site-footer {
+        .veda-site-footer {
             background: rgba(250, 250, 249, 0.92) !important;
             backdrop-filter: blur(18px) saturate(180%);
             -webkit-backdrop-filter: blur(18px) saturate(180%);
-            border-top: 1px solid rgba(255, 183, 197, 0.35) !important;
+            border-top: 1px solid rgba(255, 153, 51, 0.35) !important;
             box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.06);
             padding: 0.7rem 0 !important;
             width: 100%;
@@ -128,15 +128,15 @@
             transform: translateY(-2px);
         }
         .text-glow {
-            text-shadow: 0 0 20px rgba(255, 183, 197, 0.4);
+            text-shadow: 0 0 20px rgba(255, 153, 51, 0.4);
         }
         .recessed {
             background: #e8e8e8;
             box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05);
         }
         .glow-active {
-            box-shadow: 0 0 20px rgba(255, 183, 197, 0.5);
-            border: 1px solid rgba(255, 183, 197, 0.3);
+            box-shadow: 0 0 20px rgba(255, 153, 51, 0.5);
+            border: 1px solid rgba(255, 153, 51, 0.3);
         }
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -145,8 +145,8 @@
 </th:block>
 
 <!-- ===== SAKURA PETALS CANVAS ===== -->
-<th:block th:fragment="sakura-canvas">
-    <canvas class="fixed inset-0 pointer-events-none z-[1] opacity-70" id="sakura-canvas"></canvas>
+<th:block th:fragment="veda-canvas">
+    <canvas class="fixed inset-0 pointer-events-none z-[1] opacity-70" id="veda-canvas"></canvas>
 </th:block>
 
 <!-- ===== SAKURA PETALS JS ===== -->
@@ -155,7 +155,7 @@
     <script th:src="@{/js/sakura-petals.js}"></script>
     <script th:src="@{/js/admin-modals.js}"></script>
 <script>
-    const canvas = document.getElementById('sakura-canvas');
+    const canvas = document.getElementById('veda-canvas');
     if (canvas) {
         const ctx = canvas.getContext('2d');
         let width = canvas.width = window.innerWidth;
@@ -206,7 +206,7 @@
                 ctx.save();
                 ctx.translate(this.x, this.y);
                 ctx.rotate(this.angle);
-                ctx.fillStyle = `rgba(255, 183, 197, ${this.opacity})`;
+                ctx.fillStyle = `rgba(255, 153, 51, ${this.opacity})`;
                 ctx.beginPath();
                 ctx.moveTo(0, 0);
                 ctx.quadraticCurveTo(this.size * 0.8, -this.size * 0.8, this.size * 1.2, 0);
@@ -279,7 +279,7 @@
 <!-- ===== TOP NAVBAR (Public Pages) ===== -->
 <nav th:fragment="topnav(activePage)" class="fixed top-0 w-full z-50 rounded-b-[2rem] bg-white/60 backdrop-blur-xl border-b border-white/20 shadow-[0_20px_50px_rgba(0,0,0,0.06)]">
     <div class="flex justify-between items-center px-8 h-20 max-w-[1600px] mx-auto w-full">
-        <a th:href="@{/}" class="text-2xl font-serif font-bold text-rose-900 tracking-tight shrink-0" style="text-decoration:none;">Sakura Saki</a>
+        <a th:href="@{/}" class="text-2xl font-serif font-bold text-rose-900 tracking-tight shrink-0" style="text-decoration:none;">Veda Wellness</a>
         <div class="flex items-center gap-8">
             <div class="hidden md:flex items-center gap-8 font-serif tracking-tight">
                 <a th:href="@{/}" th:classappend="${activePage == 'home'} ? 'text-rose-900 border-b-2 border-rose-400 pb-1' : 'text-slate-500 hover:text-rose-400'" class="transition-all duration-400 ease-out hover:scale-105" style="text-decoration:none;">Home</a>
@@ -308,7 +308,7 @@
 <aside id="app-sidebar" th:fragment="admin-sidebar(activePage)" class="fixed md:fixed top-0 left-0 h-screen w-72 rounded-r-xl bg-stone-50 shadow-[40px_0_60px_-15px_rgba(0,0,0,0.05)] flex flex-col py-8 gap-2 z-50 shrink-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out self-start">
     <div class="px-8 mb-10">
         <a th:href="@{/}" style="text-decoration:none;" class="block group">
-            <h1 class="text-lg font-serif text-rose-800 tracking-tight group-hover:text-rose-600 transition-colors">Sakura Saki</h1>
+            <h1 class="text-lg font-serif text-rose-800 tracking-tight group-hover:text-rose-600 transition-colors">Veda Wellness</h1>
             <p class="font-sans text-sm text-slate-400 group-hover:text-slate-500 transition-colors">Admin Portal</p>
         </a>
     </div>
@@ -342,7 +342,7 @@
 <aside id="app-sidebar" th:fragment="staff-sidebar(activePage)" class="fixed md:fixed top-0 left-0 h-screen w-72 rounded-r-xl bg-stone-50 shadow-[40px_0_60px_-15px_rgba(0,0,0,0.05)] flex flex-col py-8 gap-2 z-50 shrink-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out self-start">
     <div class="px-8 mb-10">
         <a th:href="@{/}" style="text-decoration:none;" class="block group">
-            <h1 class="text-lg font-serif text-rose-800 tracking-tight group-hover:text-rose-600 transition-colors">Sakura Saki</h1>
+            <h1 class="text-lg font-serif text-rose-800 tracking-tight group-hover:text-rose-600 transition-colors">Veda Wellness</h1>
             <p class="font-sans text-sm text-slate-400 group-hover:text-slate-500 transition-colors">Staff Portal</p>
         </a>
     </div>
@@ -372,7 +372,7 @@
 <aside id="app-sidebar" th:fragment="customer-sidebar(activePage)" class="fixed md:fixed top-0 left-0 h-screen w-72 rounded-r-xl bg-stone-50 shadow-[40px_0_60px_-15px_rgba(0,0,0,0.05)] flex flex-col py-8 gap-2 z-50 shrink-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out self-start">
     <div class="px-8 mb-10">
         <a th:href="@{/}" style="text-decoration:none;" class="block group">
-            <h1 class="text-lg font-serif text-rose-800 tracking-tight group-hover:text-rose-600 transition-colors">Sakura Saki</h1>
+            <h1 class="text-lg font-serif text-rose-800 tracking-tight group-hover:text-rose-600 transition-colors">Veda Wellness</h1>
             <p class="font-sans text-sm text-slate-400 group-hover:text-slate-500 transition-colors">Customer Portal</p>
         </a>
     </div>
@@ -380,7 +380,7 @@
         <a th:href="@{/customer/dashboard}" th:classappend="${activePage == 'overview'} ? 'bg-white text-rose-600 shadow-sm' : 'text-slate-400 hover:bg-rose-50 hover:text-rose-600'" class="flex items-center gap-3 rounded-full px-6 py-3 ml-4 transition-transform duration-300 hover:translate-x-1 font-sans text-sm font-medium tracking-wide" style="text-decoration:none;"><span class="material-symbols-outlined">dashboard</span><span>Overview</span></a>
         <a th:href="@{/customer/bookings}" th:classappend="${activePage == 'bookings'} ? 'bg-white text-rose-600 shadow-sm' : 'text-slate-400 hover:bg-rose-50 hover:text-rose-600'" class="flex items-center gap-3 rounded-full px-6 py-3 ml-4 transition-transform duration-300 hover:translate-x-1 font-sans text-sm font-medium tracking-wide" style="text-decoration:none;"><span class="material-symbols-outlined">calendar_month</span><span>My Bookings</span></a>
         <a th:href="@{/customer/rituals}" th:classappend="${activePage == 'rituals'} ? 'bg-white text-rose-600 shadow-sm' : 'text-slate-400 hover:bg-rose-50 hover:text-rose-600'" class="flex items-center gap-3 rounded-full px-6 py-3 ml-4 transition-transform duration-300 hover:translate-x-1 font-sans text-sm font-medium tracking-wide" style="text-decoration:none;"><span class="material-symbols-outlined">self_improvement</span><span>Rituals</span></a>
-        <a th:href="@{/customer/loyalty}" th:classappend="${activePage == 'loyalty'} ? 'bg-white text-rose-600 shadow-sm' : 'text-slate-400 hover:bg-rose-50 hover:text-rose-600'" class="flex items-center gap-3 rounded-full px-6 py-3 ml-4 transition-transform duration-300 hover:translate-x-1 font-sans text-sm font-medium tracking-wide" style="text-decoration:none;"><span class="material-symbols-outlined">verified</span><span>Sakura Circle</span></a>
+        <a th:href="@{/customer/loyalty}" th:classappend="${activePage == 'loyalty'} ? 'bg-white text-rose-600 shadow-sm' : 'text-slate-400 hover:bg-rose-50 hover:text-rose-600'" class="flex items-center gap-3 rounded-full px-6 py-3 ml-4 transition-transform duration-300 hover:translate-x-1 font-sans text-sm font-medium tracking-wide" style="text-decoration:none;"><span class="material-symbols-outlined">verified</span><span>Veda Circle</span></a>
         <a th:href="@{/customer/settings}" th:classappend="${activePage == 'settings'} ? 'bg-white text-rose-600 shadow-sm' : 'text-slate-400 hover:bg-rose-50 hover:text-rose-600'" class="flex items-center gap-3 rounded-full px-6 py-3 ml-4 transition-transform duration-300 hover:translate-x-1 font-sans text-sm font-medium tracking-wide" style="text-decoration:none;"><span class="material-symbols-outlined">settings</span><span>Settings</span></a>
     </nav>
     <div class="px-8 pt-6 border-t border-rose-100/50">
@@ -401,29 +401,29 @@
 </aside>
 
 <!-- ===== FOOTER (Public) ===== -->
-<footer th:fragment="site-footer" class="sakura-site-footer w-full py-3 border-t border-rose-100/50 dark:border-zinc-800/50 mt-auto relative z-50"
-        style="background:rgba(250,250,249,.92);backdrop-filter:blur(18px) saturate(180%);-webkit-backdrop-filter:blur(18px) saturate(180%);border-top:1px solid rgba(255,183,197,.35);box-shadow:0 -8px 32px rgba(0,0,0,.06);padding:.7rem 0;"
+<footer th:fragment="site-footer" class="veda-site-footer w-full py-3 border-t border-rose-100/50 dark:border-zinc-800/50 mt-auto relative z-50"
+        style="background:rgba(250,250,249,.92);backdrop-filter:blur(18px) saturate(180%);-webkit-backdrop-filter:blur(18px) saturate(180%);border-top:1px solid rgba(255,153,51,.35);box-shadow:0 -8px 32px rgba(0,0,0,.06);padding:.7rem 0;"
         x-data="{
             legalModal: false,
             legalTab: 'privacy',
             share() {
                 if (navigator.share) {
-                    navigator.share({ title: 'Sakura Saki | Digital Serenity', url: window.location.href });
+                    navigator.share({ title: 'Veda Wellness | Ayurvedic Serenity', url: window.location.href });
                 } else {
                     navigator.clipboard.writeText(window.location.href);
                     alert('Link copied to clipboard!');
                 }
             },
             openLocation() {
-                window.open('https://maps.google.com/?q=Sakura+Saki+Spa+Kyoto+Japan', '_blank');
+                window.open('https://maps.google.com/?q=Veda+Saki+Spa+Kyoto+Japan', '_blank');
             }
         }">
     
     <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center px-8 gap-4"
          style="max-width:80rem;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
         <div class="flex flex-col items-center md:items-start gap-1" style="display:flex;flex-direction:column;gap:.25rem;">
-            <div class="text-base font-serif font-bold text-rose-900" style="font-family:'Noto Serif',serif;font-size:1rem;font-weight:700;color:#881337;">Sakura Saki</div>
-            <p class="font-sans text-[10px] uppercase tracking-[0.1em] text-slate-400" style="margin:0;font-family:'Manrope',sans-serif;font-size:.625rem;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;">© 2024 Sakura Saki Beauty. All rights reserved.</p>
+            <div class="text-base font-serif font-bold text-rose-900" style="font-family:'Noto Serif',serif;font-size:1rem;font-weight:700;color:#881337;">Veda Wellness</div>
+            <p class="font-sans text-[10px] uppercase tracking-[0.1em] text-slate-400" style="margin:0;font-family:'Manrope',sans-serif;font-size:.625rem;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;">© 2024 Veda Wellness Beauty. All rights reserved.</p>
         </div>
         <div class="flex gap-6" style="display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;">
             <a @click.prevent="legalModal = true; legalTab = 'privacy'" class="font-sans text-xs uppercase tracking-[0.1em] text-slate-400 hover:text-rose-500 transition-opacity duration-300 opacity-80 hover:opacity-100 cursor-pointer" style="font-family:'Manrope',sans-serif;font-size:.75rem;text-transform:uppercase;letter-spacing:.1em;color:#94a3b8;text-decoration:none;">Privacy</a>
@@ -528,13 +528,13 @@
                             <div class="bg-surface-container-lowest p-6 rounded-3xl border border-rose-100 flex flex-col items-center text-center hover:shadow-md transition-shadow">
                                 <span class="material-symbols-outlined text-rose-400 text-3xl mb-3">map</span>
                                 <p class="text-xs uppercase tracking-widest font-label text-slate-400 mb-2">Sanctuary Address</p>
-                                <p class="text-rose-900 font-medium text-sm">123 Blossom Avenue<br>Serenity District<br>Kyoto, Japan</p>
+                                <p class="text-rose-900 font-medium text-sm">123 Blossom Avenue<br>Serenity District<br>Kerala, India</p>
                             </div>
                             <div class="bg-surface-container-lowest p-6 rounded-3xl border border-rose-100 flex flex-col items-center text-center hover:shadow-md transition-shadow">
                                 <span class="material-symbols-outlined text-rose-400 text-3xl mb-3">call</span>
                                 <p class="text-xs uppercase tracking-widest font-label text-slate-400 mb-2">Get in Touch</p>
                                 <p class="text-rose-900 font-medium text-sm mb-1">+81 75-123-4567</p>
-                                <p class="text-rose-900 font-medium text-sm">hello@sakurasaki.com</p>
+                                <p class="text-rose-900 font-medium text-sm">hello@vedawellness.com</p>
                             </div>
                             <div class="md:col-span-2 bg-gradient-to-r from-rose-50 to-primary-container/30 p-6 rounded-3xl border border-rose-100 flex flex-col items-center text-center">
                                 <span class="material-symbols-outlined text-primary text-3xl mb-3">schedule</span>
@@ -575,7 +575,7 @@
                             </div>
                         </div>
                         <div class="text-center mt-6 pb-2">
-                            <a href="mailto:careers@sakurasaki.com" class="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-full font-label text-xs uppercase tracking-widest hover:scale-105 transition-transform shadow-md" style="text-decoration:none;">
+                            <a href="mailto:careers@vedawellness.com" class="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-full font-label text-xs uppercase tracking-widest hover:scale-105 transition-transform shadow-md" style="text-decoration:none;">
                                 <span class="material-symbols-outlined text-sm">send</span> Apply Now
                             </a>
                         </div>

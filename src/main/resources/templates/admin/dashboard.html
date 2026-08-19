@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head th:replace="~{layout/fragments :: head('Dashboard — Sakura Saki Admin')}"></head>
+<head th:replace="~{layout/fragments :: head('Dashboard — Veda Wellness Admin')}"></head>
 <body class="bg-surface text-on-surface font-body">
-<th:block th:replace="~{layout/fragments :: sakura-canvas}" />
+<th:block th:replace="~{layout/fragments :: veda-canvas}" />
 
 <div class="flex min-h-screen w-full relative z-10 md:pl-72">
     <!-- Overlay for mobile sidebar -->
@@ -16,7 +16,7 @@
         <header class="md:hidden flex justify-between items-center w-full bg-surface-container-lowest/60 backdrop-blur-xl shadow-sm sticky top-0 z-30 -mt-12 mb-8 -mx-12 px-12 py-4" style="width: calc(100% + 6rem);">
             <div class="flex items-center gap-3">
                 <button class="material-symbols-outlined text-primary mobile-menu-btn bg-transparent border-none p-0 cursor-pointer">menu</button>
-                <h1 class="font-headline text-2xl font-bold tracking-tight text-primary">Sakura Saki</h1>
+                <h1 class="font-headline text-2xl font-bold tracking-tight text-primary">Veda Wellness</h1>
             </div>
             <div class="flex items-center gap-4 text-primary">
                 <span class="material-symbols-outlined scale-95">notifications</span>
@@ -231,8 +231,8 @@
             const values = Object.values(json.data);
             const trendCtx = document.getElementById('trendChart').getContext('2d');
             const gradient = trendCtx.createLinearGradient(0, 0, 0, 200);
-            gradient.addColorStop(0, 'rgba(255, 183, 197, 0.4)');
-            gradient.addColorStop(1, 'rgba(255, 183, 197, 0)');
+            gradient.addColorStop(0, 'rgba(255, 153, 51, 0.4)');
+            gradient.addColorStop(1, 'rgba(255, 153, 51, 0)');
             new Chart(trendCtx, {
                 type: 'line',
                 data: {

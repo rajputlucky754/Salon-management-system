@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Book Your Experience | Sakura Saki</title>
+    <title>Book Your Experience | Veda Wellness</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
@@ -43,7 +43,7 @@
     </style>
 </head>
 <body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary-container">
-    <canvas class="fixed inset-0 pointer-events-none w-full h-full -z-[1]" id="sakura-canvas"></canvas>
+    <canvas class="fixed inset-0 pointer-events-none w-full h-full -z-[1]" id="veda-canvas"></canvas>
 
     <!-- TopNavBar -->
     <div th:replace="~{layout/fragments :: topnav('booking')}"></div>
@@ -250,7 +250,7 @@
 
     <script>
         // Canvas Animation
-        const canvas = document.getElementById('sakura-canvas');
+        const canvas = document.getElementById('veda-canvas');
         const ctx = canvas.getContext('2d');
         let width = canvas.width = window.innerWidth;
         let height = canvas.height = window.innerHeight;
@@ -271,7 +271,7 @@
                 if (p.x > width + p.size) p.x = -p.size;
                 if (p.x < -p.size) p.x = width + p.size;
                 ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.angle);
-                ctx.fillStyle = `rgba(255, 183, 197, ${p.opacity})`;
+                ctx.fillStyle = `rgba(255, 153, 51, ${p.opacity})`;
                 ctx.beginPath(); ctx.moveTo(0, 0);
                 ctx.quadraticCurveTo(p.size * 0.8, -p.size * 0.8, p.size * 1.2, 0);
                 ctx.quadraticCurveTo(p.size * 0.8, p.size * 0.8, 0, 0);

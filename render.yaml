@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: sakura-saki
+    name: veda-wellness
     env: docker
     branch: main
     plan: free

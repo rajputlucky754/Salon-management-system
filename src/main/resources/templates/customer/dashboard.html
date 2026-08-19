@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head th:replace="~{layout/fragments :: head('Sakura Saki - Customer Portal')}"></head>
+<head th:replace="~{layout/fragments :: head('Veda Wellness - Customer Portal')}"></head>
 <body class="bg-surface text-on-surface" x-data="actionSystem">
-<th:block th:replace="~{layout/fragments :: sakura-canvas}" />
+<th:block th:replace="~{layout/fragments :: veda-canvas}" />
 
 <div class="flex min-h-screen w-full relative z-10 md:pl-72">
     <!-- Overlay for mobile sidebar -->
@@ -15,7 +15,7 @@
             <header class="md:hidden flex justify-between items-center w-full bg-surface-container-lowest/60 backdrop-blur-xl shadow-sm sticky top-0 z-30 -mt-8 mb-8 -mx-6 px-6 py-4" style="width: calc(100% + 3rem);">
                 <div class="flex items-center gap-3">
                     <button class="material-symbols-outlined text-primary mobile-menu-btn bg-transparent border-none p-0 cursor-pointer">menu</button>
-                    <h1 class="font-headline text-2xl font-bold tracking-tight text-primary">Sakura Saki</h1>
+                    <h1 class="font-headline text-2xl font-bold tracking-tight text-primary">Veda Wellness</h1>
                 </div>
                 <div class="flex items-center gap-4 text-primary">
                     <a th:href="@{/customer/settings}" class="material-symbols-outlined scale-95" style="text-decoration:none;">settings</a>
@@ -75,7 +75,7 @@
                     </div>
                     <div th:if="${nextAppointment == null}" class="py-4">
                         <h2 class="text-3xl font-headline text-tertiary font-bold mb-3">Radiance Facial</h2>
-                        <p class="text-on-surface-variant font-body mb-8 max-w-md">Book your next salon visit and keep your Sakura Saki wellness rhythm glowing.</p>
+                        <p class="text-on-surface-variant font-body mb-8 max-w-md">Book your next salon visit and keep your Veda Wellness wellness rhythm glowing.</p>
                         <a th:href="@{/booking}" class="inline-flex items-center gap-2 px-8 py-3 bg-primary text-on-primary rounded-full font-label text-xs font-bold uppercase tracking-wider hover:scale-105 transition-all" style="text-decoration:none;">
                             Book Now <span class="material-symbols-outlined text-sm">arrow_forward</span>
                         </a>
@@ -90,7 +90,7 @@
             <section class="md:col-span-4 self-start min-h-[320px] bg-primary text-white rounded-lg p-6 xl:p-8 2xl:p-10 clay-lift flex flex-col justify-between relative overflow-hidden">
                 <div class="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
                 <div class="relative z-10">
-                    <span class="font-label text-sm uppercase tracking-widest text-primary-container mb-2 block">Sakura Circle</span>
+                    <span class="font-label text-sm uppercase tracking-widest text-primary-container mb-2 block">Veda Circle</span>
                     <div class="text-6xl font-headline font-bold mb-1" th:text="${loyaltyPoints}">2,450</div>
                     <p class="text-primary-container/80 text-sm">Points available</p>
                 </div>
@@ -191,7 +191,7 @@
                 <span class="w-12 h-12 rounded-full bg-primary-container/40 flex items-center justify-center material-symbols-outlined text-primary">event_available</span>
                 <div>
                     <p class="font-headline text-lg font-bold text-on-surface">Book Again</p>
-                    <p class="text-xs text-on-surface-variant">Reserve your next Sakura Saki visit.</p>
+                    <p class="text-xs text-on-surface-variant">Reserve your next Veda Wellness visit.</p>
                 </div>
             </a>
         </div>

@@ -1,5 +1,5 @@
 /* =================================================================
-   Sakura Saki — Admin Panel Design System
+   Veda Wellness — Admin Panel Design System
    Inspired by "Digital Serenity & Tactile Elegance" from Stitch
    ================================================================= */
 
@@ -142,7 +142,7 @@ body:not(.admin-body) {
 }
 
 .sidebar-nav a:hover {
-    background: rgba(255, 183, 197, 0.15);
+    background: rgba(255, 153, 51, 0.15);
     color: var(--primary);
     transform: translateX(4px);
 }
@@ -353,14 +353,14 @@ body:not(.admin-body) {
 }
 
 /* ---------- Data Tables ---------- */
-.sakura-table {
+.veda-table {
     width: 100%;
     text-align: left;
     border-collapse: separate;
     border-spacing: 0 0.75rem;
 }
 
-.sakura-table thead th {
+.veda-table thead th {
     font-family: var(--font-label);
     font-size: 0.625rem;
     text-transform: uppercase;
@@ -371,26 +371,26 @@ body:not(.admin-body) {
     border: none;
 }
 
-.sakura-table tbody tr {
+.veda-table tbody tr {
     background: var(--surface-container-lowest);
     box-shadow: 0 2px 8px rgba(0,0,0,0.03);
     transition: all 0.3s ease;
 }
 
-.sakura-table tbody tr:hover {
+.veda-table tbody tr:hover {
     box-shadow: 0 8px 24px rgba(134, 78, 90, 0.08);
     transform: translateY(-2px);
 }
 
-.sakura-table tbody td {
+.veda-table tbody td {
     padding: 1rem;
     font-size: 0.875rem;
     vertical-align: middle;
     border: none;
 }
 
-.sakura-table tbody td:first-child { border-radius: var(--radius-default) 0 0 var(--radius-default); }
-.sakura-table tbody td:last-child { border-radius: 0 var(--radius-default) var(--radius-default) 0; }
+.veda-table tbody td:first-child { border-radius: var(--radius-default) 0 0 var(--radius-default); }
+.veda-table tbody td:last-child { border-radius: 0 var(--radius-default) var(--radius-default) 0; }
 
 /* ---------- Badges ---------- */
 .badge-pill {
@@ -412,7 +412,7 @@ body:not(.admin-body) {
 .badge-cancelled { background: var(--error-container); color: var(--on-error-container); }
 
 /* ---------- Buttons ---------- */
-.btn-sakura {
+.btn-veda {
     padding: 0.6rem 1.5rem;
     border-radius: var(--radius-full);
     font-family: var(--font-label);
@@ -429,44 +429,44 @@ body:not(.admin-body) {
     gap: 0.5rem;
 }
 
-.btn-sakura:hover {
+.btn-veda:hover {
     transform: translateY(-2px);
 }
 
-.btn-sakura-primary {
+.btn-veda-primary {
     background: var(--primary);
     color: var(--on-primary);
     box-shadow: 0 8px 24px rgba(134, 78, 90, 0.3);
 }
 
-.btn-sakura-primary:hover {
+.btn-veda-primary:hover {
     box-shadow: 0 12px 32px rgba(134, 78, 90, 0.45);
     background: #7a4653;
 }
 
-.btn-sakura-outline {
+.btn-veda-outline {
     background: transparent;
     color: var(--primary);
     border: 1.5px solid var(--outline-variant);
 }
 
-.btn-sakura-outline:hover {
-    background: rgba(255, 183, 197, 0.1);
+.btn-veda-outline:hover {
+    background: rgba(255, 153, 51, 0.1);
     border-color: var(--primary);
 }
 
-.btn-sakura-danger {
+.btn-veda-danger {
     background: transparent;
     color: var(--error);
     border: 1.5px solid var(--error-container);
 }
 
-.btn-sakura-danger:hover {
+.btn-veda-danger:hover {
     background: var(--error-container);
     color: var(--on-error-container);
 }
 
-.btn-sakura-sm {
+.btn-veda-sm {
     padding: 0.4rem 1rem;
     font-size: 0.65rem;
 }
@@ -495,29 +495,29 @@ body:not(.admin-body) {
 .input-recessed::placeholder { color: var(--outline); }
 
 /* ---------- Modals ---------- */
-.sakura-modal .modal-content {
+.veda-modal .modal-content {
     border: none;
     border-radius: var(--radius-lg);
     overflow: hidden;
 }
 
-.sakura-modal .modal-header {
+.veda-modal .modal-header {
     background: var(--surface-container-low);
     border: none;
     padding: 1.5rem 2rem;
 }
 
-.sakura-modal .modal-title {
+.veda-modal .modal-title {
     font-family: var(--font-headline);
     font-weight: 700;
     font-size: 1.25rem;
 }
 
-.sakura-modal .modal-body {
+.veda-modal .modal-body {
     padding: 2rem;
 }
 
-.sakura-modal .modal-footer {
+.veda-modal .modal-footer {
     border: none;
     padding: 1rem 2rem 1.5rem;
 }
@@ -533,7 +533,7 @@ body:not(.admin-body) {
 .admin-footer {
     margin-top: auto;
     padding: 3rem 0;
-    border-top: 1px solid rgba(255, 183, 197, 0.2);
+    border-top: 1px solid rgba(255, 153, 51, 0.2);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -570,7 +570,7 @@ body:not(.admin-body) {
     width: 100%;
     padding: 1.25rem 2rem;
     text-align: center;
-    border-top: 1px solid rgba(255, 183, 197, 0.2);
+    border-top: 1px solid rgba(255, 153, 51, 0.2);
     background: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
@@ -586,8 +586,8 @@ body:not(.admin-body) {
     color: #94a3b8;
 }
 
-/* ---------- Sakura Petals Canvas ---------- */
-#sakura-canvas {
+/* ---------- Veda Petals Canvas ---------- */
+#veda-canvas {
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
@@ -726,19 +726,19 @@ body:not(.admin-body) {
 }
 
 /* ---------- Alert ---------- */
-.sakura-alert {
+.veda-alert {
     padding: 0.75rem 1.25rem;
     border-radius: var(--radius-default);
     font-size: 0.875rem;
     margin-bottom: 1.5rem;
 }
 
-.sakura-alert-error {
+.veda-alert-error {
     background: var(--error-container);
     color: var(--on-error-container);
 }
 
-.sakura-alert-success {
+.veda-alert-success {
     background: #dcfce7;
     color: #166534;
 }
